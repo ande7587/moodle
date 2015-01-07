@@ -1,0 +1,10 @@
+{
+  "name": "moodle-atto_boxhighlight-button",
+  "builds": {
+    "moodle-atto_boxhighlight-button": {
+      "jsfiles": [
+        "button.js"
+      ]
+    }
+  }
+}
