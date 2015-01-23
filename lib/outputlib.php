@@ -1210,7 +1210,15 @@ class theme_config {
         // find out wanted parent javascripts
         $excludes = $this->resolve_excludes('parents_exclude_javascripts');
         if ($excludes !== true) {
-            foreach (array_reverse($this->parent_configs) as $parent_config) { // base first, the immediate parent last
+            // STRY0010424 20140702 dhanzely - Changed this so that it is consistent with how theme CSS files are compiled,
+            // which is if the image does not exist within the active theme, the nearest parent with the image file will be
+            // used. The original functionality here was to start at the furthest parent, and to display the first
+            // image encountered.
+            //
+            // Since this is specifically affecting our hierarchal use of custom themes created via the theme customizer tool
+            // (umn_clean, campus, college, department, course), I've left the other blocks as-is until such time as there
+            // is an actual need.
+            foreach ($this->parent_configs as $parent_config) {
                 $parent = $parent_config->name;
                 if (empty($parent_config->$type)) {
                     continue;
