@@ -6,43 +6,6 @@ require_once('ppsft_data_updater.class.php');
 require_once($CFG->dirroot.'/local/user/lib.php');
 
 /**
-  * Core cron_run function in lib/cronlib.php invokes
-  * get_plugin_list_with_function in lib/moodlelib.php
-  * and will pick up this function because its name follows
-  * the pattern plugintype . '_' . plugin . '_' . cron.
-  */
-function local_ppsft_cron() {
-    # TODO: Can we find a way to use the lastcron config to check that
-    #       slow_cron is actually getting executed periodically.
-    #       See cron_execute_plugin_type in lib/cronlib.php.
-    echo "INFO: Use other cron to execute local/ppsft updates through ppsft_slow_cron().\n";
-}
-
-/**
- * The main Moodle cron should not execute this because the
- * name does not exactly match the convention. (See local_ppsft_cron.)
- * Instead, we should use a separate cron due to the time required
- * for this to run.  See cli directories under auth and enrol for
- * examples of additional cron scripts.
- */
-function ppsft_slow_cron() {
-
-    # TODO: FINISH THIS.  Update instructor classes, also.
-    # TODO: Need to update instructors with updater->update_instructor_classes.
-    # Include all Moodle instructors associated with a Moodle course that
-    # is associated with PeopleSoft class in the current term or later.
-    # Consider doing all instructors in another place since the class associations
-    # are part of the autoenrollment functionality and don't want to
-    # to create a dependency on that.
-
-    # TODO: Generally, we should not need to run update_class_enrollments as
-    #       we can stay current updating students based on the
-    #       ps_um_da_dly_audit table.
-    $updater = ppsft_get_updater();
-    $updater->update_all_class_enrollments();
-}
-
-/**
  * Helper for getting the Oracle PeopleSoft database connection.
  * Uncommenting the "set_debug" line will result in rather
  * verbose debug logging.
