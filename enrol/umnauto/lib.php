@@ -71,29 +71,6 @@ class enrol_umnauto_plugin extends enrol_plugin {
     }
 
     /**
-     * Core cron_run function in lib/cronlib.php invokes the method named
-     * "cron" in all enrollment plugins (except that it skips any enrollment
-     * plugins for which is_cron_required returns false).
-     */
-    public function cron() {
-        # TODO: Can we find a way to use the lastcron config to check that
-        #       slow_cron is actually getting executed periodically.
-        #       See cronrun() in lib/cronlib.php.
-        echo "INFO: Use other cron to execute enrol/umnauto updates through slow_cron()\n";
-    }
-
-    /**
-     * The main moodle cron should not execute this because it does not
-     * exactly match the convention. (See above cron() function.)  Instead,
-     * we should use a separate cron due to the time required for this to
-     * run.  See other cli directories under enrol for examples of
-     * additional cron scripts.
-     */
-    public function slow_cron() {
-        enrol_umnauto_sync();
-    }
-
-    /**
      * Overrides empty implementation in base (enrol_plugin) so that
      * we automatically get an instance for each new course if
      * defaultenrol is checked.
