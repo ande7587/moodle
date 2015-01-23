@@ -1,0 +1,92 @@
+@CHARSET "UTF-8";
+
+/* edit_theme page */
+#edit_theme_title {display:inline-block; margin-right:1em;}
+
+.mform {margin-bottom:2em;}
+.mform fieldset {margin-top:0em; margin-bottom:0em;}
+.mform fieldset.hidden {padding:0em;margin-top:0em; margin-bottom:0em;}
+.mform fieldset .advancedbutton {margin:0em;}
+.mform fieldset div div.owner_entry {margin-left:2em;}
+
+#page-blocks-theme_customizer-edit_theme #mform1 {margin-bottom:0em; display:inline; margin-left:4em;}
+#page-blocks-theme_customizer-edit_theme #mform1 * {display:inline; margin:0em; padding:0em;}
+#page-blocks-theme_customizer-edit_theme #mform1 #id_submitbutton {padding: 0.1em 0.5em;position:relative;}
+
+#block_theme_customizer_add_owner_lnk {display:block; position:relative; margin-top:1em;}
+.owner_entry {display:block; padding:0.2em; padding-left: 0.5em;}
+.owner_entry div {display:inline;}
+.owner_entry:hover {background-color: #ffc;}
+.owner_entry div.fitem div.felement {margin-left:2em;}
+.owner_entry .felement input {margin-left:0.2em; margin-right:0.2em;}
+.owner_entry span.owner_name {display:inline-block; min-width:15em;}
+.owner_entry a {margin-left:2em;}
+
+textarea.theme_description {width:98%;height:5.5em;}
+
+#page-blocks-theme_customizer-edit_theme #id_manage_custom_setting_values .fitem.fitem_ftext {
+    float: left;
+    margin-left: 0.5em;
+}
+    
+#page-blocks-theme_customizer-edit_theme .custom-value-separator {
+    border-top: 1px solid #eee;
+    margin: 1em;
+    clear: both;
+}
+
+table#predefined_css_entries {width:100%;}
+table#predefined_css_entries div {margin:0em; width:auto;}
+table#predefined_css_entries textarea {width:97%; with:3em;}
+#manage_predefined_entry {padding-bottom:0em;}
+#manage_predefined_entry div {margin-bottom:0em;}
+
+#mform4 {margin-bottom:1em;}
+#edit_theme_css_entries_link {display:block; margin-bottom:2em;}
+
+.mform fieldset .css_file_entry {display:block; float:left; width:19%; padding: 0.2em 1em 0.2em 1em;}
+#css_load_order {margin-bottom:0.5em;}
+
+#block_theme_customizer_update_graphic_lnk {display:block; position:relative; top:1em; clear:both;}
+.mform fieldset .graphic_entry {display:block; float:left; width:19%; padding: 0.2em 1em 0.2em 1em;}
+
+#graphic_file_usage {margin-bottom:1em;}
+
+textarea.predefined_entry {width:100%;height:2.5em;}
+
+textarea#id_owner_usernames {width:30em; height:5em;}
+
+/** admin page */
+.generaltable tr.list_header td {background-color:#eee; font-weight:bold;}
+#page-blocks-theme_customizer-admin .region-content table td {text-align:center;}
+#page-blocks-theme_customizer-admin .region-content table a {margin-left:0.2em; margin-right:2em;}
+
+/** edit_css page */
+#custom_css_entries {width:100%; margin-top:0.5em; position:relative;}
+#custom_css_entries tr > td:first-child {width:2em; text-align:center;}
+#custom_css_entries tr > td+td {width:30%;}
+#custom_css_entries tr > td+td+td {width:30%;}
+#custom_css_entries tr > td+td+td+td+td {width:6em; text-align:center;}
+#custom_css_entries tr.separator {height:2px; background-color:#ddd;}
+#custom_css_entries td {padding:0.2em;}
+#custom_css_entries div {margin:0em; width:auto;}
+#custom_css_entries textarea {width:100%; height:4.3em; margin:0em; border:none; padding:0em; box-shadow:none;}
+#edit_custom_entry {padding:0em; padding-top:0.5em; mar}
+#page-blocks-theme_customizer-edit_css select {position:relative; margin-top:0.5em; padding:0em; height: 1.8em;}
+#page-blocks-theme_customizer-edit_css .mform fieldset {display:inline-block; margin:0.2em; padding:0em; }
+#page-blocks-theme_customizer-edit_css .mform .fitem_actionbuttons {display:inline-block; margin:0.2em; padding:0em; }
+#page-blocks-theme_customizer-edit_css .mform .fitem_actionbuttons .felement {margin:0em; padding:0em;}
+#page-blocks-theme_customizer-edit_css .mform .fitem_actionbuttons .felement input {margin:0em; padding:0.5em;}
+#page-blocks-theme_customizer-edit_css #mform1 fieldset+fieldset+fieldset+fieldset {float:right;}
+#page-blocks-theme_customizer-edit_css #mform2 fieldset+fieldset {display:block;}
+
+/* filters */
+#block_theme_customizer_css_filter_ctn {display:block; position:relative; clear:both; top:-0.5em;}
+#block_theme_customizer_css_filter_link_ctn {display:block; position:relative; clear:both; text-align:right;}
+#block_theme_customizer_css_filter_ctn a {margin-left:1.5em;}
+#block_theme_customizer_css_filter_ctn div.filter_ctn {display:block; width:12em; float:left;}
+#block_theme_customizer_css_filter_ctn input[type=checkbox] {margin-right:0.2em;}
+#block_theme_customizer_css_filter_ctn span.disabled {color:#888;}
+
+
+#add_custom_entry textarea {width:100%; height:3.5em;}

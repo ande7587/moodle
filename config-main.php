@@ -820,6 +820,14 @@ $CFG->disablebyteserving = true;
 include_once(dirname(__FILE__) . '/config-env.php');
 
 //=========================================================================
+// define additional theme directory (for customized themes)
+// IMPORTANT: this variable must be defined here after loading external
+// config files (env, secure) as it depends on $CFG->dataroot
+//=========================================================================
+$CFG->themedir = $CFG->dataroot. '/theme';
+$CFG->forced_plugin_settings['block_theme_customizer']['output_dir'] = $CFG->themedir;
+
+//=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser
 //=========================================================================
 

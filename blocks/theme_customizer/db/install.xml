@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/theme_customizer/db" VERSION="20140320" COMMENT="XMLDB file for Moodle local/theme_customizer"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_theme" COMMENT="themes that can be customized by users">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="shortname" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="will be used to create the theme directory"/>
+        <FIELD NAME="fullname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="display name in Moodle"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="parent" TYPE="char" LENGTH="250" NOTNULL="true" SEQUENCE="false" COMMENT="Parent theme"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="last created/modified"/>
+        <FIELD NAME="last_compiled" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="timestamp when it was last compiled"/>
+        <FIELD NAME="category_level" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="last_content_hash" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="notify" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="u-shortname" UNIQUE="true" FIELDS="shortname"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_theme_css_file" COMMENT="css files of a custom theme">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="theme_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the theme this file belongs to"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="name of the file"/>
+        <FIELD NAME="path" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="path to the containing directory (relative to the theme dir, e.g. empty/null for theme dir)"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="last created/modified timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="theme_id-path-name" UNIQUE="true" FIELDS="theme_id, path, name"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_theme_css_entry" COMMENT="css entries for the custom themes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="css_file_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the CSS file record this entry belongs to"/>
+        <FIELD NAME="css_identifier" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="e.g. #header h2"/>
+        <FIELD NAME="css_value" TYPE="text" NOTNULL="true" SEQUENCE="false" COMMENT="e.g. background-color: #fff; text-align: center;"/>
+        <FIELD NAME="description" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="short comment about the entry"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="when the entry was created"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="last modified timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="css_file_id-css_identifier" UNIQUE="true" FIELDS="css_file_id, css_identifier" COMMENT="no duplicate in identifier per file"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_theme_owner" COMMENT="link the users to themes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="theme_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ID of the theme"/>
+        <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="ID of the user"/>
+        <FIELD NAME="edit_level" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" COMMENT="e.g. what in the theme can be edited by the user"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="theme_id-user_id" UNIQUE="true" FIELDS="theme_id, user_id"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="block_theme_custom_setting" COMMENT="custom field-value pairs for themes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="theme_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="setting_name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="setting_value" TYPE="char" LENGTH="1000" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="u-theme_id-setting_name" UNIQUE="true" FIELDS="theme_id, setting_name"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
