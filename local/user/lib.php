@@ -276,8 +276,7 @@ class local_user_creator {
              'htmleditor'            => 1,
              'ajax'                  => 0,
              'autosubscribe'         => 0,
-             'trackforums'           => 1,
-             'screenreader'          => 0
+             'trackforums'           => 1
         );
 
         // filter the excludes

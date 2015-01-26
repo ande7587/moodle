@@ -229,8 +229,7 @@ class local_user_external extends external_api {
                         'timezone'       => new external_value(PARAM_TEXT, 'timezone'),
                         'lastaccess'     => new external_value(PARAM_TEXT, 'last access timestamp'),
                         'lastlogin'      => new external_value(PARAM_TEXT, 'last login timestamp'),
-                        'description'    => new external_value(PARAM_CLEANHTML, 'description'),
-                        'screenreader'   => new external_value(PARAM_TEXT, 'whether use screenreader or not')
+                        'description'    => new external_value(PARAM_CLEANHTML, 'description')
                        ))
                    ))
             ),
@@ -330,8 +329,7 @@ class local_user_external extends external_api {
                 'timezone'      => $user->timezone,
                 'lastaccess'    => $user->lastaccess,
                 'lastlogin'     => $user->lastlogin,
-                'description'   => $user->description,
-                'screenreader'  => $user->screenreader
+                'description'   => $user->description
             );
 
             if (has_capability('local/user:view_idnumber', $context)) {
