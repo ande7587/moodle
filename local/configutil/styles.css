@@ -1,0 +1,20 @@
+
+.uploadconfigformwrapper { border:1px solid #aaa; margin:10px; }
+
+.uploadconfigformwrapper .mform fieldset { margin:0; padding:0; }
+
+.uploadconfigformwrapper div.fitem { margin:10px; }
+
+.configtablewrapper table { table-layout:fixed; width:100%; }
+
+.configtablewrapper td { word-wrap:break-word; }
+
+.configtablewrapper tr.nosettingmatch td.currentvalue { background-color:#FFFF99; }
+
+.configtablewrapper tr.forcedsetting td.currentvalue { color:gray; }
+
+.configtablewrapper .sectionname { width:15%; }
+.configtablewrapper .sectionname .filtertarget { color:#aaa; cursor:pointer;}
+
+.configtablewrapper .settingname { width:20%; }
+
