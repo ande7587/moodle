@@ -491,6 +491,13 @@ $string['navmethod_seq'] = 'Sequential';
 $string['navnojswarning'] = 'Warning: these links will not save your answers. Use the next button at the bottom of the page.';
 $string['neverallononepage'] = 'Never, all questions on one page';
 $string['newattemptfail'] = 'Error: Could not start a new attempt at the quiz';
+
+// >>> 20150128 cdsmith Set all quiz question point values. MOOD-969
+$string['newgradevaluelabel'] = 'Set point value of each question to {$a}';
+$string['newgradevalue'] = 'Setting all point values';
+$string['newgradevalue_help'] = 'To set all this quiz&#8217;s questions to a specific point value, enter the point value in this field. Then click the &#8220;Save&#8221; button.';
+// <<< 20150128 cdsmith Set all quiz question point values. MOOD-969
+
 $string['newpage'] = 'New page';
 $string['newpage_help'] = 'For longer quizzes it makes sense to stretch the quiz over several pages by limiting the number of questions per page. When adding questions to the quiz, page breaks will automatically be inserted according to this setting. However page breaks may later be moved manually on the editing page.';
 $string['newpageevery'] = 'Automatically start a new page';

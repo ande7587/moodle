@@ -640,6 +640,57 @@ function quiz_set_grade($newgrade, $quiz) {
     return true;
 }
 
+// >>> 20150128 cdsmith Set all quiz question point values. MOOD-969
+/**
+ * Set the point values for all questions on a quiz to the value specified.
+ *
+ * @param float $newpointvalue
+ * @param object $quizobj the quiz we are updating.
+ */
+function quiz_set_all_point_values($newpointvalue, $quizobj) {
+
+    global $CFG;
+
+    /*
+     * Get the quiz, structure, and slots for this quiz object. The slots represent
+     * the individual questions and includes such information as slot id, maxmark,
+     * question type, and more.
+     */
+    $quiz = $quizobj->get_quiz();
+    $structure = $quizobj->get_structure();
+    $slots = $structure->get_slots();
+
+    foreach ($slots as $slotid => $slotobj) {
+
+        $question = $structure->get_question_in_slot($slotobj->slot);
+        $questiontype = $question->qtype;
+        $questiontype_class = "qtype_$questiontype";
+
+        require_once($CFG->dirroot.'/question/type/'.$questiontype.'/questiontype.php');
+
+        $questiontype_instance = new $questiontype_class();
+
+        // Check if this is a real question type. For example, descriptions are not.
+        // We also compare with length because that is what
+        // mod/quiz/classes/output/edit_renderer.php uses to determine whether to make
+        // the maxmark editable.
+        if ($questiontype_instance->is_real_question_type() and $question->length > 0) {
+
+            if ($structure->update_slot_maxmark($slotobj, $newpointvalue)) {
+
+                quiz_delete_previews($quiz);
+                quiz_update_sumgrades($quiz);
+                quiz_update_all_attempt_sumgrades($quiz);
+                quiz_update_all_final_grades($quiz);
+                quiz_update_grades($quiz, 0, true);
+            }
+        }
+    }
+
+    return true;
+}
+// <<< 20150128 cdsmith Set all quiz question point values. MOOD-969
+
 /**
  * Save the overall grade for a user at a quiz in the quiz_grades table
  *

@@ -161,6 +161,19 @@ if (optional_param('savechanges', false, PARAM_BOOL) && confirm_sesskey()) {
     redirect($afteractionurl);
 }
 
+// >>> 20150128 cdsmith Set all quiz question point values. MOOD-969
+if (optional_param('updategradevalues', false, PARAM_BOOL) && confirm_sesskey()) {
+
+    $newpointvalue = unformat_float(optional_param('inputeditallgradevalues', -1, PARAM_RAW));
+    if ($newpointvalue >= 0) {
+
+        quiz_set_all_point_values($newpointvalue, $quizobj);
+    }
+
+    redirect($afteractionurl);
+}
+// <<< 20150128 cdsmith Set all quiz question point values. MOOD-969
+
 // Get the question bank view.
 $questionbank = new mod_quiz\question\bank\custom_view($contexts, $thispageurl, $course, $cm, $quiz);
 $questionbank->set_quiz_has_attempts($quizhasattempts);

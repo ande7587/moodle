@@ -63,6 +63,10 @@ class edit_renderer extends \plugin_renderer_base {
         $output .= $this->repaginate_button($structure, $pageurl);
         $output .= $this->total_marks($quizobj->get_quiz());
 
+        // >>> 20150128 cdsmith Set all quiz question point values. MOOD-969
+        $output .= $this->quiz_set_all_point_values_form($this->page->url);
+        // <<< 20150128 cdsmith Set all quiz question point values. MOOD-969
+
         // Show the questions organised into sections and pages.
         $output .= $this->start_section_list();
 
@@ -1022,4 +1026,35 @@ class edit_renderer extends \plugin_renderer_base {
                 $pagevars['cat'], $pagevars['recurse'], $pagevars['showhidden'], $pagevars['qbshowtext']);
         return html_writer::div(html_writer::div($qbank, 'bd'), 'questionbankformforpopup');
     }
+
+    // >>> 20150128 cdsmith Set all quiz question point values. MOOD-969
+    /**
+     * Create the div and form to let users set all the quiz question point values.
+     *
+     * @param \moodle_url $pageurl the canonical URL of this page.
+     * @return string HTML to output.
+     */
+    public function quiz_set_all_point_values_form(\moodle_url $pageurl) {
+
+        global $OUTPUT;
+
+        $output =  html_writer::start_div('diveditallgradevalues', array('style' => 'display: block; width: 100%;'));
+        $output .= html_writer::start_tag('form', array('method' => 'post', 'action' => 'edit.php', 'class' => 'quizsavegradesform', 'style' => 'text-align: right; margin-right: 14px; padding-right: 0.2em;'));
+        $output .= html_writer::start_tag('fieldset', array('class' => 'invisiblefieldset'));
+        $output .= html_writer::empty_tag('input', array('type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()));
+        $output .= html_writer::input_hidden_params($pageurl);
+        $a = html_writer::empty_tag('input', array('type' => 'text', 'id' => 'inputeditallgradevalues',
+                'name' => 'inputeditallgradevalues', 'size' => 4,
+                'value' => ''));
+        $output .= html_writer::tag('label', get_string('newgradevaluelabel', 'quiz', $OUTPUT->help_icon('newgradevalue', 'quiz').' '.$a),
+                array('for' => 'inputeditallgradevalues', 'style' => 'display: inline;'));
+        $output .= html_writer::empty_tag('input', array('type' => 'submit',
+                'name' => 'updategradevalues', 'value' => get_string('save', 'quiz')));
+        $output .= html_writer::end_tag('fieldset');
+        $output .= html_writer::end_tag('form');
+        $output .= html_writer::end_div();
+
+        return $output;
+    }
+    // <<< 20150128 cdsmith Set all quiz question point values. MOOD-969
 }
