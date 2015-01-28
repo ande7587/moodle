@@ -96,6 +96,9 @@ class block_calendar_month extends block_base {
             $this->content->text .= '<h3 class="eventskey">'.get_string('eventskey', 'calendar').'</h3>';
             $this->content->text .= '<div class="filters calendar_filters">'.calendar_filter_controls($this->page->url).'</div>';
         }
+        //STRY0010207 20140311 mart0969 - Add link for exporting calendar
+        $exporturl = new moodle_url('/calendar/export.php');
+        $this->content->text .= '<div class="filters export_calendar"><a href="'.$exporturl->out().'">'.get_string('exportcalendar','calendar').'</a></div>';
 
         return $this->content;
     }
