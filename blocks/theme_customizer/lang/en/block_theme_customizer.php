@@ -8,6 +8,7 @@ $string['usage'] = 'Theme Customizer Help';
 $string['theme_customizer:manage'] = 'Manage custom theme';
 $string['theme_customizer:use'] = 'Edit custom theme';
 $string['theme_customizer:addinstance'] = 'Add a new Theme Customizer block';
+$string['theme_customizer:myaddinstance'] = 'Add a new Theme Customizer block to My home';
 
 // settings
 $string['settings'] = 'Theme customizer settings';
