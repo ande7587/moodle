@@ -43,7 +43,7 @@ class block_upload_group extends block_base {
         if (has_capability('moodle/course:managegroups', $context)) {
             $this->content->text = '<a href="'.$CFG->wwwroot.'/blocks/upload_group/index.php?id='.$COURSE->id.'">Upload groups</a>';
         } else {
-            $this->content = '';
+            $this->content->text = '';
         }
 
         $this->content->footer = '';
