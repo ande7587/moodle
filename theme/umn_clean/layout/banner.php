@@ -71,54 +71,8 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
         <div id="header-banner">
             <div id="header-img-wrap">
             <div id="header-img">
-                <div id="my-courses" title="<?php echo get_string('my-courses-button','theme_umn_clean'); ?>">
+                <div id="my-courses" tabindex="0" title="<?php echo get_string('my-courses-button','theme_umn_clean'); ?>">
                 </div>
-                <?php if(!empty($mmenuitems)) { ?>
-                <div id="m-links" title="<?php echo get_string('m-links-button','theme_umn_clean'); ?>">
-                </div>
-                <?php } ?>
-                <div id="logo-umn" title="<?php echo $logotitle; ?>">
-                    <a href="<?php echo $logolink; ?>"></a>
-                </div>
-                <?php echo $OUTPUT->user_menu(); ?>
-                <?php if (!empty($helpmenuitems)) { ?>
-                <div id="help-panel-logo" title="<?php echo get_string('help-panel-logo','theme_umn_clean'); ?>">
-                <?php } ?>
-                </div>
-            </div>
-            </div>
-
-            <?php if (!empty($helpmenuitems)) { ?>
-            <div id="help-panel" class="dropdown-panel">
-                <div class="arrow-up"></div>
-                <div class="panel-content">
-                    <ul>
-                    <?php foreach ($helpmenuitems as $item) {
-                        if (!empty($item->langstringid)) {
-                            $title = get_string($item->langstringid, 'theme_umn_clean');
-                        } else {
-                            $title = empty($item->title) ? 'undefined' : $item->title;
-                        }
-                        $href = empty($item->href) ? '/#' : $item->href;
-                        $id = empty($item->id) ? '' : $item->id;
-                        $class = empty($item->class) ? '' : $item->class;
-                        $target = empty($item->target) ? '' : $item->target;
-                        echo "<li><a href=\"$href\" id=\"$id\" class=\"$class\" target=\"$target\">";
-                        if (isset($item->icon)) {
-                            echo "<i class=\"fa fa-$item->icon\"></i>";
-                        }
-                        if (isset($item->langstring)) {
-                            echo get_string($item->langstring, 'theme_umn_clean');
-                        } else {
-                            echo isset($item->title) ? $item->title : 'undefined';
-                        }
-                        echo '</a></li>';
-                     } ?>
-                    </ul>
-                </div>
-            </div>
-            <?php } ?>
-
                 <div id="course-panel" class="dropdown-panel">
                     <div class="arrow-up"></div>
                     <div class="panel-content">
@@ -136,7 +90,9 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                         </ul>
                     </div>
                 </div>
-                <?php if (!empty($mmenuitems)) { ?>
+                <?php if(!empty($mmenuitems)) { ?>
+                <div id="m-links" tabindex="0" title="<?php echo get_string('m-links-button','theme_umn_clean'); ?>">
+                </div>
                 <div id="m-links-panel" class="dropdown-panel">
                     <div class="arrow-up"></div>
                     <div class="panel-content">
@@ -166,13 +122,57 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                     </div>
                 </div>
                 <?php } ?>
-                <div id="lower-user-menu">
-                    <?php echo $OUTPUT->user_menu(); ?>
+                <div id="logo-umn" title="<?php echo $logotitle; ?>">
+                    <a href="<?php echo $logolink; ?>" target="_blank"></a>
                 </div>
+                <a class="btn btn-navbar smaller-user-menu" tabindex="0" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <?php echo $OUTPUT->user_menu(); ?>
+                <?php if (!empty($helpmenuitems)) { ?>
+                <div id="help-panel-logo" tabindex="0" title="<?php echo get_string('help-panel-logo','theme_umn_clean'); ?>">
+                </div>
+                <div id="help-panel" class="dropdown-panel">
+                <div class="arrow-up"></div>
+                <div class="panel-content">
+                    <ul>
+                    <?php foreach ($helpmenuitems as $item) {
+                        if (!empty($item->langstringid)) {
+                            $title = get_string($item->langstringid, 'theme_umn_clean');
+                        } else {
+                            $title = empty($item->title) ? 'undefined' : $item->title;
+                        }
+                        $href = empty($item->href) ? '/#' : $item->href;
+                        $id = empty($item->id) ? '' : $item->id;
+                        $class = empty($item->class) ? '' : $item->class;
+                        $target = empty($item->target) ? '' : $item->target;
+                        echo "<li><a href=\"$href\" id=\"$id\" class=\"$class\" target=\"$target\">";
+                        if (isset($item->icon)) {
+                            echo "<i class=\"fa fa-$item->icon\"></i>";
+                        }
+                        if (isset($item->langstring)) {
+                            echo get_string($item->langstring, 'theme_umn_clean');
+                        } else {
+                            echo isset($item->title) ? $item->title : 'undefined';
+                        }
+                        echo '</a></li>';
+                     } ?>
+                    </ul>
+                </div>
+                </div>
+                <?php } ?>
+            </div>
+            </div>
+            <div class="nav-collapse collapse smaller-user-menu-dropdown">
+                <ul class="nav pull-right panel-content">
+                </ul>
             </div>
             <div id="header-heading">
-                <div id="header-heading-pic-left"><?php echo $html->heading; ?></div>
                 <div id="header-heading-pic-right"></div>
+                <?php echo $html->heading; ?>
+                <?php if (isset($COURSE) && !$COURSE->visible) { echo '<h2>'.get_string('coursehiddensubheading', 'theme_umn_clean').'</h2>'; } ?>
             </div>
 </header>
 

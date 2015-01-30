@@ -44,20 +44,22 @@
     text-align: left;
     width: auto;
     display: inline-block;
-    margin: 7.5px 0;
+    margin: 0.2em 9em 0 0.6em;
 }
 
-div#header-heading-pic-left {
-    left: 0;
-    margin-left: 0.6em;
-    height: auto;
-    width: auto;
+#header-heading h2 {
+    margin: 0 0 0.2em 14px;
+    font-size: 1em;
+    text-align: left;
+    vertical-align: top;
+    line-height: 1em;
+    color: #000;
 }
 
 div#header-heading-pic-right {
-    margin-right: 0.9em;
-    float: right;
-    background-image: url([[pix:theme|wordmark]]);
+    right: 0.9em;
+    position: absolute;
+    background: url([[pix:theme|wordmark]]) no-repeat right/auto 100%;
     width: 400px;
     height: 40px;
 }
@@ -81,7 +83,8 @@ div#header-heading-pic-right {
 
 #header-img {
     width: 100%;
-    height: 38px;
+    min-height: 38px;
+    height: auto;
     box-shadow: 0px 3px 3px rgb(136, 136, 136);
     background-color: #1b1b1b;
 }
@@ -151,7 +154,7 @@ div#header-heading-pic-right {
     width: 36px;
     display: block;
     float: right;
-    position: fixed;
+    position: relative;
     top: 4px;
     margin: 0;
     background-image:none;
@@ -311,7 +314,7 @@ help-panel.active {
     color: #333;
 }
 
-.dropdown-panel a:hover {
+.dropdown-panel a:hover, div#header-banner ul.panel-content>li>a:hover {
     text-decoration: none;
     background-color:#00699e;
     background-image:-moz-linear-gradient(top,#0070a8,#005f8f);
@@ -369,11 +372,6 @@ help-panel.active {
     cursor: pointer;
 }
 
-#lower-user-menu .usermenu {
-    display: none;
-    z-index: 1001;
-}
-
 .dir-ltr.userloggedinas .usermenu .userbutton .avatars .avatar.current {
     left: 12px;
     top: 8px;
@@ -418,8 +416,68 @@ help-panel.active {
     border-top: 5px solid #000;
 }
 
+.btn.btn-navbar {
+    display: none;
+    float: right;
+    padding: 7px 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    background-color: #ededed;
+    background-image: -moz-linear-gradient(top,#f2f2f2,#e5e5e5);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#f2f2f2),to(#e5e5e5));
+    background-image: -webkit-linear-gradient(top,#f2f2f2,#e5e5e5);
+    background-image: -o-linear-gradient(top,#f2f2f2,#e5e5e5);
+    background-image: linear-gradient(to bottom,#f2f2f2,#e5e5e5);
+    background-repeat: repeat-x;
+    border-color: #e5e5e5 #e5e5e5 #bfbfbf;
+    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2f2f2',endColorstr='#ffe5e5e5',GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.1),0 1px 0 rgba(255,255,255,0.075);
+    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.1),0 1px 0 rgba(255,255,255,0.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1),0 1px 0 rgba(255,255,255,0.075);
+}
+
+.btn.btn-navbar .icon-bar {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background-color: #f5f5f5;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+    -moz-box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.nav-collapse.collapse.smaller-user-menu-dropdown {
+    display: none;
+    padding-top: 40px;
+}
+
+.smaller-user-menu-dropdown .panel-content li[role="presentation"] a {
+    border-radius: 0;
+    font-weight: normal;
+}
+
+.nav-collapse.smaller-user-menu-dropdown .panel-content {
+    margin: 0;
+}
+
 /*-----Begin 979px styling----*/
 @media (max-width: 768px) {
+
+.nav-collapse.collapse.smaller-user-menu-dropdown.active {
+    display: block;
+}
+
+.btn.btn-navbar.smaller-user-menu {
+    display: block;
+}
 
     #logo-umn {
         display: none;
@@ -431,39 +489,28 @@ help-panel.active {
 
     .dropdown-panel {
         width: 100%;
-        position: initial;
-        padding-top: 40px;
+        position: absolute;
+        padding-top: 0;
     }
+#course-panel, #m-links-panel, #help-panel {
+    left: 0;
+}
     .dropdown-panel .arrow-up {
         display: none;
     }
-#lower-user-menu .usermenu {
-    display: block;
-    width: 100%;
-}
-#lower-user-menu .menubar {
-position: fixed;
-top: 0;
-right: 0;
-z-index: 1001;
-}
-
-#lower-user-menu .menu {
-position: initial;
-left: 0;
-margin-top: 40px;
-box-shadow: none;
-border-radius: 0;
-border: 0;
-}
-
-#header-img .usermenu {
+#header-img .usermenu .avatars, #header-img .usermenu .caret {
     display: none;
 }
 
 .panel-content {
     box-shadow: none;
     border-bottom: 1px solid #efefef;
+}
+.usermenu .menubar:hover {
+    opacity: 0.5;
+}
+.usermenu a {
+    cursor: default;
 }
 }
 /*---End 979px styling----*/

@@ -131,3 +131,4 @@ $string['m-links-button'] = 'University Links';
 $string['umn-logo'] = 'University of Minnesota';
 $string['user-menu'] = 'User Menu';
 $string['help-panel-logo'] = 'Help Links';
+$string['coursehiddensubheading'] = '(Hidden from Students)';
