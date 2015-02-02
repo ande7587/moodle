@@ -67,7 +67,7 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
 
 ?>
 
-<header role="banner" class="moodle-has-zindex">
+<header role="banner" class="moodle-has-zindex <?php if (isset($CFG->environment)) { echo $CFG->environment; } ?>">
         <div id="header-banner">
             <div id="header-img-wrap">
             <div id="header-img">

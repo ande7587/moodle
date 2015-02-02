@@ -54,12 +54,10 @@ if (!empty($footersettings->campuslinks)) {
         </ul>
     </nav>
     <?php } ?>
+    <?php echo $OUTPUT->login_info(); ?>
     <ul id="umn-copyright">
         <li>© 2011–2015 Regents of the University of Minnesota. All rights reserved.</li>
         <li>The University of Minnesota is an equal opportunity educator and employer.</li>
-        <li>
-            <a class="umn-privacy" target="_blank" href="<?php echo $privacylink; ?>"><?php echo $privacytitle; ?></a>
-        </li>
     </ul>
     </div>
 </footer>

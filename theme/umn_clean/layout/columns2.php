@@ -72,10 +72,9 @@ echo $OUTPUT->doctype() ?>
         ?>
     </div>
 
-    <?php include('footer.php'); ?>
-
-    <?php echo $OUTPUT->standard_end_of_body_html() ?>
+    <?php echo $OUTPUT->standard_end_of_body_html(); ?>
 
 </div>
+<?php include('footer.php'); ?>
 </body>
 </html>

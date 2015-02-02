@@ -658,6 +658,11 @@ $CFG->campuses = array('UMNTC' => 'Twin Cities',
 // Disable partial range requests
 $CFG->disablebyteserving = true;
 
+// Enables changing the banner background and color for non-production
+// instances, such as tst, qa, and developer instances. This variable
+// should be commented out for production.
+//$CFG->environment = '';
+
 //=========================================================================
 // 9. PHPUNIT SUPPORT
 //=========================================================================

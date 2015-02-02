@@ -269,7 +269,7 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
         });
 
         // respond to top panel buttons
-        var user_image_button = Y.one('div.moodle-actionmenu');
+        var user_image_button = Y.one('div.moodle-actionmenu ul.menubar');
         var user_image_button_2 = Y.one('a.btn.btn-navbar');
         var help_panel_logo = Y.one('#help-panel-logo');
         var course_panel_logo = Y.one('#my-courses');
