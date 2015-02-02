@@ -735,6 +735,10 @@ $string['navadduserpostslinks'] = 'Add links to view user posts';
 $string['navadduserpostslinks_help'] = 'If enabled two links will be added to each user in the navigation to view discussions the user has started and posts the user has made in forums throughout the site or in specific courses.';
 $string['navigationupgrade'] = 'This upgrade introduces two new navigation blocks that will replace these blocks: Administration, Courses, Activities and Participants.  If you had set any special permissions on those blocks you should check to make sure everything is behaving as you want it.';
 $string['navcourselimit'] = 'Course limit';
+// MOOD-27 20141029 dhanzely - Add setting to allow 'Current course' in Course view Navigation block to be collapsed by default
+$string['navexpandcurrentcourse'] = 'Expand Current course initially on Course view page';
+$string['navexpandcurrentcourse_desc'] = 'When enabled the Current course branch will be expanded initially on the Course view page.';
+
 $string['navexpandmycourses'] = 'Show My courses expanded on My home';
 $string['navexpandmycourses_desc'] = 'If enabled, My courses is initially shown expanded in the navigation block on My home.';
 $string['navshowfullcoursenames'] = 'Show course full names';

@@ -1207,6 +1207,12 @@ class global_navigation extends navigation_node {
                     $coursenode->make_active();
                 }
 
+                // MOOD-27 20141029 dhanzely - Check setting to allow 'Current course' in Course view Navigation
+                // block to be collapsed by default.
+                if (empty($CFG->navexpandcurrentcourse)) {
+                    $this->rootnodes['currentcourse']->collapse = true;
+                }
+
                 break;
             case CONTEXT_MODULE :
                 if ($issite) {

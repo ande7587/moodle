@@ -133,6 +133,9 @@ mybadges,badges|/badges/mybadges.php|award',
     $temp->add(new admin_setting_configcheckbox('navshowcategories', new lang_string('navshowcategories', 'admin'), new lang_string('confignavshowcategories', 'admin'), 1));
     $temp->add(new admin_setting_configcheckbox('navshowmycoursecategories', new lang_string('navshowmycoursecategories', 'admin'), new lang_string('navshowmycoursecategories_help', 'admin'), 0));
     $temp->add(new admin_setting_configcheckbox('navshowallcourses', new lang_string('navshowallcourses', 'admin'), new lang_string('confignavshowallcourses', 'admin'), 0));
+    // MOOD-27 20141029 dhanzely - Add setting to allow 'Current course' in Course view Navigation block to be collapsed by default
+    $temp->add(new admin_setting_configcheckbox('navexpandcurrentcourse', new lang_string('navexpandcurrentcourse', 'admin'), new lang_string('navexpandcurrentcourse_desc', 'admin'), 1));
+
     $temp->add(new admin_setting_configcheckbox('navexpandmycourses', new lang_string('navexpandmycourses', 'admin'), new lang_string('navexpandmycourses_desc', 'admin'), 1));
     $sortoptions = array(
         'sortorder' => new lang_string('sort_sortorder', 'admin'),
