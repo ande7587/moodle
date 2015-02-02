@@ -1,0 +1,10 @@
+
+#columnstoinclude .fitemtitle { width:30%; }
+#columnstoinclude .felement { margin-left:31%; }
+
+#page-grade-export-ppsft-index #options .fitemtitle { width:20%; }
+#page-grade-export-ppsft-index #options .felement { width:75%; margin-left:21%; }
+
+.ppsftgradeexportinstructions { padding:10px; }
+
+#fgroup_id_ppsftclassid span { display: block;}
