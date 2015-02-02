@@ -801,3 +801,9 @@ $string['separator_help'] = 'If you are importing a .csv file, select â€œCommaâ€
 $string['rowpreviewnum_help'] = 'Sets the number of rows that are available during the preview step of the pasted data. The preview step allows the user to ensure that the data was interpreted correctly.';
 $string['verbosescales_help'] = 'Verbose scales is for importing grades that have non-numeric grading scales (Pass/Fail, Satisfactory, etc.). Having it on will not affect numeric scores. Turning this setting off will prevent any scores from being updated that do not have numeric values, even if the grading type is a non-numeric scale.';
 // <<< MOOD-253
+
+//MOOD-277 btindell 20141209 - Added strings for gradebook import mapping type
+$string['mappings_help'] = 'Each column in the provided spreadsheet is represented below as a string of text with a select box next to it. For the column(s) that you would like to import into the gradebook, select the column in the gradebook that you would like to override. In example, if you have a column in your spreadsheet called Project #1 with the grades that you would like to be placed under the first assignment in the gradebook, select that assignment in the dropdown next to "Project #1".';
+$string['mapfrom_help'] = 'Select the column from the provided spreadsheet that contains information to distinguish the grades pertaining to one user from those of another user.';
+$string['mapto_help'] = 'Select the user information contained in Moodle to match the identifying information selected in "Map to:". If you selected a column that contains the user\'s full name, select "Username", if you selected a column that contains the user\'s email address, select "Email address", and so on.';
+// <<< MOOD-277

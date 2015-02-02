@@ -86,7 +86,7 @@ class grade_import_form extends moodleform {
 class grade_import_mapping_form extends moodleform {
 
     function definition () {
-        global $CFG, $COURSE;
+        global $CFG, $COURSE, $OUTPUT;
         $mform =& $this->_form;
 
         // this is an array of headers
@@ -101,7 +101,8 @@ class grade_import_mapping_form extends moodleform {
                 $mapfromoptions[$i] = s($h);
             }
         }
-        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades'), $mapfromoptions);
+        //MOOD-277 20141208 btindell added context sensitive help for gradebook import
+        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades').$OUTPUT->help_icon('mapfrom', 'grades'), $mapfromoptions);
 
         $maptooptions = array(
             'userid'       => get_string('userid', 'grades'),
@@ -110,9 +111,11 @@ class grade_import_mapping_form extends moodleform {
             'useremail'    => get_string('email'),
             '0'            => get_string('ignore', 'grades')
         );
-        $mform->addElement('select', 'mapto', get_string('mapto', 'grades'), $maptooptions);
+        //MOOD-277 20141208 btindell added context sensitive help for gradebook import
+        $mform->addElement('select', 'mapto', get_string('mapto', 'grades').$OUTPUT->help_icon('mapto', 'grades'), $maptooptions);
 
-        $mform->addElement('header', 'general', get_string('mappings', 'grades'));
+        //MOOD-277 20141208 btindell added context sensitive help for gradebook import
+        $mform->addElement('header', 'general', get_string('mappings', 'grades').$OUTPUT->help_icon('mappings', 'grades'));
 
         // Add a feedback option.
         $feedbacks = array();
