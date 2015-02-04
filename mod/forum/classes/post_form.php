@@ -144,7 +144,8 @@ class mod_forum_post_form extends moodleform {
         }
 
         if (empty($post->id) && $manageactivities) {
-            $mform->addElement('checkbox', 'mailnow', get_string('mailnow', 'forum'));
+            //MOOD-743 btindell adding context sensitive help
+            $mform->addElement('checkbox', 'mailnow', get_string('mailnow', 'forum').$OUTPUT->help_icon('mailnow', 'forum'));
         }
 
         if (!empty($CFG->forum_enabletimedposts) && !$post->parent && has_capability('mod/forum:viewhiddentimedposts', $coursecontext)) { // hack alert

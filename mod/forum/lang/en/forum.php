@@ -511,3 +511,7 @@ $string['warnformorepost'] = 'Warning! There is more than one discussion in this
 $string['yournewquestion'] = 'Your new question';
 $string['yournewtopic'] = 'Your new discussion topic';
 $string['yourreply'] = 'Your reply';
+
+//MOOD-743 btindell adding language string for context sensitive help
+$string['mailnow_help'] = 'Checking this box will post your posting without the 30 minute waiting period for editing. Subscribed users will receive notifications about this posting according to their profile settings for "Email digest type, if subscribed to a forum';
+// <<< MOOD-743
