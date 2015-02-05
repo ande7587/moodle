@@ -105,3 +105,14 @@ div#page.maximized, body.pagelayout-maintenance div#page {
     width: 100%;
     text-align: center;
 }
+
+/*MOOD-628 btindell adding custom CSS to distinguish private replies*/
+div.privatereply, span.privatereply, li.privatereply {
+    background-color: lightblue;
+}
+
+span.privatereplyprefix {
+    font-weight: bold;
+    font-style: normal;
+}
+/* <<< MOOD-628*/

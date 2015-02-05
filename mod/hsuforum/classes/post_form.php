@@ -145,7 +145,8 @@ class mod_hsuforum_post_form extends moodleform {
         }
 
         if (empty($post->id) && has_capability('moodle/course:manageactivities', $coursecontext)) { // hack alert
-            $mform->addElement('checkbox', 'mailnow', get_string('mailnow', 'hsuforum'));
+            //MOOD-743 btindell adding context sensitive help
+            $mform->addElement('checkbox', 'mailnow', get_string('mailnow', 'hsuforum').$OUTPUT->help_icon('mailnow', 'hsuforum'));
         }
 
         if (!empty($config->enabletimedposts) && !$post->parent && has_capability('mod/hsuforum:viewhiddentimedposts', $coursecontext)) { // hack alert

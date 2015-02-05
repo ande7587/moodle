@@ -546,8 +546,8 @@ HTML;
             $html = $this->post($cm, $discussion, $post, $canreply, $parent, array(), $depth);
             if (!empty($html)) {
                 $count++;
-                $output .= "<li class='hsuforum-post depth$depth' data-depth='$depth' data-count='$count'>".$html."</li>";
-
+                // MOOD-628 btindell. Added clearfix.  And using tag method.
+                $output .= html_writer::tag('li', $html, array('class' => "hsuforum-post clearfix depth$depth", 'data-depth' => $depth, 'data-count' => $count));
                 if (!empty($post->children)) {
                     $output .= $this->post_walker($cm, $discussion, $posts, $post, $canreply, $count, ($depth + 1));
                 }
@@ -602,6 +602,20 @@ HTML;
             }
         }
 
+        //MOOD-628 btindell created extra step to distinguish private reply to original post
+        if(!empty($p->privatereply) && !$p->isreply){
+            $parent = $p->parentfullname;
+            if(empty($p->parentuserpic)){
+                $byline = get_string('privatereplybyx', 'hsuforum', $byuser);
+            }
+            else{
+                $byline = get_string('postbyxinprivatereplytox', 'hsuforum', array(
+                    'author' => $byuser,
+                    'parent' => $p->parentuserpic.$parent
+                    ));
+            }
+        }
+
         $author = s(strip_tags($p->fullname));
         $unread = '';
         $unreadclass = '';
@@ -629,8 +643,11 @@ HTML;
             $revealed = '<span class="label label-danger">'.$nonanonymous.'</span>';
         }
 
+        // MOOD-628 20141118 dhanzely - add class to distinguish private replies
+        $privatereplyclass = empty($p->privatereply) ? '' : 'privatereply';
+
  return <<<HTML
-<div class="hsuforum-post-wrapper hsuforum-post-target clearfix $unreadclass" id="p$p->id" data-postid="$p->id" data-discussionid="$p->discussionid" data-author="$author" data-ispost="true" tabindex="-1">
+<div class="hsuforum-post-wrapper hsuforum-post-target clearfix $unreadclass {$privatereplyclass}" id="p$p->id" data-postid="$p->id" data-discussionid="$p->discussionid" data-author="$author" data-ispost="true" tabindex="-1">
 
     <div class="hsuforum-post-figure">
 
@@ -1440,7 +1457,6 @@ HTML;
                 </label>
                 <textarea name="message" class="hidden"></textarea>
                 <div data-placeholder="$t->messageplaceholder" aria-label="$messagelabel" contenteditable="true" required="required" spellcheck="true" role="textbox" aria-multiline="true" class="hsuforum-textarea">$t->message</div>
-
                 $files
 
                 $t->extrahtml

@@ -91,12 +91,14 @@
 -------------------------*/
 
 /* borderbox reset */
+/*MOOD-628 btindell added CSS to add spacing between private replies*/
 .mod-hsuforum-posts-container.article *,
 .mod-hsuforum-posts-container.article *:before,
 .mod-hsuforum-posts-container.article *:after {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    margin-top: 3px;
 }
 
 
