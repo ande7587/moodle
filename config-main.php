@@ -619,7 +619,9 @@ $CFG->forced_plugin_settings = array(
                  'search_sub'           => 'no',
                  'opt_deref'            => 'no'),
      'local/user'
-        => array('bulk_limit'           => 1000)
+        => array('bulk_limit'           => 1000),
+     'local/enrol'
+        => array('allowed_roles'        => 'student,editingteacher,teacher,designer,visitor,participant,teaching_assistant')
 );
 
 //================================================================
