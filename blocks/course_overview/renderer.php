@@ -49,6 +49,10 @@ class block_course_overview_renderer extends plugin_renderer_base {
         $courseordernumber = 0;
         $maxcourses = count($courses);
         $userediting = false;
+
+        //MOOD-756 btindell added language string to course overview block
+        $html .= '<div class="course_text">'.get_string('courseoverview', 'block_course_overview').'</div>';
+
         // Intialise string/icon etc if user is editing and courses > 1
         if ($this->page->user_is_editing() && (count($courses) > 1)) {
             $userediting = true;

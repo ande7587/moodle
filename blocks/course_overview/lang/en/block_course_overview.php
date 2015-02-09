@@ -65,3 +65,7 @@ $string['view_edit_profile'] = '(View and edit your profile.)';
 $string['welcome'] = 'Welcome {$a}';
 $string['youhavemessages'] = 'You have {$a} unread ';
 $string['youhavenomessages'] = 'You have no unread ';
+
+//MOOD-756 btindell added language string to course overview block
+$string['courseoverview'] = 'Below are the courses for which you are enrolled. You can reorder and choose how many are visible by clicking the "Customize this page" button toward the top right.';
+// <<< MOOD-756

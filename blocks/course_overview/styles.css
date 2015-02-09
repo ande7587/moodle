@@ -123,3 +123,9 @@
 .block_course_overview .content .course_list .movehere{
     margin-bottom: 15px;
 }
+
+/*MOOD-756 btindell adding custom CSS for language string */
+.block_course_overview div.course_text {
+    margin: 0.2em;
+    margin-bottom: 0.5em;
+}
