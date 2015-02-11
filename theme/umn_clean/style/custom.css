@@ -116,3 +116,359 @@ span.privatereplyprefix {
     font-style: normal;
 }
 /* <<< MOOD-628*/
+
+/* <<< MOOD-327 */
+.modified {
+    margin-top: 14px;
+}
+/* <<< */
+
+/* <<< MOOD-597 */
+.moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd, .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd ul, .moodle-dialogue-base .moodle-dialogue .moodle-dialogue-bd li {
+    line-height: 1.25em;
+}
+/* <<< */
+
+/* <<< MOOD-513 */
+#notice .singlebutton+.singlebutton input:hover, .submit.buttons input[name="cancel"]:hover, #notice .singlebutton+.singlebutton input:focus, .submit.buttons input[name="cancel"]:focus {
+    background-color: #0038a8;
+    color: #FFFFFF;
+    background-position: 0 0;
+    background-repeat: repeat-y;
+}
+
+button, input.form-submit, input[type="button"], input[type="submit"], input[type="reset"], #notice .singlebutton+.singlebutton input, .submit.buttons input[name="cancel"] {
+    background-image: linear-gradient(to bottom,#0070a8,#0038a8);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0070a8', endColorstr='#0038a8',GradientType=0 );
+}
+
+button:hover, input.form-submit:hover, input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input.form-submit:focus, input[type="button"]:focus, input[type="submit"]:focus, input[type="reset"]:
+    background-color: #0038a8;
+    color: #FFFFFF;
+    background-position: 0 0;
+    background-repeat: repeat-y;
+}
+
+input[type="button"].disabled, input[type="submit"].disabled, input[type="reset"].disabled, button[disabled], input.form-submit[disabled], input[type="button"][disabled], input[type="submit"][disabled], input[type="reset"][disabled] {
+    background-image: none !important;
+    color: #333 !important;
+    background-color: #e6e6e6 !important
+}
+
+input[value="Blocks editing off"]:hover, input[value="Turn editing off"]:hover, input[value^="Stop customizing this page"]:hover {
+    background-color: #AC8010 !important;
+    color: #FFFFFF;
+}
+
+input[value="Cancel"], #page-mod-quiz-summary #confirmdialog button.default, input[value="Reset"] {
+    background-image: linear-gradient(to bottom,#D04242,#B22222) !important;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D04242', endColorstr='#B22222',GradientType=0 );
+}
+
+input[value="Cancel"]:hover, #page-mod-quiz-summary #confirmdialog button.default:hover, input[value="Reset"]:hover {
+    background-color: #B22222 !important;
+    color: #FFFFFF;
+}
+
+input[value="Previous"], input[value="Export"] {
+    background-image: linear-gradient(to bottom,#ACACAC,#808080) !important;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ACACAC', endColorstr='#808080',GradientType=0 );
+}
+
+input[value="Previous"]:hover, input[value="Export"]:hover {
+    background-color: #808080 !important;
+    color: #FFFFFF;
+}
+
+input[value="Search"], input[value="Search forums"] {
+    background-image: linear-gradient(to bottom,#0F9A0F,#008000) !important;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0F9A0F', endColorstr='#008000',GradientType=0 );
+}
+
+input[value="Search"]:hover, input[value="Search forums"]:hover {
+    background-color: #008000 !important;
+    color: #FFFFFF;
+}
+
+input[value="Turn editing on"], input[value="Customize this page"], input[value="Blocks editing on"], input[value="Blocks editing off"], input[value="Turn editing off"], input[value^="Stop customizing this page"] {
+    background-image: linear-gradient(to bottom,#DAA520,#AC8010) !important;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#DAA520', endColorstr='#AC8010',GradientType=0 );
+}
+
+input[value="Turn editing on"]:hover, input[value="Customize this page"]:hover, input[value="Blocks editing on"]:hover {
+    background-color: #AC8010 !important;
+    color: #FFFFFF;
+}
+/* <<< */
+
+/* <<< MOOD-553 */
+#page-admin-webservice-service_functions .felement.fselect {
+    margin-left: 50px;
+}
+
+#page-admin-webservice-service_functions .fitemtitle {
+    width: auto;
+}
+
+#page-admin-webservice-service_functions select {
+    max-width: 950px;
+}
+
+select {
+    max-width: 100%;
+    width: auto;
+}
+/* <<< */
+
+/* <<< MOOD-604 */
+#page-blocks-configurable_reports-viewreport form .generaltable {
+    display: table;
+}
+/* <<< */
+
+/* <<< MOOD-511 */
+#page-local-course-requestgateway .box {
+    max-width: 680px;
+}
+
+#page-local-course-requestgateway .requestformlink {
+    text-align: left;
+}
+
+#page-local-course-requestgateway .requestformlinks {
+    max-width: none !important;
+    width: auto;
+}
+/* <<< */
+
+/* <<< MOOD-347 */
+.boxhighlight {
+    background: #F8F8F8;
+    padding: 5px;
+    margin-bottom: 10px;
+    border:1px solid #e3e3e3;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+    box-shadow:inset 0 1px 1px rgba(0,0,0,0.05);
+}
+/* <<< */
+
+/* <<< MOOD-616 */
+.course-content .current {
+    background-color: #F7E7B2;
+    padding-bottom: 0 !important;
+}
+
+.course-content .current div.content {
+    background-color: #fff;
+    margin: 0 40px !important;
+}
+
+.course-content ul.topics li.section .content, .course-content ul.weeks li.section .content {
+    padding: 5px;
+}
+/* <<< */
+
+/* <<< MOOD-420 */
+.movedown, .moveup {
+    display: none;
+}
+/* <<< */
+
+/* <<< MOOD-313 */
+.nav-tabs>li>a {
+    background-color: rgb(238, 238, 238);
+    margin-top: 12px;
+}
+
+.nav-tabs>li>a:hover {
+    background-color: #DEDEDE;
+}
+/* <<< */
+
+/* <<< MOOD-283 */
+.nav>.disabled>a, .nav>.disabled>a:hover {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    color: #555;
+}
+/* <<< */
+
+/* <<< MOOD-600 */
+.onetopic font.marker {
+    font-weight: bold;
+    font-style: normal;
+}
+/* <<< */
+
+/* <<< MOOD-317 */
+.path-course #region-main hr, .path-mod.pagelayout-incourse #region-main hr {
+    border-top: 1px solid #C0C0C0;
+}
+/* <<< */
+
+/* <<< MOOD-360/533 */
+.que.multichoice .answer label > div:first-child, .que.multichoiceset .answer label>div:first-child {
+    display:inline;
+}
+/* <<< */
+
+/* <<< MOOD-384 */
+.section .availabilityinfo {
+    margin-left: 20px;
+    font-style: italic;
+}
+/* <<< */
+
+/* <<< MOOD-339 */
+#page-calendar-export .generalbox.calendarurl {
+    word-wrap: break-word;
+}
+/* <<< */
+
+/* <<< MOOD-428 */
+h3.sectionname, h3.section-title {
+    white-space: normal;
+    margin-left: 20px;
+    line-height: 30px;
+}
+/* <<< */
+
+/* <<< MOOD-590 */
+span.Apple-tab-span {
+    float: inherit !important;
+    display: inline !important;
+    margin:0 !important;
+    padding: 0 !important;
+}
+/* <<< */
+
+/* <<< MOOD-707 */
+#relatedtags-autocomplete li.yui-ac-highlight {
+    background: #426fd9;
+}
+/* <<< */
+
+.path-mod-questionnaire .qn-answer {
+    padding-left: 2px;
+}
+
+.pagelayout-mydashboard .course_title h2 {
+    font-size: 1.8em;
+    line-height: 1.8em;
+    margin: -.5em 0 0 0 !important;
+}
+
+.block.naked {
+    background-color: #fff;
+    border: none;
+    box-shadow: none;
+}
+
+/* <<< MOOD-429 */
+.box.response:before {
+    content: "\a Instructor Response: ";
+    font-style: italic;
+    white-space: pre-wrap;
+}
+
+.correctanswer:before, .correctanswer:after {
+    content:" ";
+    white-space: pre-wrap;
+    display: block;
+}
+/* <<< */
+
+/* <<< MOOD-469 */
+.hsuforum_nested_body .content, .hsuforum_nested_footer, #page-mod-hsuforum-view .hsuforum_nested_header {
+    border: none;
+    background-color: #f5f5f5;
+}
+
+.hsuforum_nested_body .privatereply .content, .privatereply .hsuforum_nested_footer, #page-mod-hsuforum-view .privatereply .hsuforum_nested_header {
+    background-color: lightblue;
+}
+
+.hsuforum_nested_footer {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+#page-mod-hsuforum-view .hsuforum_nested_header {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+#page-mod-hsuforum-view .mod_hsuforum_posts_container .forumheaderlist {
+    border: 0;
+}
+
+#page-mod-hsuforum-view td.author .hsuforum_highlightposter {
+    font-weight: normal;
+}
+
+#page-mod-hsuforum-view th.header {
+    white-space: normal;
+    vertical-align: top;
+}
+
+#page-mod-hsuforum-view tr .lastpost {
+    text-align: right;
+}
+
+#page-mod-hsuforum-view tr .replies, #page-mod-hsuforum-view tr .subscribed {
+    text-align: center;
+}
+
+#page-mod-hsuforum-view tr.discussion td {
+    vertical-align: top;
+    border: 0;
+}
+
+#page-mod-hsuforum-view tr.discussion:nth-child(odd)>td {
+    background-color: #f9f9f9;
+}
+/* <<< */
+
+/* <<< MOOD-632 */
+#page-mod-lesson-view .answeroption .fitemtitle, #page-mod-lesson-view .answeroption .fselect {
+    width:50% !important;
+    text-align:left;
+}
+/* <<< */
+
+/* <<< MOOD-638 */
+#page-mod-lesson-view .mform .fitem.fitem_fradio .felement.fradio {
+    margin-left: 0;
+}
+
+#page-mod-lesson-view .mform .fitem.fitem_fradio .fitemtitle {
+    display: none;
+}
+/* <<< */
+
+/* <<< MOOD-661 */
+#page-mod-lesson-view #lesson-timer {
+    font-size: 1.5em;
+    color: blue;
+    font-weight: bold;
+}
+
+#page-mod-lesson-view #lesson-timer.timeleft1 {
+    color: red;
+}
+/* <<< */
