@@ -443,6 +443,84 @@ EOB;
             fclose($file);
         }
 
+        /*
+         * Iterate through our theme's parents. We're looking to include and create any
+         * graphics files the parent has, which our child theme lacks. If the child
+         * theme has a file by the same name without regard for file type, that will not
+         * be over-written by this logic.
+         *
+         * Important! File names are expected not to possess any periods, except for the
+         * period preceding the file extension.
+         */
+        foreach($this->get_theme_parents($theme) as $id => $parent) {
+
+            /*
+             * Retrieve the parent theme's data from the database. This returns an array
+             * of arrays.
+             */
+            $settings = $this->load_theme_data(array('theme_shortname' => str_replace($this->theme_prefix, '', $parent)), null, null);
+
+            // Iterate through our outer arrays, about which we do not care
+            foreach($settings as $real) {
+
+                // Iterate through the inner arrays, which contain the information we need
+                foreach($real['graphic_files'] as $fileinfo) {
+
+                    /*
+                     * Assume the child theme does not already have a file with this name
+                     * and set a flag variable to false.
+                     */
+                    $found = false;
+
+                    // This array contains graphics file names and directories.
+                    foreach($graphic_files as $graphic_file) {
+
+                        /*
+                         * Check if this entry is a directory. If not, get its filename
+                         * and check if the child theme already includes a file with this
+                         * name.
+                         */
+                        if(!$graphic_file->is_directory()) {
+
+                            $file_name = $graphic_file->get_filename();
+
+                            if(substr($file_name, 0, strpos($file_name, '.')) == substr($fileinfo['name'], 0, strpos($fileinfo['name'], '.'))) {
+
+                                /*
+                                 * The child theme already includes this file. Change the
+                                 * flag variable to true and stop iterating through this
+                                 * inner array.
+                                 */
+                                $found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    /*
+                     * Since the child theme does not have an image by this name, we will
+                     * create one in its pix directory.
+                     */
+                    if(!$found) {
+
+                        chdir("{$dir}/{$parent}/pix");
+                        $towrite = file_get_contents($fileinfo['name']);
+
+                        chdir("{$dir}/{$theme_name}/pix");
+                        $file = fopen($fileinfo['name'], 'w');
+                        $result = fwrite($file, $towrite);
+
+                        if ($result === false) {
+
+                            throw new Exception("Cannot write to pix/{$file_name}");
+                        }
+
+                        fclose($file);
+                    }
+                }
+            }
+        }
+
         // notify about theme change if applicable
         $new_content_hash = md5($hash_state);
         if ($theme['notify'] == self::notify_yes && $theme['last_content_hash'] != $new_content_hash) {
@@ -583,17 +661,74 @@ EOF;
             . ($theme_parents_str ? ',' : '')
             . $global_parents_str;
 
+        // Instance $values as an array
+        $values = array();
+
         // consider the custom settings
         if (isset($theme['custom_settings'])) {
-            $values = array();
+
             foreach ($theme['custom_settings'] as $name => $setting) {
+
                 $values[] = "'{$name}' => '".addslashes($setting['setting_value'])."'";
             }
-            $custom_settings_str = 'array(' . implode(",\n", $values) . ')';
         }
-        else {
-            $custom_settings_str = 'array()';
+
+        /*
+         * Iterate through our theme's parents. We're looking to include any settings
+         * the parent possesses, which are not already possessed by the child theme.
+         */
+        foreach($this->get_theme_parents($theme) as $id => $parent) {
+
+            /*
+             * Retrieve the parent theme's data from the database. This returns an array
+             * of arrays.
+             */
+            $settings = $this->load_theme_data(array('theme_shortname' => str_replace($this->theme_prefix, '', $parent)), array('theme_custom_setting'), null);
+
+            // Iterate through our outer arrays, about which we do not care
+            foreach($settings as $real) {
+
+                // Iterate through the inner arrays, which contain the information we need
+                foreach($real['custom_settings'] as $name => $value) {
+
+                    /*
+                     * Assume the child theme does not already have this setting and
+                     * set a flag variable to false.
+                     */
+                    $found = false;
+
+                    /*
+                     * Iterate through the child theme's settings, checking if there
+                     * is a match for the current parent theme's setting.
+                     */
+                    foreach($values as $setting_nameandvalue) {
+
+                        if(strpos($setting_nameandvalue,$name) !== false) {
+
+                            /*
+                             * The child theme already includes this setting. Change
+                             * the flag variable to true and stop iterating through
+                             * this inner array.
+                             */
+                            $found = true;
+                            break;
+                        }
+                    }
+
+                    /*
+                     * Since the child theme does not have a setting by this name, we will
+                     * add the parent's setting.
+                     */
+                    if(!$found) {
+
+                        $values[] = "'{$name}' => '".addslashes($value['setting_value'])."'";
+                    }
+                }
+            }
         }
+
+        // Print out whatever it is. Will give array() if $values is empty
+        $custom_settings_str = 'array(' . implode(",\n", $values) . ')';
 
         $str = <<< EOF
 <?php

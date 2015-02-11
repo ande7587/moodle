@@ -51,11 +51,4 @@ M.block_theme_customizer.toggle_custom_value_form = function() {
     if (!category_level || !custom_value_form) {
         return false;
     }
-
-    if (category_level.get('value') == data.category_level_campus) {
-        custom_value_form.setStyle('display', 'block');
-    }
-    else {
-        custom_value_form.setStyle('display', 'none');
-    }
 };

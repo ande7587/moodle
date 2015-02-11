@@ -88,5 +88,6 @@ textarea#id_owner_usernames {width:30em; height:5em;}
 #block_theme_customizer_css_filter_ctn input[type=checkbox] {margin-right:0.2em;}
 #block_theme_customizer_css_filter_ctn span.disabled {color:#888;}
 
+#id_manage_custom_setting_values textarea {margin-left: 5px;}
 
 #add_custom_entry textarea {width:100%; height:3.5em;}

@@ -86,14 +86,14 @@ class block_theme_customizer_theme_detail_form extends moodleform {
         $custom_key = $mform->createElement('text', 'custom_setting_name', get_string('custom_setting_name', 'block_theme_customizer'), 'maxlength=200');
         $mform->setType('custom_setting_name', PARAM_TEXT);
 
-        $custom_setting_value = $mform->createElement('text', 'custom_setting_value', get_string('custom_setting_value', 'block_theme_customizer'), 'maxlength=980');
+        $custom_setting_value = $mform->createElement('textarea', 'custom_setting_value', get_string('custom_setting_value', 'block_theme_customizer'), 'rows="10" cols="40"');
         $mform->setType('custom_setting_value', PARAM_TEXT);
 
         $repeated = array($custom_key, $custom_setting_value, $mform->createElement('html', '<div class="custom-value-separator"></div>'));
         $initial_count = count($theme['custom_settings']) + 2;
-        $initial_count = $initial_count < 5 ? 5 : $initial_count;
+        $initial_count = $initial_count < 4 ? 4 : $initial_count;
 
-        $this->repeat_elements($repeated, $initial_count, array(),'custom_repeat', 'custom_add', 3,
+        $this->repeat_elements($repeated, $initial_count, array(),'custom_repeat', 'custom_add', 2,
                                get_string('add_custom_setting_value', 'block_theme_customizer'), true);
 
         $i = 0;
@@ -131,7 +131,7 @@ class block_theme_customizer_theme_custom_values_form extends moodleform {
         $custom_key = $mform->createElement('text', 'custom_key', get_string('custom_key', 'block_theme_customizer'), 'maxlength=200');
         $mform->setType('custom_key', PARAM_TEXT);
 
-        $custom_value = $mform->createElement('text', 'custom_value', get_string('custom_value', 'block_theme_customizer'), 'maxlength=980');
+        $custom_value = $mform->addElement('textarea', 'custom_value', get_string('custom_value', 'block_theme_customizer'));
         $mform->setType('custom_value', PARAM_TEXT);
 
         $repeated = array($custom_key, $custom_value, $mform->createElement('html', '<div class="custom-value-separator"></div>'));
