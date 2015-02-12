@@ -95,6 +95,7 @@ div#header-heading-pic-right {
     height: 40px;
     width: 100%;
     background: url([[pix:theme|banner-background]]) no-repeat left top/100% auto;
+    margin-bottom: 0;
 }
 
 #help-panel-logo:after {
