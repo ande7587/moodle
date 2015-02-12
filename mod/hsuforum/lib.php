@@ -3014,7 +3014,13 @@ function hsuforum_subscribed_users($course, $forum, $groupid=0, $context = null,
 
     $cm = get_coursemodule_from_instance('hsuforum', $forum->id);
     $modinfo = get_fast_modinfo($cm->course);
-    return groups_filter_users_by_course_module_visible($modinfo->get_cm($cm->id), $results);
+
+    //btindell 20150212 fixed deprecated call groups_filter_users_by_course_module_visible()
+    // Prior to the next line, $cm is a stdClass database result.  The next line sets
+    // it to an instance of a cm_info.
+    $cm = $modinfo->instances['hsuforum'][$forum->id];
+    $userlist = new \core_availability\info_module($cm);
+    return $userlist->filter_user_list($results);
 }
 
 
