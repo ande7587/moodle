@@ -1,5 +1,9 @@
 /* Custom CSS
 -------------------------*/
+#page {
+    padding: 0 10px;
+}
+
 a.logo {
     background: url([[setting:logo]]) no-repeat 0 0;
     display: block;
@@ -144,7 +148,7 @@ button, input.form-submit, input[type="button"], input[type="submit"], input[typ
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0070a8', endColorstr='#0038a8',GradientType=0 );
 }
 
-button:hover, input.form-submit:hover, input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input.form-submit:focus, input[type="button"]:focus, input[type="submit"]:focus, input[type="reset"]:
+button:hover, input.form-submit:hover, input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover, button:focus, input.form-submit:focus, input[type="button"]:focus, input[type="submit"]:focus, input[type="reset"]:focus {
     background-color: #0038a8;
     color: #FFFFFF;
     background-position: 0 0;
@@ -471,4 +475,36 @@ span.Apple-tab-span {
 #page-mod-lesson-view #lesson-timer.timeleft1 {
     color: red;
 }
+/* <<< */
+
+/* <<< MTE-198 */
+@media (min-width: 769px) {
+    body:not(.pagelayout-maintenance).has-region-side-pre.used-region-side-pre.has-region-side-post.used-region-side-post #region-bs-main-and-pre {
+        width: 75%;
+    }
+
+    body:not(.pagelayout-maintenance).has-region-side-pre.used-region-side-pre.has-region-side-post.used-region-side-post #region-main {
+        width: 65%;
+        margin-left: 2.5%;
+    }
+
+    body:not(.pagelayout-maintenance).has-region-side-pre.used-region-side-pre.has-region-side-post.used-region-side-post #block-region-side-pre {
+        width: 32.5%;
+    }
+
+    body:not(.pagelayout-maintenance).has-region-side-pre.used-region-side-pre.has-region-side-post.used-region-side-post #block-region-side-post {
+        width: 23.125%;
+        margin-left: 1.875%;
+    }
+}
+
+#page-grade-edit-tree-index div.buttons .singlebutton {
+    display: inline-block;
+}
+
+span.skip-block, span.skip-block-to, span#maincontent {
+    height: auto;
+}
+
+
 /* <<< */

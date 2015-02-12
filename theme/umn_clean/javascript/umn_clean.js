@@ -251,22 +251,28 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
             });
 
         //Populate the secondary user menu dropdown
-        Y.one('div.nav-collapse.collapse ul').setContent(Y.one('div.usermenu ul.menu').getHTML());
+        if(Y.one('div.nav-collapse.collapse ul')) {
+            Y.one('div.nav-collapse.collapse ul').setContent(Y.one('div.usermenu ul.menu').getHTML());
+        }
         //Help-panel, if present, will respond to the size of usermenu
-        if(Y.one('#help-panel')){Y.one('#help-panel').setStyle('right',parseInt(Y.one('div.moodle-actionmenu').getComputedStyle('width'))-14);}
+        if(Y.one('#help-panel')) {
+            Y.one('#help-panel').setStyle('right',parseInt(Y.one('div.moodle-actionmenu').getComputedStyle('width'))-14);
+        }
 
         //Banner respond to scroll
         var lower_banner = Y.one('#header-heading');
         var img = Y.one('#header-img-wrap');
-        var lowerBannerHeight = parseInt(Y.one(lower_banner).getComputedStyle('height'));
-        Y.on('scroll', function(e) {
-            if(window.scrollY > lowerBannerHeight) {
-                Y.one(img).setStyle('background-position','0 -' + lowerBannerHeight + 'px');
-            }
-            if(window.scrollY < lowerBannerHeight) {
-                Y.one(img).setStyle('background-position','0 -' + window.scrollY + 'px');
-            }
-        });
+        if(lower_banner) {
+            var lowerBannerHeight = parseInt(Y.one(lower_banner).getComputedStyle('height'));
+            Y.on('scroll', function(e) {
+                if(window.scrollY > lowerBannerHeight) {
+                    Y.one(img).setStyle('background-position','0 -' + lowerBannerHeight + 'px');
+                }
+                if(window.scrollY < lowerBannerHeight) {
+                    Y.one(img).setStyle('background-position','0 -' + window.scrollY + 'px');
+                }
+            });
+        }
 
         // respond to top panel buttons
         var user_image_button = Y.one('div.moodle-actionmenu ul.menubar');

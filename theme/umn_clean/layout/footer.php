@@ -32,6 +32,8 @@ if (!empty($footersettings->campuslinks)) {
     <div id="course-footer"><?php echo $OUTPUT->course_footer(); ?></div>
     <p class="helplink"><?php echo $OUTPUT->page_doc_link(); ?></p>
     <?php
+    require("$CFG->dirroot/version.php");
+    echo $release;
     echo $html->footnote;
     echo $OUTPUT->login_info();
     echo $OUTPUT->home_link();
@@ -54,7 +56,13 @@ if (!empty($footersettings->campuslinks)) {
         </ul>
     </nav>
     <?php } ?>
-    <?php echo $OUTPUT->login_info(); ?>
+    <div class="login-and-build">
+        <?php
+        echo $OUTPUT->login_info();
+        require("$CFG->dirroot/version.php");
+        echo $release;
+        ?>
+    </div>
     <ul id="umn-copyright">
         <li>© 2011–2015 Regents of the University of Minnesota. All rights reserved.</li>
         <li>The University of Minnesota is an equal opportunity educator and employer.</li>

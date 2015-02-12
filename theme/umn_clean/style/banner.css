@@ -77,7 +77,7 @@ div#header-heading-pic-right {
     height: auto;
     padding-top: 40px;
     z-index: 998;
-    background: url([[pix:theme|banner-background]]) no-repeat;
+    background: url([[pix:theme|banner-background]]) no-repeat left top/100% auto;
     margin-bottom: 10px;
 }
 
@@ -94,7 +94,7 @@ div#header-heading-pic-right {
     position: fixed;
     height: 40px;
     width: 100%;
-    background: url([[pix:theme|banner-background]]) no-repeat;
+    background: url([[pix:theme|banner-background]]) no-repeat left top/100% auto;
 }
 
 #help-panel-logo:after {
@@ -495,12 +495,12 @@ help-panel.active {
 
 /*---Environment Distinction---*/
 header.tst #header-img {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQ…eILonOByvEZR2yOCMuRTA3wuQxHI3uCZiNRCkEKSZaIQBBZCZSOhvsrwAAAABJRU5ErkJggg==)repeat !important;
-    background-color: #610b5e !important;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAICAYAAADA+m62AAAAPUlEQVQYV2NkQAM9Zh3/S05VMKKLowjAFGFTDFeILonOByvEZR2yOCMuRTA3wuQxHI3uCZiNRCkEKSZaIQBBZCZSOhvsrwAAAABJRU5ErkJggg==)repeat !important;
+    background-color: rgba(97, 11, 93, 0.7) !important;
 }
 
 header.qa #header-img {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQ…VQBSBDsCtCUoBdEZoCTEVYFKAqwqEAoQiPAogiAgpAigBjhhlfK4yrVwAAAABJRU5ErkJggg==)repeat !important;
-    background-color: #0b6121 !important;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAOklEQVQYV2NkIARchP4z4lUDVMCw5x0jbkVQBSBDsCtCUoBdEZoCTEVYFKAqwqEAoQiPAogiAgpAigBjhhlfK4yrVwAAAABJRU5ErkJggg==)repeat !important;
+    background-color: rgba(11, 97, 34, 0.7) !important;
 }
 /*---End Environment Distinction---*/

@@ -65,7 +65,7 @@ footer#umn-footer a {
     border-bottom: 1px solid rgb(194, 169, 174);
 }
 
-footer#umn-footer .logininfo {
+footer#umn-footer .login-and-build {
     font-size: 11px;
     line-height: 14px;
     float: right;
@@ -75,13 +75,13 @@ footer#umn-footer #umn-footer-links, footer#umn-footer #umn-copyright {
     width: 30%;
 }
 
-footer#umn-footer .logininfo {
+footer#umn-footer .login-and-build {
     width: 33%;
 }
 
 /* Override for when screen width drops below 980 pixels */
 @media (max-width: 979px) {
-    footer#umn-footer .logininfo, footer#umn-footer #umn-footer-links, footer#umn-footer #umn-copyright {
+    footer#umn-footer .login-and-build, footer#umn-footer #umn-footer-links, footer#umn-footer #umn-copyright {
         width: auto;
         float: none;
     }
