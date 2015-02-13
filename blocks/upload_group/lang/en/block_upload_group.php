@@ -16,11 +16,12 @@ $string['process_group_data'] = 'Process group data';
 
 // result
 $string['result_group_created'] = 'Groups created';
-$string['result_member_added'] = 'Group member added';
-$string['result_user_not_found'] = 'User not found';
+$string['result_member_added'] = 'Group members added';
+$string['result_user_not_found'] = 'Users not found';
 $string['result_group_failed'] = 'Group creation failed';
-$string['result_enroll_failed'] = 'User enrolment failed';
-$string['result_member_failed'] = 'Group member failed to be added';
+$string['result_enroll_failed'] = 'User enrolments failed';
+$string['result_member_failed'] = 'Group members failed to be added';
+$string['result_user_not_added'] = 'Users not added to a group';
 
 $string['upload_help'] = <<< EOB
 Preparing the source file:

@@ -146,14 +146,26 @@ class block_upload_group_lib {
 
             // create the group as needed
             if (!isset($group_ids[$groupname])) {
-                $data = new stdClass();
-                $data->courseid = $course->id;
-                $data->name     = $groupname;
 
-                $new_group_id = groups_create_group($data);
+                if ($groupname != '') {
+
+                    $data = new stdClass();
+                    $data->courseid = $course->id;
+                    $data->name     = $groupname;
+
+                    $new_group_id = groups_create_group($data);
+                }
+                else {
+
+                    $new_group_id = false;
+                }
 
                 if ($new_group_id === false) {
-                    $output['error']['group_failed'][] = $groupname;
+
+                    if ($groupname != '') {
+
+                        $output['error']['group_failed'][] = $groupname;
+                    }
                 }
                 else {
                     $group_ids[$groupname]     = $new_group_id;
@@ -162,19 +174,27 @@ class block_upload_group_lib {
             }
 
             // add the user to the group
-            if (groups_add_member($group_ids[$groupname], $user->id)) {
-                if (!isset($output['member_added'][$groupname])) {
-                    $output['member_added'][$groupname] = array();
-                }
+            if ($groupname != '') {
 
-                $output['member_added'][$groupname][] = $username;
+                if (groups_add_member($group_ids[$groupname], $user->id)) {
+                    if (!isset($output['member_added'][$groupname])) {
+                        $output['member_added'][$groupname] = array();
+                    }
+
+                    $output['member_added'][$groupname][] = $username;
+                }
+                else {
+                    if (!isset($output['error']['member_failed'][$groupname])) {
+                        $output['error']['member_failed'][$groupname] = array();
+                    }
+
+                    $output['error']['member_failed'][$groupname][] = $username;
+                }
             }
             else {
-                if (!isset($output['error']['member_failed'][$groupname])) {
-                    $output['error']['member_failed'][$groupname] = array();
-                }
 
-                $output['error']['member_failed'][$groupname][] = $username;
+                // No group name was provided for this user
+                $output['error']['user_not_added'][] = $username;
             }
         }
 
@@ -190,42 +210,56 @@ class block_upload_group_lib {
      * @return string
      */
     public function format_result($result) {
-        $str = '<h>' . get_string('result_group_created', 'block_upload_group') . ':</h>';
+        $str = '<h>'. count($result['group_created']) . ' ' . get_string('result_group_created', 'block_upload_group') . ':</h>';
         $str .= '<p>' . implode(', ', $result['group_created']) . '</p><br/>';
 
-        $str .= '<h>Users enrolled:</h>';
+        $str .= '<h>' . count($result['user_enrolled']) . ' Users enrolled:</h>';
         $str .= '<p>' . implode(', ', $result['user_enrolled']) . '</p><br/>';
 
-        $str .= '<h>' . get_string('result_member_added', 'block_upload_group') . ':</h>';
+        $group_str = '';
+        $group_count = 0;
         foreach ($result['member_added'] as $group => $members) {
-            $str .= '<h>' . $group . ': </h>';
-            $str .= '<p>' . implode(', ', $members) . '</p><br/>';
+            $group_count += count($members);
+            $group_str .= '<br/><h>' . $group . ': </h>';
+            $group_str .= '<p>' . implode(', ', $members) . '</p>';
         }
+        $str .= '<h>' . $group_count . ' ' . get_string('result_member_added', 'block_upload_group') . ':</h>'.$group_str;
+
+        $error_count = count($result['error']['user_not_found']) +
+                       count($result['error']['group_failed']) +
+                       count($result['error']['enrol_failed']) +
+                       count($result['error']['member_failed']) +
+                       count($result['error']['user_not_added']);
 
         $str .= '<h style="color:red;"><br/>Errors:</h>';
 
         if (count($result['error']['user_not_found']) > 0) {
-            $str .= '<h>' . get_string('result_user_not_found', 'block_upload_group') . ': </h>';
-            $str .= '<p>' . implode(', ', $result['error']['user_not_found']) . '</p><br/>';
+            $str .= '<br/><h>' . get_string('result_user_not_found', 'block_upload_group') . ': </h>';
+            $str .= '<p>' . implode(', ', $result['error']['user_not_found']) . '</p>';
         }
 
         if (count($result['error']['group_failed']) > 0) {
-            $str .= '<h>' . get_string('result_group_failed', 'block_upload_group') . ': </h>';
-            $str .= '<p>' . implode(', ', $result['error']['group_failed']) . '</p><br/>';
+            $str .= '<br/><h>' . get_string('result_group_failed', 'block_upload_group') . ': </h>';
+            $str .= '<p>' . implode(', ', $result['error']['group_failed']) . '</p>';
         }
 
         if (count($result['error']['enrol_failed']) > 0) {
-            $str .= '<h>' . get_string('result_enroll_failed', 'block_upload_group') . ': </h>';
-            $str .= '<p>' . implode(', ', $result['error']['enrol_failed']) . '</p><br/>';
+            $str .= '<br/><h>' . get_string('result_enroll_failed', 'block_upload_group') . ': </h>';
+            $str .= '<p>' . implode(', ', $result['error']['enrol_failed']) . '</p>';
         }
 
         if (count($result['error']['member_failed']) > 0) {
             $str .= '<h>' . get_string('result_member_failed', 'block_upload_group') . ': </h>';
 
             foreach ($result['error']['member_failed'] as $group => $members) {
-                $str .= '<h>' . $group . ': </h>';
-                $str .= '<p>' . implode(', ', $members) . '</p><br/>';
+                $str .= '<br/><h>' . $group . ': </h>';
+                $str .= '<p>' . implode(', ', $members) . '</p>';
             }
+        }
+
+        if (count($result['error']['user_not_added']) > 0) {
+            $str .= '<br/><h>'. count($result['error']['user_not_added']) . ' ' . get_string('result_user_not_added', 'block_upload_group') . ': </h>';
+            $str .= '<p>' . implode(', ', $result['error']['user_not_added']) . '</p>';
         }
 
         return $str;

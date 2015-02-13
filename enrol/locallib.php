@@ -237,7 +237,9 @@ class course_enrolment_manager {
             $extrafields = get_extra_user_fields($this->get_context());
             $extrafields[] = 'lastaccess';
             $ufields = user_picture::fields('u', $extrafields);
-            $sql = "SELECT DISTINCT $ufields, ul.timeaccess AS lastseen
+
+            // >>> MOOD-717 cdsmith: Added 'u.id AS id' to SQL query
+            $sql = "SELECT DISTINCT $ufields, ul.timeaccess AS lastseen, u.id AS id
                       FROM {user} u
                       JOIN {user_enrolments} ue ON (ue.userid = u.id  AND ue.enrolid $instancessql)
                       JOIN {enrol} e ON (e.id = ue.enrolid)
