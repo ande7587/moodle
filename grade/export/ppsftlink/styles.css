@@ -1,0 +1,14 @@
+
+#columnstoinclude .fitemtitle { width:30%; }
+#columnstoinclude .felement { margin-left:31%; }
+
+#page-grade-export-ppsftlink-index #options .fitemtitle { width:20%; }
+#page-grade-export-ppsftlink-index #options .felement { width:75%; margin-left:21%; }
+
+#ppsftlinkgradepreviewtable { margin-bottom: 10px; }
+#ppsftlinkgradepreviewtable td { border: 1px solid #aaa; padding: 2px 10px; }
+
+.ppsftlinkgradeexportlinks { margin-left: 20px; }
+.ppsftlinkgradeexportlinks a:visited { color: rgb(111,126,195); }
+
+.ppsftlinkgradeexportinstructions { padding:10px; }
