@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/hacpclient/db" VERSION="20120530" COMMENT="XMLDB file for Moodle blocks/hacpclient"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_hacpclient_sessions" COMMENT="hacpclient sessions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="hacpclientid"/>
+        <FIELD NAME="hacpclientid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="The block instance id of the hacpclient block that this session is associated with." PREVIOUS="id" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="The id of the user associated with this session." PREVIOUS="hacpclientid" NEXT="aicc_url"/>
+        <FIELD NAME="aicc_url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The aicc_url associated with the session." PREVIOUS="userid" NEXT="aicc_sid"/>
+        <FIELD NAME="aicc_sid" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The aicc session id." PREVIOUS="aicc_url" NEXT="lesson_status"/>
+        <FIELD NAME="lesson_status" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="The lesson_status as most recently sent to the CMI through a putparam call or as most recently received through a getparam call." PREVIOUS="aicc_sid" NEXT="getparamtime"/>
+        <FIELD NAME="getparamtime" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time of the last successful getparam call back to the CMI." PREVIOUS="lesson_status" NEXT="putparamtime"/>
+        <FIELD NAME="putparamtime" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The time of the last successful putparam call." PREVIOUS="getparamtime" NEXT="errorcode"/>
+        <FIELD NAME="errorcode" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The errorcode value is zero to indicate no error and non-zero to indicate error.  The intent is that it be set on a putparam error and reset on a successful getparam or putparam." PREVIOUS="putparamtime"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="hacpclientid"/>
+        <KEY NAME="hacpclientid" TYPE="foreign" FIELDS="hacpclientid" REFTABLE="block_instances" REFFIELDS="id" COMMENT="The hacpclientid column is a foreign key to the mdl_block_instances id column.  Should only reference instances of the hacpclient block." PREVIOUS="primary" NEXT="userid"/>
+        <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="The userid is a foreign key to the mdl_user table." PREVIOUS="hacpclientid"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="hacpclientid_userid_aiccurl" UNIQUE="true" FIELDS="hacpclientid, userid, aicc_url" COMMENT="This triplet should be unique.  The aicc_sid can change in the row, but this triplet cannot."/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
