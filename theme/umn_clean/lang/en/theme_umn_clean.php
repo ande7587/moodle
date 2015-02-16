@@ -29,12 +29,12 @@ $string['logolinkdesc'] = 'This link will be placed as an href in the banner whe
 $string['choosereadme'] = '
 <div class="clearfix">
 <div class="well">
-<h2>UMN Clean</h2>
+<h2>Generic Theme</h2>
 <p><img class=img-polaroid src="umn_clean/pix/screenshot.jpg" /></p>
 </div>
 <div class="well">
 <h3>About</h3>
-<p>UMN Clean is a modified Moodle bootstrap theme which inherits styles and renderers from its parent theme.</p>
+<p>Generic Theme is a modified Moodle bootstrap theme which inherits styles and renderers from its parent theme.</p>
 <h3>Parents</h3>
 <p>This theme is based upon the Bootstrap theme, which was created for Moodle 2.5, with the help of:<br>
 Stuart Lamour, Mark Aberdour, Paul Hibbitts, Mary Evans.</p>
@@ -49,7 +49,7 @@ Website: <a href="http://www.basbrands.nl">www.basbrands.nl</a>
 <p><a href="umn_clean/README.txt">How to copy and customise this theme.</a></p>
 </div></div>';
 
-$string['configtitle'] = 'UMN Clean';
+$string['configtitle'] = 'Generic Theme';
 $string['coursemenulimit'] = 'Course menu items limit';
 $string['coursemenulimitdesc'] = 'The maximum number of courses that will be displayed in the Course menu dropdown list.';
 $string['footersettings'] = 'Footer settings';
@@ -109,7 +109,7 @@ $string['mmenuitemsdesc'] = 'You can configure links to be listed in a drop-down
     }
 ]
 </pre>';
-$string['pluginname'] = 'UMN Clean';
+$string['pluginname'] = 'Generic Theme';
 $string['region-side-post'] = 'Right';
 $string['region-side-pre'] = 'Left';
 
