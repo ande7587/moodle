@@ -21,6 +21,15 @@ $classes = grade_export_ppsft::get_graded_ppsft_classes_for_course($COURSE->id);
 
 //pass list of peoplesoft classes to be selected  by user
 $mform = new ppsft_grade_export_form(null, array( 'classes'=>$classes ));
-$export = new grade_export_ppsft($course, $mform->get_data());
+
+// The form does not include grade item selection because we always want just the overall
+// course grade for this export. Artificially set that in the form data here.
+$courseitem = grade_item::fetch_course_item($COURSE->id);
+
+$data = $mform->get_data();
+$data->itemids = array($courseitem->id => '1');
+
+//pass list of peoplesoft classes to be selected  by user
+$export = new grade_export_ppsft($course, $data);
 $export->print_grades();
 
