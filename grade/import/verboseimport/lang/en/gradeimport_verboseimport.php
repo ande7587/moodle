@@ -70,3 +70,7 @@ $string['csvbtnupdate']='Update';
 $string['csvbtnreturn']='Return to menu';
 $string['csvbtnshowdetail']='Show Detail';
 $string['csvbtnmoredetail']='Show more detail';
+
+//MOOD-253 btindell 20141105 - Added language strings for context sensitive help
+$string['importhelp'] = 'Import Help';
+$string['importhelp_help'] = 'Changing to "Switch to Import File" will allow you to import a file similar to the way it is done in the CSV file tab. The difference is that this option will do partial updates for those grades that are correct and give error messages and not upgrade those grades that are not acceptable. The CSV file tab will only accept impor    ts where scores are all acceptable.<br/>Changing the button to "Switch to Paste Data" will bring this back to the original setting of copying and pasting data into the data tab.';

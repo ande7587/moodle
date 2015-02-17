@@ -381,8 +381,10 @@ EOX;
 
         $optionp=$_REQUEST;
         $optionp['paste'] = !$paste;
+        //MOOD-253 - btindell 20141105 - Added Context sensitive help
+        $csh = $OUTPUT->help_icon('importhelp','gradeimport_verboseimport');
         echo $OUTPUT->single_button(new moodle_url($indexphp.'?id='.$id, $optionp),
-           ($paste ?  get_string('pastebutton', 'gradeimport_verboseimport') : get_string('filebutton', 'gradeimport_verboseimport')));
+        ($paste ?  get_string('pastebutton', 'gradeimport_verboseimport') : get_string('filebutton', 'gradeimport_verboseimport'))).$csh;
         $mform->display();
         echo $OUTPUT->footer();
         die();

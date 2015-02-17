@@ -24,7 +24,7 @@ require_once($CFG->libdir.'/gradelib.php');
 
 class grade_import_form extends moodleform {
     function definition () {
-        global $COURSE;
+        global $COURSE, $OUTPUT;
 
         $mform =& $this->_form;
 
@@ -63,7 +63,8 @@ class grade_import_form extends moodleform {
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepcomma', 'grades'), 'comma');
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepcolon', 'grades'), 'colon');
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepsemicolon', 'grades'), 'semicolon');
-            $mform->addGroup($radio, 'separator', get_string('separator', 'grades'), ' ', false);
+            //MOOD-253: btindell 20141105 Added context sensitive help
+            $mform->addGroup($radio, 'separator', get_string('separator', 'grades').$OUTPUT->help_icon('separator', 'grades'), ' ', false);
         }
         if (empty($features['paste'])) {
             $mform->setDefault('separator', 'comma');
@@ -73,11 +74,13 @@ class grade_import_form extends moodleform {
 
         if (!empty($features['verbosescales'])) {
             $options = array(1=>get_string('yes'), 0=>get_string('no'));
-            $mform->addElement('select', 'verbosescales', get_string('verbosescales', 'grades'), $options);
+            //MOOD-253: btindell 20141105 Added context sensitive help
+            $mform->addElement('select', 'verbosescales', get_string('verbosescales', 'grades').$OUTPUT->help_icon('verbosescales', 'grades'), $options);
         }
 
         $options = array('10'=>10, '20'=>20, '100'=>100, '1000'=>1000, '100000'=>100000);
-        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'grades'), $options); // TODO: localize
+        //MOOD-253: btindell 20141105 Added context sensitive help
+        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'grades').$OUTPUT->help_icon('rowpreviewnum', 'grades'), $options); // TODO: localize
         $mform->setType('previewrows', PARAM_INT);
         if(array_key_exists('paste',$features)) {
             $mform->addElement('hidden','paste',$features['paste']);
@@ -92,7 +95,7 @@ class grade_import_form extends moodleform {
 class grade_import_mapping_form extends moodleform {
 
     function definition () {
-        global $CFG, $COURSE;
+        global $CFG, $COURSE, $OUTPUT;
         $mform =& $this->_form;
 
         // this is an array of headers
@@ -107,13 +110,16 @@ class grade_import_mapping_form extends moodleform {
                 $mapfromoptions[$i] = s($h);
             }
         }
-        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades'), $mapfromoptions);
+        //MOOD-277 btindell 20141209 added context senstive help
+        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades').$OUTPUT->help_icon('mapfrom', 'grades'), $mapfromoptions);
 
         //  deleted some etries and renamed perm
         $maptooptions = array( 'useridnumber'=>'student id number', 'useremail'=>'email address', 'username'=>'username', '0'=>'ignore');
-        $mform->addElement('select', 'mapto', get_string('mapto', 'grades'), $maptooptions);
+        //MOOD-277 btindell 20141209 added context senstive help
+        $mform->addElement('select', 'mapto', get_string('mapto', 'grades').$OUTPUT->help_icon('mapto', 'grades'), $maptooptions);
 
-        $mform->addElement('header', 'general', get_string('mappings', 'grades'));
+        //MOOD-277 btindell 20141209 added context sensitive help
+        $mform->addElement('header', 'general', get_string('mappings', 'grades').$OUTPUT->help_icon('mappings', 'grades'));
 
         // Add a feedback option.
         $feedbacks = array();
