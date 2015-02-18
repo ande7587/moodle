@@ -85,7 +85,8 @@ class attendance_tabs implements renderable {
 
         if ($this->att->perm->can_export()) {
             $toprow[] = new tabobject(self::TAB_EXPORT, $this->att->url_export()->out(),
-                        get_string('export', 'quiz'));
+                        //MOOD-744 btindell fixed deprecation warning
+                        get_string('export', 'attendance'));
         }
 
         if ($this->att->perm->can_change_preferences()) {
