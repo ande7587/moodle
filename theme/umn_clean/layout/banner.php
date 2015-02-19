@@ -169,6 +169,80 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                 <ul class="nav pull-right panel-content">
                 </ul>
             </div>
+            <div class="dropdown-panel small" id="course-panel-small">
+                <div class="panel-content">
+                    <ul>
+                            <?php foreach ($coursemenuitems as $item) {
+                                $title = $item->fullname;
+                                $href = $item->url;
+                                $id = 'dyanmic_user-course_'.$course->id;
+                                $hidden = $item->visible ? '' : 'hidden';
+                                echo "<li class=\"$hidden\"><a href=\"$href\" id=\"$id\">$title</a></li>";
+                            } ?>
+                            <li>
+                                <a href="<?php echo $CFG->wwwroot.'/my/'; ?>" id="all-user-courses"><?php echo get_string('all-courses', 'theme_umn_clean'); ?></a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            <?php if(!empty($mmenuitems)) { ?>
+            <div id="m-links-panel-small" class="dropdown-panel small">
+                <div class="panel-content">
+                    <ul>
+                    <?php foreach ($mmenuitems as $item) {
+                        if (!empty($item->langstringid)) {
+                            $title = get_string($item->langstringid, 'theme_umn_clean');
+                        } else {
+                            $title = empty($item->title) ? 'undefined' : $item->title;
+                        }
+                        $href = empty($item->href) ? '/#' : $item->href;
+                        $id = empty($item->id) ? '' : $item->id;
+                        $class = empty($item->class) ? '' : $item->class;
+                        $target = empty($item->target) ? '' : $item->target;
+                        echo "<li><a href=\"$href\" id=\"$id\" class=\"$class\" target=\"$target\">"; // id=\"help-link-getting-help\">";
+                        if (isset($item->icon)) {
+                            echo "<i class=\"fa fa-$item->icon\"></i>";
+                        }
+                        if (isset($item->langstring)) {
+                            echo get_string($item->langstring, 'theme_umn_clean');
+                        } else {
+                            echo isset($item->title) ? $item->title : 'undefined';
+                        }
+                        echo '</a></li>';
+                    } ?>
+                    </ul>
+                </div>
+            </div>
+            <?php } ?>
+            <?php if (!empty($helpmenuitems)) { ?>
+                <div id="help-panel-small" class="dropdown-panel small">
+                <div class="panel-content">
+                    <ul>
+                    <?php foreach ($helpmenuitems as $item) {
+                        if (!empty($item->langstringid)) {
+                            $title = get_string($item->langstringid, 'theme_umn_clean');
+                        } else {
+                            $title = empty($item->title) ? 'undefined' : $item->title;
+                        }
+                        $href = empty($item->href) ? '/#' : $item->href;
+                        $id = empty($item->id) ? '' : $item->id;
+                        $class = empty($item->class) ? '' : $item->class;
+                        $target = empty($item->target) ? '' : $item->target;
+                        echo "<li><a href=\"$href\" id=\"$id\" class=\"$class\" target=\"$target\">";
+                        if (isset($item->icon)) {
+                            echo "<i class=\"fa fa-$item->icon\"></i>";
+                        }
+                        if (isset($item->langstring)) {
+                            echo get_string($item->langstring, 'theme_umn_clean');
+                        } else {
+                            echo isset($item->title) ? $item->title : 'undefined';
+                        }
+                        echo '</a></li>';
+                     } ?>
+                    </ul>
+                </div>
+                </div>
+                <?php } ?>
             <div id="header-heading">
                 <div id="header-heading-pic-right"></div>
                 <?php echo $html->heading; ?>

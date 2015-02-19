@@ -165,10 +165,6 @@ body.jsenabled #user-image-button {
     float: left;
 }
 
-help-panel.active {
-    display: block;
-}
-
 .panel-content {
     border-radius: 4px;
     clear: right;
@@ -211,7 +207,15 @@ help-panel.active {
     border-radius: 4px;
 }
 
-.dropdown-panel.active {
+.dropdown-panel.small {
+    width: 100%;
+    position: relative;
+    top: 0;
+    padding-top: 40px;
+    z-index: 0;
+}
+
+.dropdown-panel.active, .dropdown-panel.small.active {
     display: block;
 }
 
@@ -259,11 +263,7 @@ help-panel.active {
     width: 14px;
 }
 
-#course-panel a, #help-panel a, #user-panel a {
-    padding: 0 8px 0 8px;
-}
-
-#course-panel li, #help-panel li, #user-panel li, #m-links-panel li {
+.dropdown-panel li {
     line-height: 40px;
 }
 
@@ -287,7 +287,7 @@ help-panel.active {
     content: "\f02d";
 }
 
-#m-links-panel ul, #course-panel ul, #help-panel ul, #user-panel ul {
+.dropdown-panel ul {
     margin: 0;
     list-style-type: none;
 }
@@ -297,6 +297,7 @@ help-panel.active {
     display: block;
     width: auto;
     color: #333;
+    padding: 0 8px;
 }
 
 .dropdown-panel a:hover, div#header-banner ul.panel-content>li>a:hover {
@@ -309,10 +310,6 @@ help-panel.active {
     background-image:linear-gradient(to bottom,#0070a8,#005f8f);
     background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0070a8',endColorstr='#ff005f8f',GradientType=0);
     color: #fff;
-}
-
-#course-panel li {
-    display: block;
 }
 
 #help-panel-logo, .usermenu .menubar, #header-img #my-courses {
@@ -446,8 +443,8 @@ help-panel.active {
     margin: 0;
 }
 
-/*-----Begin 979px styling----*/
-@media (max-width: 768px) {
+/*-----Begin 767px styling----*/
+@media (max-width: 767px) {
 
 .nav-collapse.collapse.smaller-user-menu-dropdown.active {
     display: block;
@@ -465,17 +462,6 @@ help-panel.active {
         display: none;
     }
 
-    .dropdown-panel {
-        width: 100%;
-        position: absolute;
-        padding-top: 0;
-    }
-#course-panel, #m-links-panel, #help-panel {
-    left: 0;
-}
-    .dropdown-panel .arrow-up {
-        display: none;
-    }
 #header-img .usermenu .avatars, #header-img .usermenu .caret {
     display: none;
 }
@@ -486,9 +472,6 @@ help-panel.active {
 }
 .usermenu .menubar:hover {
     opacity: 0.5;
-}
-.usermenu a {
-    cursor: default;
 }
 }
 /*---End 979px styling----*/

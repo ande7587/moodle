@@ -209,43 +209,62 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
         }
 
             //Respond to smaller screen by adding class
-            if(Y.Media.matches('screen and (max-width:768px)')) {
+            if(Y.Media.matches('screen and (max-width:767px)')) {
                 Y.one('header[role="banner"]').addClass('smallScreen');
                 Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', -1);
             }
 
             //Handle screen size changes
-            Y.Media.on('screen and (min-width:769px)', function(result) {
+            Y.Media.on('screen and (min-width:768px)', function(result) {
                 if(result.matches){
                     if(Y.one('div.usermenu div.moodle-actionmenu a.textmenu')){Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', 0);}
                     if(Y.one('div.nav-collapse.collapse').hasClass('active')) {
                         Y.one('div.usermenu div.moodle-actionmenu').addClass('show');
+                        Y.one('div.nav-collapse.collapse').removeClass('active')
                     }
-                    if(Y.one('#header-heading')){Y.one('#header-heading').removeClass('smallScreen');}
-                    if(Y.one('div.nav-collapse.collapse')){Y.one('div.nav-collapse.collapse').removeClass('active');}
-                    if(Y.one('a.btn.btn-navbar')){Y.one('a.btn.btn-navbar').removeClass('active');}
-                    Y.one('header[role="banner"]').removeClass('smallScreen');
-                    Y.one('#header-heading').setStyle('padding-top','40');
+                    else if (Y.one('#help-panel-small') && Y.one('#help-panel-small').hasClass('active')) {
+                        Y.one('#help-panel-small').removeClass('active');
+                        Y.one('#help-panel').addClass('active');
+                    }
+                    else if (Y.one('#course-panel-small') && Y.one('#course-panel-small').hasClass('active')) {
+                        Y.one('#course-panel-small').removeClass('active');
+                        Y.one('#course-panel').addClass('active');
+                    }
+                    else if (Y.one('#m-links-panel-small') && Y.one('#m-links-panel-small').hasClass('active')) {
+                        Y.one('#m-links-panel-small').removeClass('active');
+                        Y.one('#m-links-panel').addClass('active');
+                    }
+                    Y.one('header.smallScreen').removeClass('smallScreen');
+                    Y.one('#header-heading').setStyle('padding-top', '40');
+                    if(Y.one('#help-panel')) {
+                        Y.one('#help-panel').setStyle('right',parseInt(Y.one('div.moodle-actionmenu').getComputedStyle('width'))-14);
+                    }
                 }
             });
 
-            Y.Media.on('screen and (max-width:768px)', function(result) {
+            Y.Media.on('screen and (max-width:767px)', function(result) {
                 if(result.matches) {
                     if(Y.one('div.usermenu div.moodle-actionmenu a.textmenu')){Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', -1);}
                     Y.one('header[role="banner"]').addClass('smallScreen');
                     if(Y.one('div.usermenu div.moodle-actionmenu') && Y.one('div.usermenu div.moodle-actionmenu').hasClass('show')) {
                         Y.one('div.usermenu div.moodle-actionmenu').removeClass('show');
                         Y.one('div.nav-collapse.collapse').addClass('active');
-                        Y.one('#header-heading').setStyle('padding-top','0');
+                        Y.one('#header-heading').setStyle('padding-top', '0');
                     }
-                    if(Y.one('#help-panel') && Y.one('#help-panel').hasClass('active')) {
-                        Y.one('#header-heading').setStyle('padding-top',parseInt(Y.one('#help-panel').getComputedStyle('height'))+40);
+                    else if(Y.one('#help-panel') && Y.one('#help-panel').hasClass('active')) {
+                        Y.one('#help-panel').removeClass('active')
+                        Y.one('#help-panel-small').addClass('active');
+                        Y.one('#header-heading').setStyle('padding-top', '0');
                     }
-                    if(Y.one('#course-panel') && Y.one('#course-panel').hasClass('active')) {
-                        Y.one('#header-heading').setStyle('padding-top',parseInt(Y.one('#course-panel').getComputedStyle('height'))+40);
+                    else if(Y.one('#course-panel') && Y.one('#course-panel').hasClass('active')) {
+                        Y.one('#course-panel').removeClass('active');
+                        Y.one('#course-panel-small').addClass('active');
+                        Y.one('#header-heading').setStyle('padding-top', '0');
                     }
-                    if(Y.one('#m-links-panel') && Y.one('#m-links-panel').hasClass('active')) {
-                        Y.one('#header-heading').setStyle('padding-top',parseInt(Y.one('#m-links-panel').getComputedStyle('height'))+40);
+                    else if(Y.one('#m-links-panel') && Y.one('#m-links-panel').hasClass('active')) {
+                        Y.one('#m-links-panel').removeClass('active');
+                        Y.one('#m-links-panel-small').addClass('active');
+                        Y.one('#header-heading').setStyle('padding-top', '0');
                     }
                 }
             });
@@ -286,48 +305,49 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
             }
             if(exception != '#course-panel') {
                 if(Y.one('#course-panel')){Y.one('#course-panel').removeClass('active');}
+                if(Y.one('#course-panel-small')){Y.one('#course-panel-small').removeClass('active');}
             }
             if(exception != '#m-links-panel') {
                 if(Y.one('#m-links-panel')){Y.one('#m-links-panel').removeClass('active');}
+                if(Y.one('#m-links-panel-small')){Y.one('#m-links-panel-small').removeClass('active');}
             }
             if(exception != '#help-panel') {
                 if(Y.one('#help-panel')){Y.one('#help-panel').removeClass('active');}
+                if(Y.one('#help-panel-small')){Y.one('#help-panel-small').removeClass('active');}
             }
             if(exception != 'div.moodle-actionmenu') {
                 if(Y.one('div.usermenu .moodle-actionmenu')){Y.one('div.usermenu .moodle-actionmenu').removeClass('show');}
             }
             if(exception == 'hideall') {
-                Y.one('#header-heading').setStyle('padding-top','40px');
+                if(Y.one('#header-heading')){Y.one('#header-heading').setStyle('padding-top','40');}
             }
         };
-        var toggleMenu = function(e, target, hide, access) {
+        var toggleMenu = function(e, target, access) {
+            if(target == 'hideall') {
+                hideall(target);
+                return;
+            }
             e.stopPropagation();
             e.preventDefault();
-            if(target.hasClass('active') || target.hasClass('show')) {
+            hide = target;
+            if(Y.one('header.smallScreen') && target != 'div.nav-collapse.collapse' && target != 'div.moodle-actionmenu') {
+                target = target + '-small';
+            }
+            if(Y.one(target).hasClass('active') || Y.one(target).hasClass('show')) {
                 hideall('hideall');
                 return;
             }
-            if(target == Y.one('div.moodle-actionmenu')) {
-                target.addClass('show');
+            if(target == 'div.moodle-actionmenu') {
+                Y.one(target).addClass('show');
             }
             else {
-                target.addClass('active');
-            }
-            if(Y.one('header.smallScreen')) {
-                if(hide != 'div.nav-collapse.collapse') {
-                    Y.one('#header-heading').setStyle('padding-top',parseInt(target.getComputedStyle('height'))+40);
-                }
-                else {
-                    Y.one('#header-heading').setStyle('padding-top','0');
-                }
+                Y.one(target).addClass('active');
             }
             if(access) {
-                if(hide != 'div.nav-collapse.collapse') {
-                    target.one('a').focus();
-                }
-                else {
-                    Y.one('div.nav-collapse.collapse a').focus();
-                }
+                Y.one(target).one('a').focus();
+            }
+            if(Y.one('header.smallScreen')) {
+                Y.one('#header-heading').setStyle('padding-top','0');
             }
             hideall(hide);
         }
@@ -335,44 +355,44 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
         if(user_image_button) {
             user_image_button.on('click', function(e) {
                 if(Y.one('header.smallScreen')) {
-                    toggleMenu(e, Y.one('div.nav-collapse.collapse'), 'div.nav-collapse.collapse', false);
+                    toggleMenu(e, 'div.nav-collapse.collapse', false);
                 }
                 else {
-                    toggleMenu(e, Y.one('div.moodle-actionmenu'), 'div.moodle-actionmenu', false);
+                    toggleMenu(e, 'div.moodle-actionmenu', false);
                 }
                 });
             user_image_button.on('key', function(e) {
                 if(Y.one('header.smallScreen')) {
-                    toggleMenu(e, Y.one('div.nav-collapse.collapse'), 'div.nav-collapse.collapse', true);
+                    toggleMenu(e, 'div.nav-collapse.collapse', true);
                 }
             }, 'enter');
         }
         if(user_image_button_2) {
-            user_image_button_2.on('click', toggleMenu, null, Y.one('div.nav-collapse.collapse'), 'div.nav-collapse.collapse', false);
-            user_image_button_2.on('key', toggleMenu, 'enter', null, Y.one('div.nav-collapse.collapse'), 'div.nav-collapse.collapse', true);
+            user_image_button_2.on('click', toggleMenu, null, 'div.nav-collapse.collapse', false);
+            user_image_button_2.on('key', toggleMenu, 'enter', null, 'div.nav-collapse.collapse', true);
             Y.one('div.nav-collapse.collapse li:last-of-type a').on('key', function(e) {hideall('hideall'); user_image_button_2.focus();}, 'tab');
             Y.one('div.nav-collapse.collapse li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); user_image_button_2.focus();}, 'tab+shift');
         }
         if(help_panel_logo) {
-            help_panel_logo.on('click', toggleMenu, null, Y.one('#help-panel'), '#help-panel', false);
-            help_panel_logo.on('key', toggleMenu, 'enter', null, Y.one('#help-panel'), '#help-panel', true);
-            Y.one('#help-panel li:last-of-type a').on('key', function(e) {hideall('hideall'); help_panel_logo.focus();}, 'tab');
-            Y.one('#help-panel li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); help_panel_logo.focus();}, 'tab+shift');
+            help_panel_logo.on('click', toggleMenu, null, '#help-panel', false);
+            help_panel_logo.on('key', toggleMenu, 'enter', null, '#help-panel', true);
+            Y.all('#help-panel li:last-of-type a, #help-panel-small li:last-of-type a').on('key', function(e) {hideall('hideall'); help_panel_logo.focus();}, 'tab');
+            Y.all('#help-panel li:first-of-type a, #help-panel-small li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); help_panel_logo.focus();}, 'tab+shift');
         }
         if(course_panel_logo) {
-            course_panel_logo.on('click', toggleMenu, null, Y.one('#course-panel'), '#course-panel', false);
-            course_panel_logo.on('key', toggleMenu, 'enter', null, Y.one('#course-panel'), '#course-panel', true);
-            Y.one('#course-panel li:last-of-type a').on('key', function(e) {hideall('hideall'); course_panel_logo.focus();}, 'tab');
-            Y.one('#course-panel li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); course_panel_logo.focus();}, 'tab+shift');
+            course_panel_logo.on('click', toggleMenu, null, '#course-panel', false);
+            course_panel_logo.on('key', toggleMenu, 'enter', null, '#course-panel', true);
+            Y.all('#course-panel li:last-of-type a, #course-panel-small li:last-of-type a').on('key', function(e) {hideall('hideall'); course_panel_logo.focus();}, 'tab');
+            Y.all('#course-panel li:first-of-type a, #course-panel-small li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); course_panel_logo.focus();}, 'tab+shift');
         }
         if(m_links_logo) {
-            m_links_logo.on('click', toggleMenu, null, Y.one('#m-links-panel'), '#m-links-panel', false);
-            m_links_logo.on('key', toggleMenu, 'enter', null, Y.one('#m-links-panel'), '#m-links-panel', true);
-            Y.one('#m-links-panel li:last-of-type a').on('key', function(e) {hideall('hideall'); m_links_logo.focus();}, 'tab');
-            Y.one('#m-links-panel li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); m_links_logo.focus();}, 'tab+shift');
+            m_links_logo.on('click', toggleMenu, null, '#m-links-panel', false);
+            m_links_logo.on('key', toggleMenu, 'enter', null, '#m-links-panel', true);
+            Y.all('#m-links-panel li:last-of-type a, #m-links-panel-small li:last-of-type a').on('key', function(e) {hideall('hideall'); m_links_logo.focus();}, 'tab');
+            Y.all('#m-links-panel li:first-of-type a, #m-links-panel-small li:first-of-type a').on('key', function(e) {e.preventDefault(); hideall('hideall'); m_links_logo.focus();}, 'tab+shift');
         }
 
-        Y.one('body').on('click', hideall, null, 'hideall');
+        Y.one('body').on('click', toggleMenu, null, 'hideall', false);
 
         /* ============ MAXIMIZE-CONTENT BUTTON =======*/
         var region_main   = Y.one('#region-main');
