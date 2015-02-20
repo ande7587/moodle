@@ -739,3 +739,7 @@ FUN WITH FORMS
 .format-flexpage  .block_flexpagemod_hsuforum li.activity:after {
     clear: both;
 }
+/*MTE-248 Fixing CSS issue where text is being cut off*/
+#page-mod-hsuforum-discuss input[name="subject"] {
+    height: auto;
+}
