@@ -78,7 +78,7 @@ class qtype_matrix extends question_type
 
         //wheights
         $sql = "DELETE FROM {$prefix}question_matrix_weights
-                WHERE {$prefix}question_matrix_weights.rowid IN 
+                WHERE {$prefix}question_matrix_weights.rowid IN
                       (
                       SELECT rows.id FROM {$prefix}question_matrix_rows  AS rows
                       INNER JOIN {$prefix}question_matrix      AS matrix ON rows.matrixid = matrix.id
@@ -88,7 +88,7 @@ class qtype_matrix extends question_type
 
         //rows
         $sql = "DELETE FROM {$prefix}question_matrix_rows
-                WHERE {$prefix}question_matrix_rows.matrixid IN 
+                WHERE {$prefix}question_matrix_rows.matrixid IN
                       (
                       SELECT matrix.id FROM {$prefix}question_matrix AS matrix
                       WHERE matrix.questionid = $questionid
@@ -97,7 +97,7 @@ class qtype_matrix extends question_type
 
         //cols
         $sql = "DELETE FROM {$prefix}question_matrix_cols
-                WHERE {$prefix}question_matrix_cols.matrixid IN 
+                WHERE {$prefix}question_matrix_cols.matrixid IN
                       (
                       SELECT matrix.id FROM {$prefix}question_matrix AS matrix
                       WHERE matrix.questionid = $questionid
@@ -203,14 +203,14 @@ class qtype_matrix extends question_type
 
         global $CFG;
         $prefix = $CFG->prefix;
-        $sql = "SELECT weights.* 
+        $sql = "SELECT weights.*
                 FROM {$prefix}question_matrix_weights AS weights
-                WHERE 
-                    rowid IN (SELECT rows.id FROM {$prefix}question_matrix_rows     AS rows 
+                WHERE
+                    rowid IN (SELECT rows.id FROM {$prefix}question_matrix_rows     AS rows
                               INNER JOIN {$prefix}question_matrix                   AS matrix ON rows.matrixid = matrix.id
                               WHERE matrix.questionid = $question_id)
                     OR
-                              
+
                     colid IN (SELECT cols.id FROM {$prefix}question_matrix_cols     AS cols
                               INNER JOIN {$prefix}question_matrix                   AS matrix ON cols.matrixid = matrix.id
                               WHERE matrix.questionid = $question_id)
@@ -237,7 +237,7 @@ class qtype_matrix extends question_type
 
     /**
      * Initialise the common question_definition fields.
-     * 
+     *
      * @param question_definition $question the question_definition we are creating.
      * @param object $questiondata the question data loaded from the database.
      */
@@ -254,7 +254,7 @@ class qtype_matrix extends question_type
     /**
      * Saves question-type specific options.
      * This is called by {@link save_question()} to save the question-type specific data.
-     * 
+     *
      * @param object $question This holds the information from the editing form, it is not a standard question object.
      * @return object $result->error or $result->noticeyesno or $result->notice
      */
@@ -264,95 +264,219 @@ class qtype_matrix extends question_type
         //parent::save_question_options($question);
 
         $question_id = isset($question->id) ? $question->id : false;
-        if (empty($question->makecopy))
-        {
-            $this->delete_question_options($question_id);
-        }
+
+        // pull existing matrix information
+        $matrix = self::retrieve_matrix($question_id);
+        $matrix_rows = $matrix && is_array($matrix->rows) ? array_values($matrix->rows) : array();    // strip the key to use the row order
+        $matrix_cols = $matrix && is_array($matrix->cols) ? array_values($matrix->cols) : array();
+
+        $row_ids = array();    // map from index to row IDs for updating the weights later
+        $col_ids = array();
 
         $transaction = $DB->start_delegated_transaction();
 
-        $matrix = (object) array(
-                    'questionid' => $question->id,
-                    'multiple' => $question->multiple,
-                    'grademethod' => $question->grademethod,
-                    'renderer' => 'matrix'
+        // update matrix
+        $matrix_obj = (object) array(
+                'questionid'  => $question->id,
+                'multiple'    => $question->multiple,
+                'grademethod' => $question->grademethod,
+                'renderer'    => 'matrix'
         );
 
-        $matrix_id = $DB->insert_record('question_matrix', $matrix);
-
-        // rows
-        $rowids = array(); //mapping for indexes to db ids.
-        foreach ($question->rowshort as $i => $short)
-        {
-            if (empty($short))
-            {
-                break;
-            }
-            $row = (object) array(
-                        'matrixid' => $matrix_id,
-                        'shorttext' => $question->rowshort[$i],
-                        'description' => $question->rowlong[$i],
-                        'feedback' => $question->rowfeedback[$i]
-            );
-            $newid = $DB->insert_record('question_matrix_rows', $row);
-            $rowids[] = $newid;
+        if ($matrix) {
+            $matrix_id = $matrix_obj->id = $matrix->id;
+            $DB->update_record('question_matrix', $matrix_obj);
+        }
+        else {
+            $matrix_id = $DB->insert_record('question_matrix', $matrix_obj, true);
         }
 
-        // cols
-        $colids = array();
-        foreach ($question->colshort as $i => $short)
-        {
-            if (empty($short))
-            {
-                break;
-            }
-            $col = (object) array(
-                        'matrixid' => $matrix_id,
-                        'shorttext' => $question->colshort[$i],
-                        'description' => $question->collong[$i]
-            );
+        // update existing rows
+        $update_count = min(count($question->rowshort), count($matrix_rows));
+        for ($i = 0; $i < $update_count; $i++) {
+            $row = $matrix_rows[$i];
+ 
+            // if the row is set to blank, delete it
+            if (empty($question->rowshort[$i])) {
+                $DB->delete_records('question_matrix_rows', array('id' => $row->id));
 
-            $newid = $DB->insert_record('question_matrix_cols', $col);
-            $colids[] = $newid;
+                // delete referecing weights too
+                $DB->delete_records('question_matrix_weights', array('rowid' => $row->id));
+                $row_ids[] = null;
+            }
+            else {
+                $row->shorttext    = $question->rowshort[$i];
+                $row->description  = $question->rowlong[$i];
+                $row->feedback     = $question->rowfeedback[$i];
+
+                $DB->update_record('question_matrix_rows', $row);
+                $row_ids[] = $row->id;
+            }
+        }
+ 
+        $diff_count = count($question->rowshort) - count($matrix_rows);
+
+        // add new rows as needed
+        if ($diff_count > 0) {
+            for ($i = $update_count; $i < count($question->rowshort); $i++) {
+                if (empty($question->rowshort[$i])) {
+                    continue;
+                }
+
+                $row = (object) array(
+                    'matrixid'     => $matrix_id,
+                    'shorttext'    => $question->rowshort[$i],
+                    'description'  => $question->rowlong[$i],
+                    'feedback'     => $question->rowfeedback[$i]
+                );
+
+                $row_ids[] = $DB->insert_record('question_matrix_rows', $row);
+            }
+        }
+ 
+        // delete old rows as needed
+        if ($diff_count < 0) {
+            for ($i = $update_count; $i < count($matrix_rows); $i++) {
+                $DB->delete_records('question_matrix_rows', array('id' => $matrix_rows[$i]->id));
+
+                // delete referecing weights too
+                $DB->delete_records('question_matrix_weights', array('rowid' => $row[$i]->id));
+            }
         }
 
-        //wheights
-        if ($question->multiple)
-        {
-            foreach ($rowids as $row_index => $row_id)
-            {
-                foreach ($colids as $col_index => $col_id)
-                {
-                    $key = qtype_matrix_grading::cell_name($row_index, $col_index, $question->multiple);
-                    $value = isset($question->{$key}) ? $question->{$key}: 0;
-                    if (!is_numeric($value))
-                    {
+        // update existing columns
+        $update_count = min(count($question->colshort), count($matrix_cols));
+        for ($i = 0; $i < $update_count; $i++) {
+            $col = $matrix_cols[$i];
+
+            // if the col is set to blank, delete it
+            if (empty($question->colshort[$i])) {
+                $DB->delete_records('question_matrix_cols', array('id' => $col->id));
+
+                // delete referencing weights too
+                $DB->delete_records('question_matrix_weights', array('colid' => $col->id));
+                $col_ids[] = null;
+            }
+            else {
+                $col->shorttext    = $question->colshort[$i];
+                $col->description  = $question->collong[$i];
+
+                $DB->update_record('question_matrix_cols', $col);
+                $col_ids[] = $col->id;
+            }
+        }
+
+        $diff_count = count($question->colshort) - count($matrix_cols);
+
+        // add new cols as needed
+        if ($diff_count > 0) {
+            for ($i = $update_count; $i < count($question->colshort); $i++) {
+                if (empty($question->colshort[$i])) {
+                    continue;
+                }
+
+                $col = (object) array(
+                    'matrixid'     => $matrix_id,
+                    'shorttext'    => $question->colshort[$i],
+                    'description'  => $question->collong[$i]
+                );
+
+                $col_ids[] = $DB->insert_record('question_matrix_cols', $col);
+            }
+        }
+
+        // delete old cols as needed
+        if ($diff_count < 0) {
+            for ($i = $update_count; $i < count($matrix_cols); $i++) {
+                $DB->delete_records('question_matrix_cols', array('id' => $matrix_cols[$i]->id));
+
+                // delete referencing weights too
+                $DB->delete_records('question_matrix_weights', array('colid' => $col[$i]->id));
+            }
+        }
+
+        // map the existing weights record for easy access
+        $existing_weights = array();
+        if ($matrix) {
+            foreach ($matrix->rawweights as $rec) {
+                if (!isset($existing_weights[$rec->rowid])) {
+                    $existing_weights[$rec->rowid] = array();
+                }
+
+                $existing_weights[$rec->rowid][$rec->colid] = $rec;
+            }
+        }
+
+        // weights
+        if ($question->multiple) {
+            foreach ($row_ids as $row_index => $row_id) {
+                foreach ($col_ids as $col_index => $col_id) {
+                    // skip if the row or column has been deleted
+                    if ($row_id == null || $col_id == null) {
+                        continue;
+                    }
+
+                    $key   = qtype_matrix_grading::cell_name($row_index, $col_index, $question->multiple);
+                    $value = isset($question->{$key}) ? $question->{$key} : 0;
+
+                    if (!is_numeric($value)) {
                         $value = empty($value) ? 0 : 1;
                     }
-                    $weight = (object) array(
-                                'rowid' => $row_id,
-                                'colid' => $col_id,
-                                'weight' => $value
-                    );
-                    $DB->insert_record('question_matrix_weights', $weight);
+
+                    // update existing weights
+                    if (isset($existing_weights[$row_id][$col_id])) {
+                        $weight = $existing_weights[$row_id][$col_id];
+
+                        if ($matrix->weights[$row_id][$col_id] != $value) {
+                            $weight->weight = $value;
+
+                            $DB->update_record('question_matrix_weights', $weight);
+                        }
+                    }
+                    else {
+                        // insert new weights
+                        $weight = (object) array(
+                                    'rowid'  => $row_id,
+                                    'colid'  => $col_id,
+                                    'weight' => $value);
+
+                        $DB->insert_record('question_matrix_weights', $weight);
+                    }
                 }
             }
         }
-        else
-        {
-            foreach ($rowids as $row_index => $row_id)
-            {
-                $key = qtype_matrix_grading::cell_name($row_index, 0, $question->multiple);
-                $col_index = $question->{$key};
-                $col_id = $colids[$col_index];
-                $value = 1;
+        else {
+            foreach ($row_ids as $row_index => $row_id) {
+                if ($row_id == null) {
+                    continue;    // skip deleted rows
+                }
 
-                $weight = (object) array(
-                            'rowid' => $row_id,
-                            'colid' => $col_id,
-                            'weight' => $value
-                );
-                $DB->insert_record('question_matrix_weights', $weight);
+                // submitted key only has row index, e.g. cell2
+                $key = qtype_matrix_grading::cell_name($row_index, 0, $question->multiple);
+                $selected_col_id = $col_ids[$question->{$key}];
+
+                // update existing weights
+                foreach ($col_ids as $col_index => $col_id) {
+                    $value = $selected_col_id == $col_id ? 1 : 0;
+
+                    if (isset($existing_weights[$row_id][$col_id])) {
+                        $weight = $existing_weights[$row_id][$col_id];
+
+                        if ($weight->weight != $value) {
+                            $weight->weight = $value;
+
+                            $DB->update_record('question_matrix_weights', $weight);
+                        }
+                    }
+                    else {
+                        $weight = (object) array(
+                                    'rowid'  => $row_id,
+                                    'colid'  => $col_id,
+                                    'weight' => $value);
+
+                        $DB->insert_record('question_matrix_weights', $weight);
+                    }
+                }
             }
         }
 
@@ -377,8 +501,8 @@ class qtype_matrix extends question_type
             echo $OUTPUT->heading_with_help($heading, $this->name(), $this->plugin_name());
         }
 
-        //Who cares about that:       
-       
+        //Who cares about that:
+
 //        $permissionstrs = array();
 //        if (!empty($question->id)) {
 //            if ($question->formoptions->canedit) {

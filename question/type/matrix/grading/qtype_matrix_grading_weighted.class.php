@@ -93,20 +93,23 @@ class qtype_matrix_grading_weighted extends qtype_matrix_grading
         }
 
         // each row must have a total weight of 100%
-        $rows_count = $this->row_count($data);
-        $cols_count = $this->col_count($data);
-        for ($row = 0; $row < $rows_count; $row++)
+        for ($row = 0; $row < count($data['rowshort']); $row++)
         {
+            // skip empty rows (to be deleted)
+            if (empty($data['rowshort'][$row])) {
+                continue;
+            }
+
             $row_grade = 0;
-            for ($col = 0; $col < $cols_count; $col++)
+            for ($col = 0; $col < count($data['colshort']); $col++)
             {
                 $cell_name = $this->cell_name($row, $col, $multiple);
-                if (isset($data[$cell_name])) {
+                if (!empty($data['colshort'][$col]) && isset($data[$cell_name])) {
                     $row_grade += (float) $data[$cell_name];
                 }
 
             }
-            if (abs(abs($row_grade) - 1)>0.0001)
+            if (abs(abs($row_grade) - 1) > 0.0001)
             {
                 return array("matrix" => qtype_matrix::get_string('mustaddupto100'));
             }

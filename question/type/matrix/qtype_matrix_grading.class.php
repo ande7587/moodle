@@ -172,25 +172,27 @@ abstract class qtype_matrix_grading
 
     protected function col_count($data)
     {
+        $count = 0;
         foreach ($data['colshort'] as $index => $value)
         {
-            if (empty($value))
+            if (!empty($value))
             {
-                return $index++;
+                $count++;
             }
         }
-        return count($data['colshort']);
+        return $count;
     }
 
     protected function row_count($data)
     {
+        $count = 0;
         foreach ($data['rowshort'] as $index => $value)
         {
             if (empty($value))
             {
-                return $index++;
+                $count++;
             }
         }
-        return count($data['rowshort']);
+        return $count;
     }
 }

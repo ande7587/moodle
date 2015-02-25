@@ -84,6 +84,8 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 
             //$question->matrix = array();
             $row_index = 0;
+            $fractions = question_bank::fraction_options(); // to match the stored less-precise value to standard fractions
+
             foreach ($options->rows as $row)
             {
                 $col_index = 0;
@@ -95,7 +97,14 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
                     if ($options->multiple)
                     {
                         if ($options->grademethod == 'weighted') {
-                            $value = $weight;
+                            $value = $weight; // default, in case there's no match from standard fractions
+
+                            // find the matching standard-fraction
+                            foreach ($fractions as $fraction => $nada) {
+                                if (abs($fraction - $weight) < 0.001) {
+                                    $value = $fraction;
+                                }
+                            }
                         }
                         else {
                             $value = ($weight > 0) ? 'on' : '';
@@ -144,26 +153,28 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 
     protected function col_count($data)
     {
+        $count = 0;
         foreach ($data['colshort'] as $index => $value)
         {
-            if (empty($value))
+            if (!empty($value))
             {
-                return $index++;
+                $count++;
             }
         }
-        return count($data['colshort']);
+        return $count;
     }
 
     protected function row_count($data)
     {
-        foreach ($data['rowshort'] as $index => $value)
-        {
-            if (empty($value))
-            {
-                return $index++;
-            }
-        }
-        return count($data['rowshort']);
+        $count = 0;
+         foreach ($data['rowshort'] as $index => $value)
+         {
+            if (!empty($value))
+             {
+                $count++;
+             }
+         }
+        return $count;
     }
 
     //elements
