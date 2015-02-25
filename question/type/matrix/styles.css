@@ -4,14 +4,14 @@
 
 .que.matrix,
 .que.matrix td,
-.que.matrix th{    
+.que.matrix th{
     border-style:none;
     border-bottom-style:solid;
     border-width: 1px;
     border-color: #848484;
 }
 
-.que.matrix th{    
+.que.matrix th{
     border-width: 3px;
 }
 
@@ -25,7 +25,7 @@
     min-width: 50px;
 }
 
-.que.matrix .r0{    
+.que.matrix .r0{
     background-color: transparent;
 }
 
@@ -37,12 +37,12 @@
 
 /*tooltip*/
 
-.que.matrix th, 
+.que.matrix th,
 .que.matrix td{
     position: relative;
 }
 
-.que.matrix th .description p, 
+.que.matrix th .description p,
 .que.matrix td .description p{
     margin:0px;
 }
@@ -75,27 +75,29 @@
     z-index: 10000 !important;
 }
 
-.que.matrix td:hover .description 
+.que.matrix td:hover .description
 {
     display:inline-block !important;
     z-index: 10000 !important;
 }
 
 /** edit matrix **/
-
-.mform fieldset {
-    overflow: visible !important;
+#page-question-type-matrix #matrixheader,
+#page-question-type-matrix #matrixheader .fcontainer {
+    overflow: visible;
+    visibility: visible;
 }
 
-#page-content .region-content{
-    overflow: visible !important;
+#page-question-type-matrix #page-content .region-content {
+    overflow: visible;
 }
 
-#page-content #region-main {
-    overflow: visible !important;
+#page-question-type-matrix #page-content #region-main {
+    overflow: visible;
 }
-#page-content {
-    overflow: visible !important;
+
+#page-question-type-matrix #page-content {
+    overflow: visible;
 }
 
 #matrixheader .fitemtitle{
@@ -106,7 +108,16 @@
     margin-left:0;
 }
 
-.quedit.matrix th{    
+#id_matrixheader .felement {
+    margin-left: 0;
+
+}
+
+.path-mod-quiz .que.matrix .formulation {
+    overflow: auto;
+}
+
+.quedit.matrix th{
     border-style:none;
     border-bottom-style:solid;
     border-width: 3px;
@@ -139,7 +150,7 @@
     text-align: center;
 }
 
-.quedit.matrix .feedback .pbutton{ 
+.quedit.matrix .feedback .pbutton{
     border-left-style:solid;
 }
 
@@ -152,14 +163,14 @@
     display:block;
     display:none;
     position: absolute !important;
-    background-color:#FFFFFF;   
+    background-color:#FFFFFF;
 /*    border: 0px solid #848484;
     border-radius: 0px;*/
     padding:0px;
     margin-left:0px;
 }
 
-.quedit.matrix .popup .title{ 
+.quedit.matrix .popup .title{
     display: block;
     text-align: left;
     font-weight: bold;
@@ -176,18 +187,18 @@
 }
 
 
-.button {
+.quedit.matrix .button {
     border-style: solid;
     border-width: 1px;
     padding:2px;
 }
 
-.button:active {
+.quedit.matrix .button:active {
     background-color: #848484;
     color: #00000;
 }
 
-.quedit.matrix .popup .pbutton.close{ 
+.quedit.matrix .popup .pbutton.close{
     float:right;
     color: #000000;
     border-left-style:solid;
@@ -195,35 +206,35 @@
     margin:3px;
 }
 
-#id_refresh_matrix{ 
+#id_refresh_matrix{
     background-image: url([[pix:a/refresh]]);
     background-repeat: no-repeat;
     background-position: 1px center;
     padding-left:20px;
 }
 
-.path-question-type #id_submitbutton{ 
+#page-question-type-matrix #id_submitbutton{
     background-image: url([[pix:qtype_matrix|save]]);
     background-repeat: no-repeat;
     background-position: 1px center;
     padding-left:20px;
 }
 
-.path-question-type #id_makecopy{ 
+#page-question-type-matrix #id_makecopy{
     background-image: url([[pix:qtype_matrix|copy]]);
     background-repeat: no-repeat;
     background-position: 1px center;
     padding-left:20px;
 }
 
-.path-question-type #id_cancel{ 
+#page-question-type-matrix #id_cancel{
     background-image: url([[pix:qtype_matrix|cancel]]);
     background-repeat: no-repeat;
     background-position: 1px center;
     padding-left:20px;
 }
 
-.pbutton.close{ 
+#page-question-type-matrix .pbutton.close{
     background-image: url([[pix:qtype_matrix|close]]);
     background-repeat: no-repeat;
     background-position: center center;
@@ -233,8 +244,7 @@
     color:transparent;
 }
 
-
-.button.add{
+#page-question-type-matrix .button.add{
     background-image: url([[pix:qtype_matrix|add]]);
     background-repeat: no-repeat;
     background-position: center center;

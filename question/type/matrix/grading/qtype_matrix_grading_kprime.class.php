@@ -1,11 +1,11 @@
 <?php
 
 /**
- * 
+ *
  * Total grading - i.e. including rows.
- * 
- * The student must choose all correct answers, and none of the wrong ones 
- * to get 100% otherwise he gets 0%. Including rows. 
+ *
+ * The student must choose all correct answers, and none of the wrong ones
+ * to get 100% otherwise he gets 0%. Including rows.
  * If one row is wrong then the mark for the question is 0.
  *
  * @copyright (c) 2011 University of Geneva
@@ -28,11 +28,11 @@ class qtype_matrix_grading_kprime extends qtype_matrix_grading
     }
 
     /**
-     * Factory 
-     * 
+     * Factory
+     *
      * @return qtype_matrix_grading_kprime
      */
-    public static function create()
+    public static function create($type=null)
     {
         static $result = false;
         if ($result)
@@ -44,10 +44,10 @@ class qtype_matrix_grading_kprime extends qtype_matrix_grading
 
     /**
      * Returns the question's grade. By default it is the average of correct questions.
-     * 
+     *
      * @param qtype_matrix_question $question
      * @param array                 $answers
-     * @return float 
+     * @return float
      */
     public function grade_question($question, $answers)
     {
@@ -64,11 +64,11 @@ class qtype_matrix_grading_kprime extends qtype_matrix_grading
 
     /**
      * Grade a specific row
-     * 
+     *
      * @param qtype_matrix_question     $question
      * @param object                    $row
      * @param array                     $answers
-     * @return float 
+     * @return float
      */
     public function grade_row($question, $row, $answers)
     {

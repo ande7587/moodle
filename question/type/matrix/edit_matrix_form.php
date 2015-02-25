@@ -21,8 +21,8 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 {
 
     const DEFAULT_REPEAT_ELEMENTS = 1; //i.e. how many elements are added each time somebody click the add row/add column button.
-    const DEFAULT_ROWS = 4; //i.e. how many rows 
-    const DEFAULT_COLS = 2; //i.e. how many cols 
+    const DEFAULT_ROWS = 4; //i.e. how many rows
+    const DEFAULT_COLS = 2; //i.e. how many cols
 
     function qtype()
     {
@@ -38,7 +38,7 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
     }
 
     /**
-     * Override if you need to setup the form depending on current values. 
+     * Override if you need to setup the form depending on current values.
      * This method is called after definition(), data submission and set_data().
      * All form setup that is dependent on form values should go in here.
      */
@@ -94,7 +94,12 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 
                     if ($options->multiple)
                     {
-                        $value = ($weight > 0) ? 'on' : '';
+                        if ($options->grademethod == 'weighted') {
+                            $value = $weight;
+                        }
+                        else {
+                            $value = ($weight > 0) ? 'on' : '';
+                        }
                         $question->{$cell_name} = $value;
                     }
                     else
@@ -236,10 +241,10 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
         {
             $matrix[] = $this->create_static('<th>');
             $matrix[] = $this->create_text("colshort[$col]");
-            
+
             $popup = $this->create_htmlpopup("collong[$col]", qtype_matrix::get_string('collong'));
             $matrix = array_merge($matrix, $popup);
-            
+
 //            $id = "popcol$col";
 //            $matrix[] = $this->create_static('<a class="pbutton" href="#" onclick="mtrx_popup(\'' . $id . '\');return false;" >...</a>');
 //            $matrix[] = $this->create_static('<span id="' . $id . '" class="popup">');
@@ -250,7 +255,7 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 //            $matrix[] = $this->create_htmleditor("collong[$col]");
 //            $matrix[] = $this->create_hidden("colid[$col]");
 //            $matrix[] = $this->create_static('</span>');
-            
+
             $matrix[] = $this->create_hidden("colid[$col]");
             $matrix[] = $this->create_static('</th>');
         }
@@ -271,11 +276,11 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
             $matrix[] = $this->create_static('<tr>');
             $matrix[] = $this->create_static('<td>');
             $matrix[] = $this->create_text("rowshort[$row]");
-            
+
             $popup = $this->create_htmlpopup("rowlong[$row]", qtype_matrix::get_string('rowlong'));
-            $matrix = array_merge($matrix, $popup);    
-            $matrix[] = $this->create_hidden("rowid[$row]");        
-            
+            $matrix = array_merge($matrix, $popup);
+            $matrix[] = $this->create_hidden("rowid[$row]");
+
 //            $id = "poprow$row";
 //            $matrix[] = $this->create_static('<a class="pbutton" href="#" onclick="mtrx_popup(\'' . $id . '\');return false;" >...</a>');
 //            $matrix[] = $this->create_static('<span id="' . $id . '" class="popup">');
@@ -299,10 +304,10 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
 
 //            $id = "popfeedback$row";
             $matrix[] = $this->create_static('<td class="feedback">');
-            
+
             $popup = $this->create_htmlpopup("rowfeedback[$row]", qtype_matrix::get_string('rowfeedback'));
-            $matrix = array_merge($matrix, $popup);    
-            
+            $matrix = array_merge($matrix, $popup);
+
 //            $matrix[] = $this->create_static('<a class="pbutton" href="#" onclick="mtrx_popup(\'' . $id . '\');return false;" >...</a>');
 //            $matrix[] = $this->create_static('<span id="' . $id . '" class="popup">');
 //            $matrix[] = $this->create_static('<a class="pbutton close" href="#" onclick="mtrx_popup(\'' . $id . '\');return false;" >&nbsp;&nbsp;&nbsp;</a>');
@@ -355,7 +360,12 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
             $this[] = $matrix_group;
         }
 
-        if ($cols_count > 1)
+        // 20140108 Colin. Added to condition so that column text would be set to
+        //     default only if cols for the column had not been set before.  Should
+        //     be the case only when adding the question.  Before this change,
+        //     the default was getting set in the form in place of that previously
+        //     entered.
+        if ($cols_count > 1 and !isset($this->question->options->cols))
         {
             $this->set_default('colshort[0]', qtype_matrix::get_string('true'));
             $this->set_default('colshort[1]', qtype_matrix::get_string('false'));
@@ -365,12 +375,12 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
     public function get_javascript()
     {
         return <<<EOT
-        
-        var YY = null;               
-        
+
+        var YY = null;
+
         window.mtrx_current = false;
         function mtrx_popup(id)
-        {        
+        {
             var current_id = window.mtrx_current;
             var new_id = '#' + id;
             if(current_id == false)
@@ -389,18 +399,18 @@ class qtype_matrix_edit_form extends question_edit_form implements ArrayAccess
             {
                 node = YY.one(current_id);
                 node.hide();
-                
+
                 node = YY.one(new_id)
                 node.setStyle('display', 'block');
                 window.mtrx_current = new_id;
             }
-        }        
-        
+        }
+
         YUI(M.yui.loader).use('node', function(Y) {
             YY = Y;
-            }); 
-        
-        
+            });
+
+
 EOT;
     }
 
@@ -454,7 +464,7 @@ EOT;
         static $popcount = 0;
         $popcount++;
         $id = "htmlpopup$popcount";
-        
+
         $result = array();
         $result[] = $this->create_static('<a class="pbutton" href="#" onclick="mtrx_popup(\'' . $id . '\');return false;" >...</a>');
         $result[] = $this->create_static('<span id="' . $id . '" class="popup">');

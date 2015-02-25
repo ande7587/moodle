@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Per row grading. The total grade is the average of grading received 
+ * Per row grading. The total grade is the average of grading received
  * for reach one of the rows.
- * 
- * Weighted grading. Each cell receives a weighting, and the positive values 
+ *
+ * Weighted grading. Each cell receives a weighting, and the positive values
  * for each row must add up to 100%. Penalises user for wrong answers
  *
  * @copyright (c) 2011 University of Geneva
@@ -27,11 +27,11 @@ class qtype_matrix_grading_weighted extends qtype_matrix_grading
     }
 
     /**
-     * Factory 
-     * 
+     * Factory
+     *
      * @return qtype_matrix_grading_weighted
      */
-    public static function create()
+    public static function create($type=null)
     {
         static $result = false;
         if ($result)
@@ -43,11 +43,11 @@ class qtype_matrix_grading_weighted extends qtype_matrix_grading
 
     /**
      * Grade a specific row
-     * 
+     *
      * @param qtype_matrix_question     $question
      * @param object                    $row
      * @param array                     $answers
-     * @return float 
+     * @return float
      */
     public function grade_row($question, $row, $answers)
     {
@@ -70,11 +70,11 @@ class qtype_matrix_grading_weighted extends qtype_matrix_grading
 
     /**
      * Create the form element used to define the weight of the cell
-     * 
+     *
      * @param MoodleQuickForm   $form
      * @param int               $row
      * @param int               $col
-     * 
+     *
      * @return object
      */
     public function create_cell_element($form, $row, $col, $multiple)
@@ -101,7 +101,10 @@ class qtype_matrix_grading_weighted extends qtype_matrix_grading
             for ($col = 0; $col < $cols_count; $col++)
             {
                 $cell_name = $this->cell_name($row, $col, $multiple);
-                $row_grade += (float) $data[$cell_name];
+                if (isset($data[$cell_name])) {
+                    $row_grade += (float) $data[$cell_name];
+                }
+
             }
             if (abs(abs($row_grade) - 1)>0.0001)
             {

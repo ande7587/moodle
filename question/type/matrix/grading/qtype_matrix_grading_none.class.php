@@ -23,11 +23,11 @@ class qtype_matrix_grading_none extends qtype_matrix_grading
     }
 
     /**
-     * Factory 
-     * 
+     * Factory
+     *
      * @return qtype_matrix_grading_none
      */
-    public static function create()
+    public static function create($type=null)
     {
         static $result = false;
         if ($result)
@@ -47,11 +47,11 @@ class qtype_matrix_grading_none extends qtype_matrix_grading
 
     /**
      * Grade a specific row
-     * 
+     *
      * @param qtype_matrix_question     $question
      * @param object                    $row
      * @param array                     $answers
-     * @return float 
+     * @return float
      */
     public function grade_row($question, $row, $answers)
     {

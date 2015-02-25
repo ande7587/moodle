@@ -42,7 +42,7 @@ abstract class qtype_matrix_grading
     }
 
     /**
-     *     
+     *
      * @param string $type
      * @return qtype_matrix_grading
      */
@@ -56,7 +56,7 @@ abstract class qtype_matrix_grading
         $class = 'qtype_matrix_grading_' . $type;
 
         require_once dirname(__FILE__) . '/grading/' . $class . '.class.php';
-        return $resut[$type] = call_user_func(array($class, 'create'));
+        return $result[$type] = call_user_func(array($class, 'create'));
     }
 
     public static function get_name()
@@ -74,7 +74,7 @@ abstract class qtype_matrix_grading
 
     /**
      * Create the form element used to define the weight of the cell
-     * 
+     *
      * @param MoodleQuickForm   $form
      * @param int $row          row number
      * @param int $col          column number
@@ -100,7 +100,7 @@ abstract class qtype_matrix_grading
      * @param int   $row row number
      * @param int   $col col number
      * @param bool  $multiple one answer per row or several
-     * 
+     *
      * @return string cellname
      */
     public static function cell_name($row, $col, $multiple)
@@ -119,10 +119,10 @@ abstract class qtype_matrix_grading
 
     /**
      * Returns the question's grade. By default it is the average of correct questions.
-     * 
+     *
      * @param qtype_matrix_question $question
      * @param array                 $answers
-     * @return float 
+     * @return float
      */
     public function grade_question($question, $answers)
     {
@@ -139,11 +139,11 @@ abstract class qtype_matrix_grading
 
     /**
      * Grade a specific row
-     * 
+     *
      * @param qtype_matrix_question     $question
      * @param object                    $row
      * @param array                     $answers
-     * @return float 
+     * @return float
      */
     public function grade_row($question, $row, $answers)
     {
@@ -151,7 +151,7 @@ abstract class qtype_matrix_grading
     }
 
     /**
-     * validate 
+     * validate
      *
      * @param array $data the raw form data
      *

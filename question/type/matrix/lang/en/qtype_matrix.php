@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  * @copyright   2012 University of Geneva
  * @author      laurent.opprecht@unige.ch
  * @license     http://www.gnu.org/copyleft/gpl.html GNU Public License
@@ -10,11 +10,20 @@
  */
 
 // qtype strings
-$string['pluginname'] = 'Matrix question';
+$string['pluginname'] = 'Matrix multiple choice';
+
+// 20140108 Colin.  Added missing strings using text from Mark.
+$string['pluginnameadding'] = 'Adding a Matrix question';
+$string['pluginnameediting'] = 'Editing a Matrix question';
+$string['pluginnamesummary'] = 'This question type allows the instructor to define the rows and columns that make up a matrix. Students can select either single or multiple answers per row, depending on how the question has been configured. Each row receives a grade defined by one of the grading methods. The final grade for the question is an average of their grades for each of the rows.';
+
 $string['addingmatrix'] = 'Adding Matrix';
 $string['editingmatrix'] = 'Editing Matrix';
 $string['matrix'] = 'Matrix';
 $string['matrixsummary'] = 'Matrix question type';
+$string['pluginnamesummary'] = 'Matrix question type';
+$string['pluginnameediting'] = 'Edit a Matrix question';
+$string['pluginnameadding'] = 'Add a Matrix question';
 
 $string['matrix_help'] = '<p>This question type allows the teacher to define the rows and columns that make up a matrix.</p>
 <p>Students can select either multiple or single answers per row, depending on how the question has been configured. Each row receives a grade defined by one of the grading methods.</p>

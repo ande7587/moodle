@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Per row grading. The total grade is the average of grading received 
+ * Per row grading. The total grade is the average of grading received
  * for reach one of the rows.
- * 
+ *
  * Any correct and no wrong answer to get 100% otherwise 0
  *
  * @copyright (c) 2011 University of Geneva
@@ -26,11 +26,11 @@ class qtype_matrix_grading_any extends qtype_matrix_grading
     }
 
     /**
-     * Factory 
-     * 
+     * Factory
+     *
      * @return qtype_matrix_grading_any
      */
-    public static function create()
+    public static function create($type=null)
     {
         static $result = false;
         if ($result)
@@ -42,11 +42,11 @@ class qtype_matrix_grading_any extends qtype_matrix_grading
 
     /**
      * Grade a specific row
-     * 
+     *
      * @param qtype_matrix_question     $question
      * @param object                    $row
      * @param array                     $answers
-     * @return float 
+     * @return float
      */
     public function grade_row($question, $row, $answers)
     {
