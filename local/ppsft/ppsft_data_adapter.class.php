@@ -341,10 +341,8 @@ SQL;
      * Returns an array of emplids.
      * Possible PeopleSoft instr_type values are PI, PRXY, SI, TA, for
      * primary, proxy, secondary, and ta, respectively.
-     * Making private for now just because it is only used internally.  Can be
-     * made public, if necessary.
      */
-    private function get_instructors_for_classes($triplets, $ppsftroles=null) {
+    public function get_instructors_for_classes($triplets, $ppsftroles=null) {
 
         $classmatchcondition = $this->convert_search_params_to_sql($triplets);
 

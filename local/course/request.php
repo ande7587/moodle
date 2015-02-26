@@ -45,6 +45,49 @@ $customdata = array('usercreator' => new local_user_creator(),
 
 $strtitle = get_string('nonacademiccourserequest', 'local_course');
 
+/**
+ * Returns true if the user is either an instructor or not a student
+ *
+ */
+function is_instr_or_not_a_student($ppsftadapter, $triplets){
+    global $USER;
+
+    $isinstrornotastd = true;
+    $emplid = $USER->idnumber;
+
+    if(empty($emplid)){
+        return $isinstrornotastd;
+    }
+
+    $uniqueterms = array();
+    //for each term from requested classes, fetch student enrolled courses
+    //avoid duplicate calls to ppsft by storing visited terms.
+    foreach($triplets as $class){
+        $term = $class['term'];
+        if(!array_key_exists($uniqueterms, $terms)){
+            $uniqueterms[$term] = true;
+            $enrolledclasses = $ppsftadapter->get_student_enrollments($emplid, $term);
+            //for each enrolled class, check if it's one of the requested course
+            foreach($enrolledclasses as $enrolledclass){
+                if(array_key_exists($enrolledclass->triplet, $triplets)){
+                    $isinstrornotastd = false;
+                    break;
+                }
+            }
+        }
+    }
+
+    //if it is a student, check if the student has an instructor role
+    if(!$isinstrornotastd){
+        $instructors = $ppsftadapter->get_instructors_for_classes($triplets);
+        if(array_key_exists($emplid, $instructors)){
+            $isinstrornotastd=true;
+        }
+    }
+
+    return $isinstrornotastd;
+}
+
 switch ($crtype) {
     case 'acad':
         if (isset($SESSION->courserequest_ppsftsearch)) {
@@ -66,6 +109,13 @@ switch ($crtype) {
         // we might need to cache the emplids and ppsftclasses for the session as long as triplets does
         // not change.
         $ppsftadapter = ppsft_get_adapter();
+
+        $isinstrornotastd = is_instr_or_not_a_student($ppsftadapter, $triplets);
+
+         if(!$isinstrornotastd){
+            redirect('/local/course/requestrejection.php');
+        }
+
         $customdata['primaryinstructoremplids'] = $ppsftadapter->get_primary_instructors_for_classes($triplets);
         $customdata['ppsftclasses'] = $ppsftadapter->get_classes_by_triplets_or_catalog($triplets);
 

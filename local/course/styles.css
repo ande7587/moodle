@@ -56,9 +56,9 @@ body.path-local-course .previousbuttondiv button { margin-right:33px; }
 
 /* requestconfirmation */
 
-div.requestconfirmationcontainer { text-align:center; margin-bottom:30px; }
-div.requestconfirmationcontainer .message { width:100%; text-align:left; margin:5px 10px 20px 10px; }
-div.requestconfirmation { display:inline-block; text-align:center; margin:5px 30px; width:50%; }
+div.requestconfirmationcontainer, div.requestrejectioncontainer { text-align:center; margin-bottom:30px; }
+div.requestconfirmationcontainer .message, div.requestrejectioncontainer .message { width:100%; text-align:left; margin:5px 10px 20px 10px; }
+div.requestconfirmation, div.requestrejection { display:inline-block; text-align:center; margin:5px 30px; width:50%; }
 
 /* Start main request form (includes edit form, also) */
 

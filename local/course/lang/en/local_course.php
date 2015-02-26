@@ -327,3 +327,7 @@ $string['defaultcategorytheme'] = 'Default category theme';
 $string['defaultcategorytheme_help'] = 'When an existing course is copied into this category the course setting "Force theme" will be set to this theme regardless of the setting in the source course. Instructors, designers, etc... can change this setting after the course is copied but initially all courses copied to this category after this setting is set will default to this theme.';
 $string['editcategorycoursesettings'] = 'Edit category course settings';
 $string['editcategorycoursesettingsthis'] = 'Category course settings';
+
+// MOOD-733 Prevent Students from requesting Academic Course Sites
+$string['courserequestrejection'] = 'You are requesting a Moodle course site for a class in which you are enrolled. Students cannot request Moodle course sites for their classes.';
+$string['requestdevornonacacoursesite'] = 'Request development or non-academic course site';
