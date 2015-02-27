@@ -81,8 +81,8 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                                 $title = $item->fullname;
                                 $href = $item->url;
                                 $id = 'dyanmic_user-course_'.$course->id;
-                                $hidden = $item->visible ? '' : 'hidden';
-                                echo "<li class=\"$hidden\"><a href=\"$href\" id=\"$id\">$title</a></li>";
+                                $hidden = $item->visible ? '' : ' '.get_string('coursehiddensubheading', 'theme_umn_clean');
+                                echo "<li><a href=\"$href\" id=\"$id\">$title$hidden</a></li>";
                             } ?>
                             <li>
                                 <a href="<?php echo $CFG->wwwroot.'/my/'; ?>" id="all-user-courses"><?php echo get_string('all-courses', 'theme_umn_clean'); ?></a>
