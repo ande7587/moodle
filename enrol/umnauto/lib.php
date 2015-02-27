@@ -406,8 +406,8 @@ class enrol_umnauto_plugin extends enrol_plugin {
 
         $sql =<<<SQL
 select 1
-from mdl_ppsft_class_enrol ce
- join mdl_enrol_umnauto_classes uc on uc.ppsftclassid=ce.ppsftclassid
+from {ppsft_class_enrol} ce
+ join {enrol_umnauto_classes} uc on uc.ppsftclassid=ce.ppsftclassid
 where ce.status='E' and ce.userid=:userid and uc.enrolid=:enrolid
 SQL;
 
