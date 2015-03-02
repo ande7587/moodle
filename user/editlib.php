@@ -298,11 +298,12 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
     #    }
     #}
 
-    if (!empty($CFG->usetags) and empty($USER->newadminuser)) {
-        $mform->addElement('header', 'moodle_interests', get_string('interests'));
-        $mform->addElement('tags', 'interests', get_string('interestslist'), array('display' => 'noofficial'));
-        $mform->addHelpButton('interests', 'interestslist');
-    }
+    # MOOD-778 20150302 wolde034: Hide the "Interests" area of the User Profile.
+    #if (!empty($CFG->usetags) and empty($USER->newadminuser)) {
+    #    $mform->addElement('header', 'moodle_interests', get_string('interests'));
+    #    $mform->addElement('tags', 'interests', get_string('interestslist'), array('display' => 'noofficial'));
+    #    $mform->addHelpButton('interests', 'interestslist');
+    #}
 
     // Moodle optional fields.
     $mform->addElement('header', 'moodle_optional', get_string('optional', 'form'));
