@@ -1,6 +1,6 @@
 .path-grade-report-singleview div.generalbox {
-  margin: 0 20px 15px 20px;
-  text-align: center;
+  margin: 0;
+  margin-bottom: 15px;
 }
 
 .path-grade-report-singleview div.generalbox div.singleselect form div {
@@ -26,16 +26,13 @@
 .path-grade-report-singleview input[name^="finalgrade"] {
     width: 50px;
 }
-.path-grade-report-singleview .generaltable tbody th {
-  white-space: nowrap;
-}
 .path-grade-report-singleview .generaltable tbody th > * {
   display: inline-block;
   vertical-align: middle;
   margin: 0 2px;
 }
 
-.path-grade-report-singleview #region-main h2, .paging{
+.paging{
    text-align: center;
 }
 
@@ -87,4 +84,27 @@
 }
 .dir-rtl.path-grade-report-singleview div.generalbox form .singleview_bulk > div.enable {
   text-align: right;
+}
+
+/* MOOD-762 20150306 jinhofer Stylize select boxes */
+.path-grade-report-singleview div.singleselect {
+    max-width: 50%;
+    margin-right: 0;
+}
+
+.path-grade-report-singleview div.singleselect label {
+    text-align: left;
+}
+
+.path-grade-report-singleview .singleselect select {
+    min-width: 220px;
+    max-width: 100%;
+}
+
+.path-grade-report-singleview div.singleselect label {
+    font-weight: bold;
+}
+
+.path-grade-report-singleview #toggle-search-container {
+    text-align: right;
 }

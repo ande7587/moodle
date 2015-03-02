@@ -255,6 +255,9 @@ abstract class screen {
         );
 
         $PAGE->requires->js_init_call('M.gradereport_singleview.init', array(), false, $module);
+
+        # MOOD-762 20150306 jinhofer Give string to the previously called js file
+        $PAGE->requires->string_for_js('searchlist', 'gradereport_singleview');
     }
 
     /**

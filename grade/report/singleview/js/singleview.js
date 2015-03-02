@@ -18,6 +18,59 @@ M.gradereport_singleview.init = function(Y) {
         });
     });
 
+    //MOOD-762 20150306 jinhofer Add Click function to the button
+    if(Y.one('button#toggle-search')) {
+        Y.one('button#toggle-search').on('click', function() {
+            Y.all('div.singleselect select').each(function() {
+                if(this.get('size') == '15') {
+                    this.setAttribute('size', '1');
+                    Y.all('div.filter').each(function() {
+                        this.addClass('hidden');
+                    });
+                }
+                else {
+                    this.setAttribute('size', '15');
+                    Y.all('div.filter').each(function() {
+                        this.removeClass('hidden');
+                    });
+                }
+            })
+        });
+    }
+
+    //MOOD-762 20150306 jinhofer Add the filter input boxes for each select
+    Y.all('div.singleselect').each(function() {
+        if(this.one('input[name=item]').getAttribute('value') == 'grade') {
+            id = 'grade-search';
+        }
+        else {
+            id = 'user-search';
+        }
+        this.append('<div class="hidden filter">'+M.util.get_string('searchlist', 'gradereport_singleview')+'<br><input id="'+id+'" type="text" autocomplete="off"></div>');
+    });
+
+    //MOOD-762 20150306 jinhofer Handle search srtings put into the input boxes
+    Y.all('div.filter input').each(function() {
+        this.on('valueChange', function(e) {
+            if(this.get('value') = '') {
+                this.ancestor('div.singleselect').all('select option').each(function() {
+                    this.removeClass('hidden');
+                });
+                return;
+            }
+            this.ancestor('div.singleselect').all('select option').each(function() {
+                value = this.getHTML().toLowerCase();
+                text = this.ancestor('div.singleselect').one('div.filter input').get('value').toLowerCase();
+                if(value.indexOf(text) == -1 || this.get('value') == '' && text != '') {
+                    this.addClass('hidden');
+                }
+                else {
+                    this.removeClass('hidden');
+                }
+            });
+        });
+    });
+
     // Override Toggle
     Y.all('input[name^=override_]').each(function(input) {
         input.on('change', function() {

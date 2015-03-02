@@ -113,6 +113,17 @@ class select extends screen {
             $OUTPUT->notification(get_string('noscreens', 'gradereport_singleview'));
         }
 
+        # MOOD-762 20150306 jinhofer Add search function to Single view.
+        #          This button will be handled in singleview/js
+        $button = '<button value="'.
+                  get_string('togglesearch', 'gradereport_singleview').
+                  '" id="toggle-search">'.
+                  get_string('togglesearch', 'gradereport_singleview').
+                  '</button>';
+        $button = '<div id="toggle-search-container">'.$button.'</div>';
+        $html = '<div>'.$html.'</div>';
+        $html = $button.$html;
+
         return $html;
     }
 
