@@ -287,15 +287,16 @@ function useredit_shared_definition(&$mform, $editoroptions = null, $filemanager
 
     }
 
+    # MOOD-778 20150302 wolde034: Hide the "Additional names" area of the User Profile.
     // Display user name fields that are not currenlty enabled here if there are any.
-    $disabledusernamefields = useredit_get_disabled_name_fields($enabledusernamefields);
-    if (count($disabledusernamefields) > 0) {
-        $mform->addElement('header', 'moodle_additional_names', get_string('additionalnames'));
-        foreach ($disabledusernamefields as $allname) {
-            $mform->addElement('text', $allname, get_string($allname), 'maxlength="100" size="30"');
-            $mform->setType($allname, PARAM_NOTAGS);
-        }
-    }
+    #$disabledusernamefields = useredit_get_disabled_name_fields($enabledusernamefields);
+    #if (count($disabledusernamefields) > 0) {
+    #    $mform->addElement('header', 'moodle_additional_names', get_string('additionalnames'));
+    #    foreach ($disabledusernamefields as $allname) {
+    #        $mform->addElement('text', $allname, get_string($allname), 'maxlength="100" size="30"');
+    #        $mform->setType($allname, PARAM_NOTAGS);
+    #    }
+    #}
 
     if (!empty($CFG->usetags) and empty($USER->newadminuser)) {
         $mform->addElement('header', 'moodle_interests', get_string('interests'));
