@@ -40,6 +40,7 @@ echo $OUTPUT->doctype() ?>
 
 <?php echo $OUTPUT->standard_top_of_body_html() ?>
 
+<?php include('banner.php'); ?>
 
 <div id="page" class="container-fluid">
 

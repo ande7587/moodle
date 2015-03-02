@@ -209,13 +209,13 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
         }
 
             //Respond to smaller screen by adding class
-            if(Y.Media.matches('screen and (max-width:767px)')) {
+            if(Y.Media.matches('screen and (max-width:768px)')) {
                 Y.one('header[role="banner"]').addClass('smallScreen');
                 Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', -1);
             }
 
             //Handle screen size changes
-            Y.Media.on('screen and (min-width:768px)', function(result) {
+            Y.Media.on('screen and (min-width:769px)', function(result) {
                 if(result.matches){
                     if(Y.one('div.usermenu div.moodle-actionmenu a.textmenu')){Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', 0);}
                     if(Y.one('div.nav-collapse.collapse').hasClass('active')) {
@@ -242,7 +242,7 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
                 }
             });
 
-            Y.Media.on('screen and (max-width:767px)', function(result) {
+            Y.Media.on('screen and (max-width:768px)', function(result) {
                 if(result.matches) {
                     if(Y.one('div.usermenu div.moodle-actionmenu a.textmenu')){Y.one('div.usermenu div.moodle-actionmenu a.textmenu').setAttribute('tabindex', -1);}
                     Y.one('header[role="banner"]').addClass('smallScreen');

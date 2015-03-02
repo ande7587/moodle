@@ -38,13 +38,13 @@
 
 #header-heading h1 {
     color: #000;
-    line-height: 36px;
+    line-height: 24px;
     position: relative;
     font-size: 1.5em;
     text-align: left;
     width: auto;
     display: inline-block;
-    margin: 0 9em 0 0.6em;
+    margin: 8px 9em 8px 0.6em;
 }
 
 #header-heading h2 {
@@ -52,7 +52,7 @@
     font-size: 1em;
     text-align: left;
     vertical-align: top;
-    line-height: 1em;
+    line-height: 20px;
     color: #000;
 }
 
@@ -78,6 +78,7 @@ div#header-heading-pic-right {
     padding-top: 40px;
     z-index: 998;
     background: url([[pix:theme|banner-background]]) no-repeat left top/100% auto;
+    background-color: #7b7a7a;
     margin-bottom: 10px;
 }
 
@@ -444,7 +445,7 @@ body.jsenabled #user-image-button {
 }
 
 /*-----Begin 767px styling----*/
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
 .nav-collapse.collapse.smaller-user-menu-dropdown.active {
     display: block;
@@ -472,6 +473,14 @@ body.jsenabled #user-image-button {
 }
 .usermenu .menubar:hover {
     opacity: 0.5;
+}
+
+#header-heading h1 {
+    margin: 0.2em 0 0 0.2em;
+}
+
+#header-heading h2 {
+    margin-left: 0.2em;
 }
 }
 /*---End 979px styling----*/
