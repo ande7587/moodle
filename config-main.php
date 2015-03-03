@@ -644,7 +644,7 @@ $CFG->shibboleth_login_handler = 'https://ay15.moodle.umn.edu/Shibboleth.sso/Log
 $CFG->ppsft_dbhost = '';
 $CFG->ppsft_dbuser = 'mdlsys';
 $CFG->ppsft_dbpass = '< env config >';
-$CFG->ppsft_dbname = 'dwprd.oit';
+$CFG->ppsft_dbname = 'CSPRD.WORLD';
 
 // For migrating courses from one instance to another.
 $CFG->migration_base_dir = '/nfs/migration/transfer';

@@ -5,16 +5,20 @@
  * PeopleSoft schema.
  *
  * Public methods:
- *
- *      get_classes_by_triplets_or_catalog($searchparams)
- *      get_enrollment_updates_since($start_time)
- *      get_class_by_triplet($term, $institution, $class_nbr)
- *      get_instructor_classes($emplid, $min_term)
- *      get_student_classes($emplid, $min_term)
- *      get_class_instructors($term, $institution, $class_nbr)
- *      get_class_students($term, $institution, $class_nbr)
- *      get_terms_since($start_term)
- *      get_current_term()
+ * $ grep 'public function' local/ppsft/ppsft_data_adapter.class.php  | sed 's/^ *public function / *     /;s/ {$//'
+ *     __construct($database_connection)
+ *     get_classes_by_instructor_and_term($emplid, $term)
+ *     get_classes_by_triplets_or_catalog($searchparams)
+ *     convert_search_params_to_sql($searchparams)
+ *     get_enrollment_updates_since($since_time)
+ *     get_class_by_triplet($term, $institution, $class_nbr)
+ *     get_instructor_classes($emplid, $min_term=null)
+ *     get_class_instructors($term, $institution, $class_nbr)
+ *     get_primary_instructors_for_classes($triplets)
+ *     get_student_enrollments($emplid, $min_term=null)
+ *     get_class_enrollments($term, $institution, $class_nbr)
+ *     get_current_term()
+ *     get_enrollment_row_delete_action($emplid, $term, $institution, $class_nbr)
  */
 
 
@@ -24,6 +28,9 @@ class ppsft_data_adapter {
 
     public function __construct($database_connection) {
         $this->db = $database_connection;
+
+        # Uncomment for debugging SQL.
+        #$this->db->set_debug(true);
     }
 
     /**
@@ -41,20 +48,20 @@ select distinct c.strm || c.institution || c.class_nbr as triplet,
         c.ssr_component,
         cc.course_title_long as long_title,
         c.class_nbr
-from cssysadm.o_ps_class_tbl c,
-     dwsysadm.ps_crse_catalog cc,
-     cssysadm.o_ps_class_instr ci
+from ps_cs.ps_class_tbl c,
+     ps_cs.ps_crse_catalog cc,
+     ps_cs.ps_class_instr ci
 where
     cc.crse_id = c.crse_id
     and cc.eff_status = 'A'
     and cc.effdt = coalesce(
                     (select max(cc2.effdt)
-                     from dwsysadm.ps_crse_catalog cc2
+                     from ps_cs.ps_crse_catalog cc2
                      where cc2.eff_status = 'A'
                                 and cc2.effdt <= c.start_dt
                                 and cc2.crse_id = cc.crse_id),
                     (select min(cc3.effdt)
-                     from dwsysadm.ps_crse_catalog cc3
+                     from ps_cs.ps_crse_catalog cc3
                      where cc3.eff_status = 'A'
                                 and cc3.crse_id = cc.crse_id))
     and c.crse_id = ci.crse_id
@@ -98,18 +105,18 @@ select distinct c.strm || c.institution || c.class_nbr as triplet,
         c.ssr_component,
         cc.course_title_long as long_title,
         c.class_nbr
-from cssysadm.o_ps_class_tbl c, dwsysadm.ps_crse_catalog cc
+from ps_cs.ps_class_tbl c, ps_cs.ps_crse_catalog cc
 where
     cc.crse_id = c.crse_id
     and cc.eff_status = 'A'
     and cc.effdt = coalesce(
                     (select max(cc2.effdt)
-                     from dwsysadm.ps_crse_catalog cc2
+                     from ps_cs.ps_crse_catalog cc2
                      where cc2.eff_status = 'A'
                                 and cc2.effdt <= c.start_dt
                                 and cc2.crse_id = cc.crse_id),
                     (select min(cc3.effdt)
-                     from dwsysadm.ps_crse_catalog cc3
+                     from ps_cs.ps_crse_catalog cc3
                      where cc3.eff_status = 'A'
                                 and cc3.crse_id = cc.crse_id))
     and
@@ -208,7 +215,7 @@ select rownum,
        um_trig_emplid,
        um_changetype,
        um_keyvalue
-from cssysadm.o_ps_um_da_dly_audit a
+from ps_cs.ps_um_da_dly_audit a
 where um_identifier = 'STDNT_ENRL'
   and um_syseffdt >= to_date(:since_time, 'YYYY-MM-DD"T"HH24:MI:SS')
 order by um_syseffdt asc
@@ -225,13 +232,13 @@ SQL;
      */
     // TODO: Might also need to get acad_group_desc (is this college?) for
     //       all_stats report.  Neither of
-    //       these attributes appear to be available from o_ps_class_tbl.
+    //       these attributes appear to be available from ps_class_tbl.
     public function get_class_by_triplet($term, $institution, $class_nbr) {
 
-        // Not using join syntax for ps_crse_catalog because joining ps_crse_catalog
-        // (in dwsysadm) causes an ORA-02019.  This might be due to an Oracle bug.
-        // Another connection arrangement might not have this problem; currently
-        // the other views are in cssysadm.
+        // Not using join syntax for ps_crse_catalog because was joining ps_crse_catalog
+        // from another schema which caused an ORA-02019.  This might be due to an Oracle bug.
+        // Another connection arrangement might not have this problem, so now that we are
+        // getting everything from one schema (ps_cs), we could try again.
 
         // The nested subquery with the union is designed to get either the most
         // recently effective catalog record or (if there are none with an effdt in
@@ -250,17 +257,17 @@ select distinct c.strm || c.institution || c.class_nbr as triplet,
         c.subject, c.catalog_nbr, c.class_section,
         c.start_dt, c.end_dt, c.enrl_tot,
         c.descr, c.class_section as section
-from cssysadm.o_ps_class_tbl c, dwsysadm.ps_crse_catalog cc
+from ps_cs.ps_class_tbl c, ps_cs.ps_crse_catalog cc
 where cc.crse_id = c.crse_id
     and cc.eff_status = 'A'
     and cc.effdt = coalesce(
                     (select max(cc2.effdt)
-                     from dwsysadm.ps_crse_catalog cc2
+                     from ps_cs.ps_crse_catalog cc2
                      where cc2.eff_status = 'A'
                                 and cc2.effdt <= c.start_dt
                                 and cc2.crse_id = cc.crse_id),
                     (select min(cc3.effdt)
-                     from dwsysadm.ps_crse_catalog cc3
+                     from ps_cs.ps_crse_catalog cc3
                      where cc3.eff_status = 'A'
                                 and cc3.crse_id = cc.crse_id))
   and c.strm = :term
@@ -293,8 +300,8 @@ select distinct c.strm || c.institution || c.class_nbr as triplet,
         c.subject, c.catalog_nbr, c.class_section,
         c.start_dt, c.end_dt, c.enrl_tot,
         c.descr, c.class_section as section
-from cssysadm.o_ps_class_instr ci
-  join cssysadm.o_ps_class_tbl c
+from ps_cs.ps_class_instr ci
+  join ps_cs.ps_class_tbl c
         on  c.crse_id = ci.crse_id
         and c.crse_offer_nbr = ci.crse_offer_nbr
         and c.strm = ci.strm
@@ -316,8 +323,8 @@ SQL;
 
         $sql =<<<SQL
 select ci.emplid
-from cssysadm.o_ps_class_instr ci
-  join cssysadm.o_ps_class_tbl c
+from ps_cs.ps_class_instr ci
+  join ps_cs.ps_class_tbl c
         on  c.crse_id = ci.crse_id
         and c.crse_offer_nbr = ci.crse_offer_nbr
         and c.strm = ci.strm
@@ -354,8 +361,8 @@ SQL;
 
         $sql =<<<SQL
 select distinct ci.emplid
-from cssysadm.o_ps_class_instr ci
-  join cssysadm.o_ps_class_tbl c
+from ps_cs.ps_class_instr ci
+  join ps_cs.ps_class_tbl c
         on  c.crse_id = ci.crse_id
         and c.crse_offer_nbr = ci.crse_offer_nbr
         and c.strm = ci.strm
@@ -392,7 +399,7 @@ SQL;
      */
     private $filterEStatusSql =<<<SQL
 not exists (select *
-            from cssysadm.o_ps_stdnt_enrl se3
+            from ps_cs.ps_stdnt_enrl se3
             where se3.emplid      = se.emplid
               and se3.strm        = se.strm
               and se3.institution = se.institution
@@ -416,7 +423,7 @@ SQL;
      */
     private $filterDStatusSql =<<<SQL
 not exists (select *
-            from cssysadm.o_ps_stdnt_enrl se2
+            from ps_cs.ps_stdnt_enrl se2
             where se2.emplid      = se.emplid
               and se2.strm        = se.strm
               and se2.institution = se.institution
@@ -454,7 +461,7 @@ select distinct se.strm || se.institution || se.class_nbr as triplet,
             se.stdnt_enrl_status) status,
        to_char(se.enrl_add_dt, 'IYYY-MM-DD') as add_date,
        to_char(se.enrl_drop_dt, 'IYYY-MM-DD') as drop_date
-from cssysadm.o_ps_stdnt_enrl se
+from ps_cs.ps_stdnt_enrl se
 where se.emplid = :emplid
   and se.strm >= :term
   and ((se.stdnt_enrl_status = 'E' and $this->filterEStatusSql)
@@ -485,7 +492,7 @@ select distinct se.emplid, se.stdnt_enrl_status,
             se.stdnt_enrl_status) status,
        to_char(se.enrl_add_dt, 'IYYY-MM-DD') as add_date,
        to_char(se.enrl_drop_dt, 'IYYY-MM-DD') as drop_date
-from cssysadm.o_ps_stdnt_enrl se
+from ps_cs.ps_stdnt_enrl se
 where se.strm        = :term
   and se.institution = :institution
   and se.class_nbr   = :classnbr
@@ -506,12 +513,12 @@ SQL;
      */
     public function get_current_term() {
 
-        // cssysadm is required below probably because no synonym
+        // ps_cs is required below probably because no synonym
         // is set up in Oracle for this view.
 
         $sql =<<<SQL
 select max(tt.strm)
-from cssysadm.o_ps_term_tbl tt
+from ps_cs.ps_term_tbl tt
 where tt.institution = 'UMNTC'
   and tt.acad_career = 'UGRD'
   and tt.term_begin_dt <= sysdate
@@ -527,11 +534,11 @@ SQL;
      */
     function get_terms_since($start_term) {
 
-        # TODO: Join with o_ps_term_tbl and get descr ("Spring 2011"), also?
+        # TODO: Join with ps_term_tbl and get descr ("Spring 2011"), also?
 
         $sql =<<<SQL
 select distinct STRM
-from cssysadm.o_ps_class_tbl
+from ps_cs.ps_class_tbl
 where strm >= :term
 order by strm
 SQL;
@@ -542,7 +549,7 @@ SQL;
     /**
      * Some users (especially in Duluth) take actions that delete enrollment rows
      * rather than update the enrollment to 'D'.  We can detect those actions
-     * using o_ps_audit_um_s_enrl.
+     * using ps_audit_um_s_enrl.
      * Returns a single timestamp if the most recent action for the passed emplid
      * and triplet is a 'D'.  Otherwise, returns null.  Currently, all rows in the
      * table have audit_actn = 'D'.
@@ -550,14 +557,14 @@ SQL;
     public function get_enrollment_row_delete_action($emplid, $term, $institution, $class_nbr) {
         $sql =<<<SQL
 select audit_stamp
-from o_ps_audit_um_s_enrl ae
+from ps_cs.ps_audit_um_s_enrl ae
 where emplid = :emplid and
       strm = :term and
       institution = :institution and
       class_nbr = :class_nbr and
       audit_actn = 'D' and
       audit_stamp = (select max(audit_stamp)
-                     from o_ps_audit_um_s_enrl ae2
+                     from ps_cs.ps_audit_um_s_enrl ae2
                      where ae2.emplid=ae.emplid and
                            ae2.strm=ae.strm and
                            ae2.institution=ae.institution and
