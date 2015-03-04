@@ -164,7 +164,85 @@ class core_user_renderer extends plugin_renderer_base {
         return $content;
     }
 
+    /**
+     * MOOD-794 20150313 jinhofer.  Same as the above user_search function except that this uses
+     * moodleform in order to make the search option expandable/collapsible in the UI.
+     */
+    public function user_search_expandable($url, $firstinitial, $lastinitial, $usercount, $totalcount, $heading = null) {
+        global $OUTPUT;
+
+        $strall = get_string('all');
+        $alpha  = explode(',', get_string('alphabet', 'langconfig'));
+
+        if (!isset($heading)) {
+            $heading = get_string('allparticipants');
+        }
+
+        $content = html_writer::start_tag('div');
+
+        // Search utility heading.
+        $content .= $OUTPUT->heading($heading.get_string('labelsep', 'langconfig').$usercount.'/'.$totalcount, 3);
+
+        // Bar of first initials.
+        $content .= html_writer::start_tag('div', array('class' => 'initialbar firstinitial'));
+        $content .= html_writer::label(get_string('firstname').' : ', null);
+
+        if (!empty($firstinitial)) {
+            $content .= html_writer::link($url.'&sifirst=', $strall);
+        } else {
+            $content .= html_writer::tag('strong', $strall);
+        }
+
+        foreach ($alpha as $letter) {
+            if ($letter == $firstinitial) {
+                $content .= html_writer::tag('strong', $letter);
+            } else {
+                $content .= html_writer::link($url.'&sifirst='.$letter, $letter);
+            }
+        }
+        $content .= html_writer::end_tag('div');
+
+         // Bar of last initials.
+        $content .= html_writer::start_tag('div', array('class' => 'initialbar lastinitial'));
+        $content .= html_writer::label(get_string('lastname').' : ', null);
+
+        if (!empty($lastinitial)) {
+            $content .= html_writer::link($url.'&silast=', $strall);
+        } else {
+            $content .= html_writer::tag('strong', $strall);
+        }
+
+        foreach ($alpha as $letter) {
+            if ($letter == $lastinitial) {
+                $content .= html_writer::tag('strong', $letter);
+            } else {
+                $content .= html_writer::link($url.'&silast='.$letter, $letter);
+            }
+        }
+        $content .= html_writer::end_tag('div');
+
+        $content .= html_writer::end_tag('div');
+        $content .= html_writer::tag('div', '&nbsp;');
+
+        // Call the content as a moodleform
+        $usersearchform = new user_search_form(null, $content);
+        $usersearchform->display();
+    }
+
 }
+
+# MOOD-794 20150306 jinhofer Call the functions in the following class to utilize moodleform functions
+require_once($CFG->libdir.'/formslib.php');
+class user_search_form extends moodleform {
+    public function definition() {
+        $mform =& $this->_form;
+        $content = $this->_customdata;
+        $mform->addElement('header', 'filter_options', get_string('filter'));
+        $mform->addElement('static', 'filter_content', null, $content);
+        $mform->setExpanded('filter_options', false);
+    }
+}
+# MOOD-794 20150306 jinhofer End of custom form for expandable user search.
 
 /**
  * User files tree
