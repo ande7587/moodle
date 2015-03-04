@@ -52,3 +52,5 @@ $string['instructionstext'] =
 $string['invalidclassnbr'] = 'PeopleSoft class number is not valid';
 $string['noclassesassociated'] = 'You have not added any PeopleSoft classes to this course site.';
 
+// Name for scheduled task
+$string['updateautoenrollments'] = 'Process autoenrollments';
