@@ -38,15 +38,8 @@ class filter_urlicon extends moodle_text_filter {
      *
      */
     public function __construct($context, $localconfig) {
-       global $OUTPUT;
 
-       parent::__construct($context, $localconfig);
-
-       $this->icon_defs = array(
-           'FLIPGRID'    =>  '<img class="iconlarge activityicon" alt="FlipGrid" src="'.$OUTPUT->pix_url('flipgrid', 'filter_urlicon').'"></img>',
-           'GOOGLEDOC'   =>  '<img class="iconlarge activityicon" alt="GoogleDoc" src="'.$OUTPUT->pix_url('gdoc', 'filter_urlicon').'"></img>',
-           'GOOGLESPREADSHEET'  =>  '<img class="iconlarge activityicon" alt="GoogleSpreadsheet" src="'.$OUTPUT->pix_url('gss', 'filter_urlicon').'"></img>'
-       );
+        parent::__construct($context, $localconfig);
     }
 
     /**
@@ -66,6 +59,15 @@ class filter_urlicon extends moodle_text_filter {
      * @return string text after processing
      */
     public function filter($text, array $options = array()) {
+
+        global $OUTPUT;
+
+        $this->icon_defs = array(
+            'FLIPGRID'    =>  '<img class="iconlarge activityicon" alt="FlipGrid" src="'.$OUTPUT->pix_url('flipgrid', 'filter_urlicon').'"></img>',
+            'GOOGLEDOC'   =>  '<img class="iconlarge activityicon" alt="GoogleDoc" src="'.$OUTPUT->pix_url('gdoc', 'filter_urlicon').'"></img>',
+            'GOOGLESPREADSHEET'  =>  '<img class="iconlarge activityicon" alt="GoogleSpreadsheet" src="'.$OUTPUT->pix_url('gss', 'filter_urlicon').'"></img>'
+        );
+
         if (!isset($options['originalformat'])) {
             // if the format is not specified, we are probably called by {@see format_string()}
             // in that case, it would be dangerous to replace URL with the link because it could
