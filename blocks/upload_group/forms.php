@@ -72,13 +72,26 @@ class block_upload_group_confirm_form extends moodleform {
         $mform->addElement('hidden', 'iid', $data['iid']);
         $mform->setType('iid', PARAM_INT);
 
-        // get all the course-level roles
-        $role_ids = array_flip(get_roles_for_contextlevels(CONTEXT_COURSE));
-        $choices = role_fix_names($role_ids, null, ROLENAME_ALIAS, true);
+        // get the available bulk enrolment roles
+        $roleids = get_config('local_enrol', 'allowed_bulkenrol_roles');
+        $roles = $DB->get_records_select('role', "id in ($roleids)");
+        $rolemenu = role_fix_names($roles, null, ROLENAME_ALIAS, true);
+
+        // Set student role as default.
+        $default_role_id = 0;
+        foreach ($roles as $role) {
+
+            if ($role->shortname == 'student') {
+
+                $default_role_id = $role->id;
+
+            }
+        }
 
         // add the role option
-        $mform->addElement('select', 'role', get_string('role_desc', 'block_upload_group'), $choices);
-        $mform->setDefault('role', 5);
+        $mform->addElement('select', 'role', get_string('role_desc', 'block_upload_group'), $rolemenu);
+        $mform->setType('role', PARAM_INT);
+        $mform->setDefault('role', $default_role_id);
 
         $this->add_action_buttons(true, get_string('process_group_data', 'block_upload_group'));
     }
