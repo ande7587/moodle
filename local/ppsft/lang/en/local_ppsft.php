@@ -22,3 +22,8 @@ $string['gradelinkaccessurldesc'] = 'PeopleSoft URL used by the "Send to PeopleS
 $string['gradelinkgradeposturl'] = 'PeopleSoft grade link post URL';
 $string['gradelinkgradeposturldesc'] = 'PeopleSoft URL used by the "Send to PeopleSoft" grade export to post grades to PeopleSoft.';
 
+// Scheduled task names
+$string['updaterecentenrollmentchanges'] = 'Incremental PeopleSoft enrollments';
+$string['updateallclassenrollments'] = 'All PeopleSoft enrollments';
+$string['updateallclassinstructors'] = 'All PeopleSoft instructors';
+$string['updateppsftterms'] = 'PeopleSoft terms';
