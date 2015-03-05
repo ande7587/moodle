@@ -44,6 +44,11 @@ class qtype_essay extends question_type {
         return array('attachments', 'answer');
     }
 
+    # MOOD-720 20150306 jinhofer Override to make basic type
+    public function is_basic_question_type() {
+        return true;
+    }
+
     public function get_question_options($question) {
         global $DB;
         $question->options = $DB->get_record('qtype_essay_options',

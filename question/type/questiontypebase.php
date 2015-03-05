@@ -99,6 +99,15 @@ class question_type {
     }
 
     /**
+    * MOOD-720 20150306 jinhofer
+    * @return bool override this to return true if this is a basic question type.
+    */
+
+    public function is_basic_question_type() {
+        return false;
+    }
+
+    /**
      * @return bool true if this question type sometimes requires manual grading.
      */
     public function is_manual_graded() {

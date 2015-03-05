@@ -37,6 +37,12 @@ require_once($CFG->libdir . '/questionlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_multichoice extends question_type {
+
+    # MOOD-720 20150306 jinhofer Override to make basic type
+    public function is_basic_question_type() {
+        return true;
+    }
+
     public function get_question_options($question) {
         global $DB, $OUTPUT;
         $question->options = $DB->get_record('qtype_multichoice_options',

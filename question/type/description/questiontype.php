@@ -40,6 +40,11 @@ class qtype_description extends question_type {
         return false;
     }
 
+    # MOOD-720 20150306 jinhofer Override to make basic type
+    public function is_basic_question_type() {
+        return true;
+    }
+
     public function is_usable_by_random() {
         return false;
     }

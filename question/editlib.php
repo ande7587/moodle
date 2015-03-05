@@ -488,21 +488,25 @@ function print_choose_qtype_to_add_form($hiddenparams, array $allowedqtypes = nu
         $PAGE->requires->yui_module('moodle-question-chooser', 'M.question.init_chooser', array(array()));
     }
 
-    $realqtypes = array();
-    $fakeqtypes = array();
+    # MOOD-720 20150306 jinhofer Changed arrays to advanced and basic
+    $advdqtypes = array();
+    $baseqtypes = array();
     foreach (question_bank::get_creatable_qtypes() as $qtypename => $qtype) {
         if ($allowedqtypes && !in_array($qtypename, $allowedqtypes)) {
             continue;
         }
-        if ($qtype->is_real_question_type()) {
-            $realqtypes[] = $qtype;
-        } else {
-            $fakeqtypes[] = $qtype;
+        # MOOD-720 20150306 jinhofer Check to see if this question type is basic or not (false by default)
+        if ($qtype->is_basic_question_type()) {
+            $baseqtypes[] = $qtype;
+        }
+        else {
+            $advdqtypes[] = $qtype;
         }
     }
 
     $renderer = $PAGE->get_renderer('question', 'bank');
-    return $renderer->qbank_chooser($realqtypes, $fakeqtypes, $PAGE->course, $hiddenparams);
+    # MOOD-720 20150306 jinhofer Changed parameters to pass to qbank_chooser replacing real and fake with advanced and basic
+    return $renderer->qbank_chooser($baseqtypes, $advdqtypes, $PAGE->course, $hiddenparams);
 }
 
 /**

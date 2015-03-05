@@ -51,13 +51,14 @@ class core_question_bank_renderer extends plugin_renderer_base {
     /**
      * Build the HTML for the question chooser javascript popup.
      *
-     * @param array $real A set of real question types
-     * @param array $fake A set of fake question types
+     * @param array $basic A set of basic question types
+     * @param array $advanced A set of advanced question types
      * @param object $course The course that will be displayed
      * @param array $hiddenparams Any hidden parameters to add to the form
      * @return string The composed HTML for the questionbank chooser
      */
-    public function qbank_chooser($real, $fake, $course, $hiddenparams) {
+    # MOOD-720 20150306 jinhofer Changed parameters, replacing real and fake with basic and advanced
+    public function qbank_chooser($basic, $advanced, $course, $hiddenparams) {
         global $OUTPUT;
 
         // Start the form content.
@@ -81,15 +82,17 @@ class core_question_bank_renderer extends plugin_renderer_base {
         // Put all options into one tag 'qoptions' to allow us to handle scrolling.
         $formcontent .= html_writer::start_tag('div', array('class' => 'alloptions'));
 
-        // First display real questions.
-        $formcontent .= $this->qbank_chooser_title('questions', 'question');
-        $formcontent .= $this->qbank_chooser_types($real);
+        //First display basic types
+        $formcontent .= $this->qbank_chooser_title('basic', 'question');
+        $formcontent .= $this->qbank_chooser_types($basic);
 
         $formcontent .= html_writer::div('', 'separator');
 
-        // Then fake questions.
-        $formcontent .= $this->qbank_chooser_title('other');
-        $formcontent .= $this->qbank_chooser_types($fake);
+        // Then display real questions.
+        $formcontent .= $this->qbank_chooser_title('advanced', 'question');
+        $formcontent .= $this->qbank_chooser_types($advanced);
+
+        $formcontent .= html_writer::div('', 'separator');
 
         // Options.
         $formcontent .= html_writer::end_tag('div');

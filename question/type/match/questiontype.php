@@ -37,6 +37,11 @@ require_once($CFG->dirroot . '/question/engine/lib.php');
  */
 class qtype_match extends question_type {
 
+    # MOOD-720 20150306 jinhofer Override to make basic type
+    public function is_basic_question_type() {
+        return true;
+    }
+
     public function get_question_options($question) {
         global $DB;
         parent::get_question_options($question);

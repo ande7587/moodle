@@ -36,6 +36,12 @@ require_once($CFG->libdir . '/questionlib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qtype_truefalse extends question_type {
+
+    # MOOD-720 20150306 jinhofer Override to make basic type
+    public function is_basic_question_type() {
+        return true;
+    }
+
     public function save_question_options($question) {
         global $DB;
         $result = new stdClass();
