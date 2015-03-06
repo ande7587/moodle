@@ -64,7 +64,7 @@ function is_instr_or_not_a_student($ppsftadapter, $triplets){
     //avoid duplicate calls to ppsft by storing visited terms.
     foreach($triplets as $class){
         $term = $class['term'];
-        if(!array_key_exists($uniqueterms, $terms)){
+        if(!array_key_exists($uniqueterms, $term)){
             $uniqueterms[$term] = true;
             $enrolledclasses = $ppsftadapter->get_student_enrollments($emplid, $term);
             //for each enrolled class, check if it's one of the requested course
