@@ -331,3 +331,7 @@ $string['editcategorycoursesettingsthis'] = 'Category course settings';
 // MOOD-733 Prevent Students from requesting Academic Course Sites
 $string['courserequestrejection'] = 'You are requesting a Moodle course site for a class in which you are enrolled. Students cannot request Moodle course sites for their classes.';
 $string['requestdevornonacacoursesite'] = 'Request development or non-academic course site';
+
+// Scheduled task names
+$string['processmigrationrequests'] = 'Course migration request handling';
+$string['processmigrationresponses'] = 'Course migration response handling';
