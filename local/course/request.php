@@ -64,7 +64,7 @@ function is_instr_or_not_a_student($ppsftadapter, $triplets){
     //avoid duplicate calls to ppsft by storing visited terms.
     foreach($triplets as $class){
         $term = $class['term'];
-        if(!array_key_exists($uniqueterms, $term)){
+        if(!array_key_exists($term, $uniqueterms)){
             $uniqueterms[$term] = true;
             $enrolledclasses = $ppsftadapter->get_student_enrollments($emplid, $term);
             //for each enrolled class, check if it's one of the requested course
@@ -80,7 +80,7 @@ function is_instr_or_not_a_student($ppsftadapter, $triplets){
     //if it is a student, check if the student has an instructor role
     if(!$isinstrornotastd){
         $instructors = $ppsftadapter->get_instructors_for_classes($triplets);
-        if(array_key_exists($emplid, $instructors)){
+        if(in_array($emplid, $instructors)){
             $isinstrornotastd=true;
         }
     }

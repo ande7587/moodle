@@ -35,7 +35,7 @@ $buttons .= html_writer::tag('button',
                              array('onclick'=>"window.close()"));
 
 
-echo $OUTPUT->box($messagediv. $links .$buttons, 'requestrejection generalbox');
+echo $OUTPUT->box($messagediv.$buttons, 'requestrejection generalbox');
 
 // Intentionally nesting one box inside the other to allow for centering the div as inline-block.
 
