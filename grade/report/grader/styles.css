@@ -253,3 +253,8 @@
 .path-grade-report-grader #id_filter_options legend.ftoggler {
     border-bottom: none;
 }
+
+/* MOOD-751 20150309 jinhofer Counteract mform styles issue with hidden blocks */
+.path-grade-report-grader form.mform {
+    margin-left: 20px;
+}

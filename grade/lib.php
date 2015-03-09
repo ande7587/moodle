@@ -881,7 +881,8 @@ function print_grade_page_head($courseid, $active_type, $active_plugin=null,
     }
 
     if ($active_type == 'report') {
-        $PAGE->set_pagelayout('report');
+        # MOOD-751 20150309 jinhofer Prevent blocks from loading in report plugin
+        $PAGE->set_pagelayout('base');
     } else {
         $PAGE->set_pagelayout('admin');
     }
