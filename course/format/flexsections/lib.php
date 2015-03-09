@@ -321,7 +321,62 @@ class format_flexsections extends format_base {
      * @return array of options
      */
     public function course_format_options($foreditform = false) {
-        return array();
+        //MOOD-262 btindell rewrote this function to model after other course formats
+        global $CFG;
+        static $courseformatoptions = false;
+        if($courseformatoptions == false){
+            $courseformatoptions = array(
+                'modeditingmenu' => array(
+                    'default' => $CFG->modeditingmenu,
+                    'type' => PARAM_INT
+                ),
+            );
+        }
+        if($foreditform){
+            $courseformatoptionsedit = array(
+                'modeditingmenu' => array(
+                    'label' => new lang_string('modeditingmenus'),
+                    'help' => 'modeditingmenus',
+                    'help_component' => 'moodle',
+                    'element_type' => 'select',
+                    'element_attributes' => array(
+                        array(
+                            0 => new lang_string('no'),
+                            1 => new lang_string('yes')
+                        )
+                    ),
+                )
+            );
+            $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
+        }
+        return $courseformatoptions;
+    }
+
+   /**
+    * Updates format options for a course
+    *
+    * MOOD-262 btindell wrote this function and modeled it after other course formats
+    *
+    * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
+    * @param stdClass $oldcourse if this function is called from {@link update_course()}
+    *       this object contains information about the course before update
+    * @return bool whether there were any changes to the options values
+    */
+    public function update_course_format_options($data, $oldcourse = null) {
+        global $DB;
+        if ($oldcourse !== null) {
+            $data = (array)$data;
+            $oldcourse = (array)$oldcourse;
+            $options = $this->course_format_options();
+            foreach ($options as $key => $unused) {
+                if (!array_key_exists($key, $data)) {
+                    if (array_key_exists($key, $oldcourse)) {
+                        $data[$key] = $oldcourse[$key];
+                    }
+                }
+            }
+        }
+        return $this->update_format_options($data);
     }
 
     /**
