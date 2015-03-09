@@ -2033,3 +2033,8 @@ $string['ppsftsection'] = 'PeopleSoft';
 
 //MOOD-239 btindell 10/28/14 - Added language string for "Text Editor" context sensitive help
 $string['textediting_help'] = 'Use this option to select the editor that you would like to use when entering text. This will include, but is not limited to, areas such as labels, descriptions, and summaries. If you select "Plain text area", all text entry areas with allow you to use HTML format, Moodle auto-format, Plain text format, or Markdown format. For a description of Markdown format, see <a href="https://docs.moodle.org/28/en/Markdown"> Moodle Markdown</a>.';
+
+//MOOD-262 btindell added language strings for modeditingmenu
+$string['modeditingmenus'] = 'Activity editing menus';
+$string['modeditingmenus_help'] = 'If enabled many of the activity editing icons shown when viewing a course with editing on will be displayed within a drop-down menu. This reduces the content on screen when editing a course by hiding the icons until they are needed.';
+// <<< MOOD-262

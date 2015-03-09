@@ -340,7 +340,7 @@ class core_course_renderer extends plugin_renderer_base {
      * @return string
      */
     public function course_section_cm_edit_actions($actions, cm_info $mod = null, $displayoptions = array()) {
-        global $CFG;
+        global $CFG, $DB;
 
         if (empty($actions)) {
             return '';
@@ -366,7 +366,16 @@ class core_course_renderer extends plugin_renderer_base {
         $menu->set_constraint($constraint);
         $menu->set_alignment(action_menu::TR, action_menu::BR);
         $menu->set_menu_trigger(get_string('edit'));
-        if (isset($CFG->modeditingmenu) && !$CFG->modeditingmenu || !empty($displayoptions['donotenhance'])) {
+
+        //MOOD-262 20150309 btindell added ability to allow instructor to have icons instead of dropdown
+        $course = $this->page->course;
+        $format = course_get_format($course->id)->get_course();
+
+        // MOOD-262 20150309 btindell. The course format setting, if set, overrides the global setting.
+        if (    ( isset($format->modeditingmenu) && !$format->modeditingmenu)
+             || (!isset($format->modeditingmenu) && isset($CFG->modeditingmenu) && !$CFG->modeditingmenu)
+             || !empty($displayoptions['donotenhance']) )
+        {
             $menu->do_not_enhance();
 
             // Swap the left/right icons.

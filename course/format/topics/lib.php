@@ -191,6 +191,7 @@ class format_topics extends format_base {
      * @return array of options
      */
     public function course_format_options($foreditform = false) {
+        global $CFG;
         static $courseformatoptions = false;
         if ($courseformatoptions === false) {
             $courseconfig = get_config('moodlecourse');
@@ -205,6 +206,11 @@ class format_topics extends format_base {
                 ),
                 'coursedisplay' => array(
                     'default' => $courseconfig->coursedisplay,
+                    'type' => PARAM_INT,
+                ),
+                //MOOD-262 btindell adding icon display option
+                'modeditingmenu' => array(
+                    'default' => $CFG->modeditingmenu,
                     'type' => PARAM_INT,
                 ),
             );
@@ -248,6 +254,19 @@ class format_topics extends format_base {
                     ),
                     'help' => 'coursedisplay',
                     'help_component' => 'moodle',
+                ),
+                //MOOD-262 btindell added this icon display option
+                'modeditingmenu' => array(
+                    'label' => new lang_string('modeditingmenus'),
+                    'help' => 'modeditingmenus',
+                    'help_component' => 'moodle',
+                    'element_type' => 'select',
+                    'element_attributes' => array(
+                        array(
+                            0 => new lang_string('no'),
+                            1 => new lang_string('yes')
+                        )
+                    ),
                 )
             );
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
