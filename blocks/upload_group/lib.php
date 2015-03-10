@@ -116,7 +116,8 @@ class block_upload_group_lib {
                                'user_not_found'    => array(),
                                'group_failed'      => array(),
                                'enrol_failed'      => array(),
-                               'member_failed'     => array()));
+                               'member_failed'     => array(),
+                               'user_not_added'     => array()));
 
         // loop through the records
         $reader->init();
