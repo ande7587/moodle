@@ -40,8 +40,16 @@ class local_grade_external extends external_api {
                     'gradepass' => new external_value(PARAM_TEXT, 'grade needed to pass'),
                     'is_hidden' => new external_value(PARAM_BOOL, 'true if item is currently hidden'),
                     'hiddenuntil' => new external_value(PARAM_TEXT, 'datetime of "hidden until" value, if set'),
-                    'containeritemid' => new external_value(PARAM_INT,  'ID of the grade item that contains this grade item')
-            )))
+                    'containeritemid' => new external_value(PARAM_INT,  'ID of the grade item that contains this grade item'),
+                    'categoryid'      => new external_value(PARAM_INT,  'ID of the grade item category')
+            ))),
+            'categories'        => new external_multiple_structure(
+                new external_single_structure(array(
+                    'name'              => new external_value(PARAM_TEXT, 'name  of the category'),
+                    'id'                => new external_value(PARAM_INT,  'ID of the category'),
+                    'parentcategoryid'  => new external_value(PARAM_INT,  'ID of the category\'s parent'),
+                    'itemid'            => new external_value(PARAM_INT,  'ID of the category\'s corresponding grade item')
+             )))
         ));
     }
 
@@ -81,11 +89,22 @@ class local_grade_external extends external_api {
             'course_id'        => $course->id,
             'course_shortname' => $course->shortname,
             'course_fullname'  => $course->fullname,
+            'categories'       => array(),
             'items'            => array()
         );
 
         $grade_items = grade_item::fetch_all(array('courseid'=>$course->id));
         $categories = static::get_item_and_parent_for_categories($course->id);
+
+        foreach ($categories as $category) {
+            $category_out = array(
+                'id'               => $category->categoryid,
+                'name'             => $category->category_fullname,
+                'itemid'           => $category->categoryitemid,
+                'parentcategoryid' => $category->categoryparentid
+            );
+            $out['categories'][] = $category_out;
+        }
 
         foreach ($grade_items as $gi) {
 
@@ -117,6 +136,7 @@ class local_grade_external extends external_api {
                 'is_hidden' => $gi->is_hidden(),
                 'hiddenuntil' => static::iso8601_date_from_hidden($gi->get_hidden()),
                 'containeritemid' => $parentgradeitemid,
+                'categoryid'      => $gi->categoryid
                 ###'timecreated'  => $gi->timecreated,
                 ###'timemodified' => $gi->timemodified
             );
@@ -130,20 +150,25 @@ class local_grade_external extends external_api {
      * This is a helper function used by get_course_grade_items to get
      * the corresponding grade item id for each grade category in the course
      * as well as each grade category's parent grade category id.
+     * The DB library does not allow ?(questions marks)  in sql unless they're parameters,
+     * as a result the case clause passes question mark as parameter.
      */
     private static function get_item_and_parent_for_categories($courseid) {
         global $DB;
 
         $sql =<<<SQL
-select gc.id categoryid, gi.id categoryitemid, gc.parent categoryparentid
-from mdl_grade_categories gc
-join mdl_grade_items gi
+ select gc.id categoryid, gi.id categoryitemid,
+        gc.parent categoryparentid,
+        case gc.fullname when :questionmark then ''
+                         else gc.fullname end category_fullname
+from {grade_categories} gc
+join {grade_items} gi
   on gi.iteminstance=gc.id and
      gi.courseid=gc.courseid and
      gi.itemtype in ('course','category')
 where gc.courseid=:courseid
 SQL;
-        $categories = $DB->get_records_sql($sql, array('courseid'=>$courseid));
+        $categories = $DB->get_records_sql($sql, array('courseid'=>$courseid, 'questionmark' => '?'));
         return $categories;
     }
 
@@ -246,8 +271,8 @@ SQL;
 
             $sql =<<<SQL
 select distinct gi.id
-from mdl_grade_items gi
-join mdl_grade_grades gg
+from {grade_items} gi
+join {grade_grades} gg
          on gg.itemid = gi.id
 where gi.courseid=:courseid and
       (gi.timecreated > :time1 or gi.timemodified > :time2 or
