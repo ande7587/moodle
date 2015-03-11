@@ -37,7 +37,8 @@ class local_enrol_external extends external_api {
             new external_single_structure(array(
                 'course_id'    => new external_value(PARAM_INT, 'course ID'),
                 'course_name'  => new external_value(PARAM_TEXT, 'course short name'),
-                'lastaccess'   => new external_value(PARAM_TEXT, 'course last-access timestamp'),
+                'lastaccess'   => new external_value(PARAM_TEXT, 'course last-access timestamp (DEPRECATED)'),
+                'courselastaccess' => new external_value(PARAM_TEXT, 'course last-access timestamp (ISO 8601)'),
                 'roles'        => new external_multiple_structure(
                     new external_single_structure(array(
                         'RA_id'             => new external_value(PARAM_INT, 'Role_Assignment ID'),
@@ -106,6 +107,7 @@ class local_enrol_external extends external_api {
                 'course_id'     => $course_id,
                 'course_name'   => $course->shortname,
                 'lastaccess'    => null,
+                'courselastaccess' => null,
                 'roles'         => array()
             );
         }
@@ -116,6 +118,7 @@ class local_enrol_external extends external_api {
         foreach ($rs as $row) {
             if (isset($out[$row->courseid])) {
                 $out[$row->courseid]['lastaccess'] = $row->timeaccess;
+                $out[$row->courseid]['courselastaccess'] = static::iso8601_date_from_unixtime($row->timeaccess);
             }
         }
 
@@ -168,9 +171,43 @@ class local_enrol_external extends external_api {
         return new external_function_parameters(
             array(
                 'course_id'     => new external_value(PARAM_TEXT, 'Course ID', VALUE_REQUIRED),
-                'user_id_type'  => new external_value(PARAM_TEXT, 'ID type (x500, emplid)', VALUE_DEFAULT, 'x500')
+                'user_id_type'  => new external_value(PARAM_TEXT, 'ID type (x500, emplid)', VALUE_DEFAULT, 'x500'),
+                'since_lastaccess'  => new external_value(PARAM_TEXT,
+                                                          'Fetch users who have accessed the course since the specified parameter',
+                                                          VALUE_OPTIONAL)
             )
         );
+    }
+
+    /**
+     * Helper function. Returns list of users enrolled into course.
+     * @param int $course_id
+     * @parm string $since_lastaccess return a subset of users with last access greater than
+     *                                or equal to the specified time (optional)
+     * @return array of user records
+     */
+    private static function get_enrolled_users($course_id, $since_lastaccess = null){
+        global $DB, $CFG;
+
+$sql =<<<SQL
+select distinct u.*, la.timeaccess courselastaccess
+from {user} u
+join {user_enrolments} ue on ue.userid=u.id
+join {enrol} e on (e.id=ue.enrolid)
+left join {user_lastaccess} la on la.userid=ue.userid and la.courseid=e.courseid
+where u.deleted=0 and u.id<>:guestid and e.courseid=:courseid
+SQL;
+
+        $params = array('guestid'     => $CFG->siteguest,
+                        'courseid'    => $course_id);
+
+        if($since_lastaccess){
+            $since_lastaccess_time = date("U",strtotime($since_lastaccess));
+            $sql = "$sql and la.timeaccess >= :since_lastaccess ";
+            $params['since_lastaccess'] = $since_lastaccess_time;
+        }
+
+        return $DB->get_records_sql($sql, $params);
     }
 
 
@@ -185,7 +222,8 @@ class local_enrol_external extends external_api {
                 'user_id'         => new external_value(PARAM_TEXT, 'user x500 or emplid'),
                 'user_firstname'  => new external_value(PARAM_TEXT, 'user firstname'),
                 'user_lastname'   => new external_value(PARAM_TEXT, 'user lastname'),
-                'lastaccess'      => new external_value(PARAM_TEXT, 'course last-access timestamp'),
+                'lastaccess'       => new external_value(PARAM_TEXT, 'course last-access timestamp DEPRECATED'),
+                'courselastaccess' => new external_value(PARAM_TEXT, 'course last-access timestamp (ISO 8601)'),
                 'roles'           => new external_multiple_structure(
                     new external_single_structure(array(
                         'RA_id'             => new external_value(PARAM_INT, 'Role_Assignment ID'),
@@ -200,14 +238,16 @@ class local_enrol_external extends external_api {
     /**
      * Get all role_assignments, related courses and users for a specific course
      * @param int $course_id Course ID
+     * @param int $since_lastaccess A timestamp in ISO 8601 format. Optional. Fetch those greater than the specified value.
      * @return array, see get_course_users_returns()
      */
-    public static function get_course_users($course_id, $user_id_type) {
+    public static function get_course_users($course_id, $user_id_type, $since_lastaccess=null) {
         global $DB;
 
         $params = self::validate_parameters(self::get_course_users_parameters(), array(
                 'course_id'     => $course_id,
-                'user_id_type'  => $user_id_type));
+                'user_id_type'  => $user_id_type,
+                'since_lastaccess' => $since_lastaccess));
 
         if (!in_array($params['user_id_type'], array('x500', 'emplid'))) {
             throw new moodle_exception(get_string('errorinvalidparam', 'webservice', 'user_id_type'));
@@ -242,7 +282,7 @@ class local_enrol_external extends external_api {
         $out = array();
 
         // get the enrolled users
-        $users = get_enrolled_users($context);
+        $users = self::get_enrolled_users($course_id, $params['since_lastaccess']);
 
         $user_id_map = array();
         foreach ($users as $user_id => $user) {
@@ -265,17 +305,15 @@ class local_enrol_external extends external_api {
                 'user_id'          => $user_id_map[$user_id],
                 'user_firstname'   => $user->firstname,
                 'user_lastname'    => $user->lastname,
-                'lastaccess'       => null,
+                'lastaccess'       => $user->courselastaccess,
+                'courselastaccess' => static::iso8601_date_from_unixtime($user->courselastaccess),
                 'roles'            => array()
             );
         }
 
-        // get the last-access time
-        $rs = $DB->get_records('user_lastaccess', array('courseid' => $course->id));
-        foreach ($rs as $row) {
-            if (isset($out[$row->userid])) {
-                $out[$row->userid]['lastaccess'] = $row->timeaccess;
-            }
+        // If no users found, below execution is not needed.
+        if(empty($out)){
+           return $out;
         }
 
         // get the roles
@@ -650,6 +688,16 @@ class local_enrol_external extends external_api {
         }
 
         return $out;
+    }
+
+    /**
+     * Simple helper function to get date in iso format for web service response.
+     */
+    private static function iso8601_date_from_unixtime($unixtime) {
+        if (! $unixtime) return '';
+
+        # TODO: What kind of error handling do we need here?
+        return date('c', $unixtime);
     }
 
 }
