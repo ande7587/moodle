@@ -48,9 +48,9 @@ static private function get_sitelink_html_map($classes) {
 
     $sql =<<<SQL
 select $tripletconcat as triplet, count(*) as count
-from mdl_ppsft_classes pc
-  join mdl_course_request_classes rc on rc.ppsftclassid=pc.id
-  join mdl_course_request_u r on r.id = rc.courserequestid
+from {ppsft_classes} pc
+  join {course_request_classes} rc on rc.ppsftclassid=pc.id
+  join {course_request_u} r on r.id = rc.courserequestid
 where (pc.term, pc.institution, pc.class_nbr) in ($tuplesql)
   and r.status < :status
 group by triplet
@@ -60,9 +60,9 @@ SQL;
 
     $sql =<<<SQL
 select $tripletconcat as triplet, count(*) as count, max(e.courseid) as courseid
-from mdl_ppsft_classes pc
-  join mdl_enrol_umnauto_classes ec on ec.ppsftclassid=pc.id
-  join mdl_enrol e on e.id=ec.enrolid
+from {ppsft_classes} pc
+  join {enrol_umnauto_classes} ec on ec.ppsftclassid=pc.id
+  join {enrol} e on e.id=ec.enrolid
 where (pc.term, pc.institution, pc.class_nbr) in ($tuplesql)
 group by triplet
 SQL;

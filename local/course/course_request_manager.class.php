@@ -747,9 +747,9 @@ SQL;
 
         $sql =<<<SQL
 select ru.id as requestuserid, ru.userid, r.*, u.username
-from mdl_course_request_users ru
-  join mdl_user u on u.id=ru.userid
-  join mdl_role r on r.id=ru.roleid
+from {course_request_users} ru
+  join {user} u on u.id=ru.userid
+  join {role} r on r.id=ru.roleid
 where ru.courserequestid=:courserequestid
 order by sortorder
 SQL;

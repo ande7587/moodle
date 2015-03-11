@@ -18,8 +18,8 @@ class edit_migrationserver_form extends moodleform {
                            get_string('migrationserver', 'local_course'));
 
         $sql =<<<SQL
-select mi.id, mi.wwwroot from mdl_moodle_instances mi 
-left join mdl_course_request_servers crs
+select mi.id, mi.wwwroot from {moodle_instances} mi
+left join {course_request_servers} crs
            on mi.id = crs.sourceinstanceid and crs.requestinginstanceid=:currentrequester
 where (crs.sourceinstanceid is null or crs.sourceinstanceid=:currentsource)
        and isupgradeserver=0
