@@ -264,10 +264,6 @@ body.jsenabled #user-image-button {
     width: 14px;
 }
 
-.dropdown-panel li {
-    line-height: 40px;
-}
-
 .fa-envelope:before {
     content: "\f0e0";
 }
@@ -298,7 +294,8 @@ body.jsenabled #user-image-button {
     display: block;
     width: auto;
     color: #333;
-    padding: 0 8px;
+    padding: 10px 8px;
+    line-height: 20px;
 }
 
 .dropdown-panel a:hover, div#header-banner ul.panel-content>li>a:hover {
