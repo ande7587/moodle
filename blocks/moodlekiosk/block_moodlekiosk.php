@@ -132,14 +132,36 @@ class block_moodlekiosk extends block_base {
         return false;
     }
 
+    /**
+     * Returns a comma separated list of the shortnames of roles
+     * with archetypes that are typically associated with a course
+     * enrollment.
+     * When used as the role filter in getCourses, this limits roles to
+     * only those that this instance knows about.  This could lead to
+     * course records not coming back from the kiosk server for courses on
+     * other instances that have roles with short names that this instance
+     * does not also have.  Drew says that this is okay.
+     */
+    private function get_courseroles_shortnames() {
+        global $DB;
+
+        $shortnames = $DB->get_fieldset_select(
+                            'role',
+                            'shortname',
+                            "archetype in ('student', 'teacher', 'editingteacher')");
+
+        return implode(',', $shortnames);
+    }
 
     /**
-     *
+     * Makes a web service call to the kiosk server to pull course listings for
+     * the current Moodle user.  The filtering can lead to unexpected behavior,
+     * so "issues" might have their cause here.
      */
     protected function getCourses() {
         return $this->service->search_course(array(
-                'roles'             => 'student,teacher,editingteacher,participant,visitor,designer',
-                'exclude_instances' => get_config('block_moodlekiosk', 'exclude_instances')
+                'roles'             => $this->get_courseroles_shortnames(),
+                'exclude_instances' => get_config('block_moodlekiosk', 'instance_name')
         ));
    }
 }
