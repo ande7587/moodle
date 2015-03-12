@@ -120,6 +120,13 @@
 
     echo $OUTPUT->header();
 
+    # MOOD-809 20150318 cdsmith. Adding link to advanced search page.
+    echo '<div class="reportlink">';
+    echo '<a href="search.php?id='.$course->id.
+                             '&amp;showform=1'.
+                             '">'.get_string('advancedsearch','forum').'...</a>';
+    echo '</div>';
+
 /// Some capability checks.
     if (empty($cm->visible) and !has_capability('moodle/course:viewhiddenactivities', $context)) {
         notice(get_string("activityiscurrentlyhidden"));

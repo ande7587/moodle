@@ -247,6 +247,13 @@ $renderer = $PAGE->get_renderer('mod_forum');
 
 echo $OUTPUT->header();
 
+# MOOD-809 20150318 cdsmith. Adding link to advanced search page.
+echo '<div class="reportlink">';
+echo '<a href="search.php?id='.$course->id.
+                         '&amp;showform=1'.
+                         '">'.get_string('advancedsearch','forum').'...</a>';
+echo '</div>';
+
 echo $OUTPUT->heading(format_string($forum->name), 2);
 echo $OUTPUT->heading(format_string($discussion->name), 3, 'discussionname');
 

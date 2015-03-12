@@ -459,6 +459,13 @@ $PAGE->set_heading($course->fullname);
 $PAGE->set_button($searchform);
 echo $OUTPUT->header();
 
+# MOOD-809 20150318 cdsmith. Adding link to advanced search page.
+echo '<div class="reportlink">';
+echo '<a href="search.php?id='.$course->id.
+                         '&amp;showform=1'.
+                         '">'.get_string('advancedsearch','forum').'...</a>';
+echo '</div>';
+
 // Show the subscribe all options only to non-guest, enrolled users
 if (!isguestuser() && isloggedin() && $can_subscribe) {
     echo $OUTPUT->box_start('subscription');
