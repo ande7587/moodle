@@ -123,7 +123,8 @@ define('COMPLETION_NOT_VIEWED', 0);
  * Cache expiry time in seconds (10 minutes)
  * Completion cacheing
  */
-define('COMPLETION_CACHE_EXPIRY', 10*60);
+# MOOD-836 20150313 Colin. Changed expiration from 10 minutes to 1. (MOOD-499 in 2.6)
+define('COMPLETION_CACHE_EXPIRY', 1*60);
 
 /**
  * Completion details should be ORed together and you should return false if
