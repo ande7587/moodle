@@ -16,6 +16,7 @@ class local_reject_request_form extends moodleform {
         $emailtestonly = $this->_customdata['emailtestonly'];
         $silent  = $this->_customdata['silent'];
         $request = $this->_customdata['request'];
+        $users   = $this->_customdata['emailusers'];
 
         if ($silent) {
             $mform->addElement('html', get_string('silentrejecthdr', 'local_course'));
@@ -36,9 +37,15 @@ class local_reject_request_form extends moodleform {
         $mform->addElement('hidden', 'emailtestonly', $emailtestonly);
         $mform->setType('emailtestonly', PARAM_BOOL);
 
+        $useremailadresses = array_map(function($u) {return $u->username;}, $users);
+        $usersString= implode(', ' , $useremailadresses);
+
         $mform->addElement('header',
                            'coursedetails',
                            get_string('coursereasonforrejecting', 'local_course'));
+
+        $mform->addElement('static','description',
+                           get_string('requestemailtolabel', 'local_course'), $usersString);
 
         $mform->addElement('textarea',
                            'rejectnotice',

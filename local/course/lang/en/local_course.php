@@ -335,3 +335,5 @@ $string['requestdevornonacacoursesite'] = 'Request development or non-academic c
 // Scheduled task names
 $string['processmigrationrequests'] = 'Course migration request handling';
 $string['processmigrationresponses'] = 'Course migration response handling';
+
+$string['requestemailtolabel'] = 'To: ';

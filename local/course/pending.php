@@ -64,9 +64,12 @@ if (!empty($approve) and confirm_sesskey()) {
     $silent = optional_param('silent', 0, PARAM_BOOL);
     $emailtestonly = optional_param('emailtestonly', 0, PARAM_BOOL);
 
-    $customdata = array('silent'  => $silent,
-                        'request' => $request,
-                        'emailtestonly' => $emailtestonly);
+    $users = $request_manager->get_users_to_email_request_status($request, $silent);
+
+    $customdata = array('silent'        => $silent,
+                        'request'       => $request,
+                        'emailtestonly' => $emailtestonly,
+                        'emailusers'    => $users);
 
     $approveform = new local_approve_request_form($pendingpageurl, $customdata);
 
@@ -118,10 +121,12 @@ if (!empty($reject)) {
     $silent = optional_param('silent', 0, PARAM_BOOL);
     $emailtestonly = optional_param('emailtestonly', 0, PARAM_BOOL);
 
-    $customdata = array('silent'  => $silent,
-                        'request' => $request,
-                        'emailtestonly' => $emailtestonly);
+    $users = $request_manager->get_users_to_email_request_status($request, $silent);
 
+    $customdata = array('silent'        => $silent,
+                        'request'       => $request,
+                        'emailtestonly' => $emailtestonly,
+                        'emailusers'         => $users);
     // Prepare the form.
     $rejectform = new local_reject_request_form($pendingpageurl, $customdata);
 

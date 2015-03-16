@@ -831,17 +831,8 @@ SQL;
         $message_type_name = 'courserequestapproved';
         $subject = get_string('courseapprovedemail_subject', 'local_course');
 
-        // Get the users set up in admin/settings.php?section=courserequest
-        $users = get_users_from_config($CFG->courserequestnotify, 'moodle/site:approvecourse');
 
-        $message_init = '';
-
-        if ( $silent) {
-            $message_init .= get_string('courseapprovedemail_silent', 'local_course');
-        } else {
-            $courseuserstoemail = $this->get_requested_users($request->id, true);
-            $users = $users + $courseuserstoemail + array($requester->id => $requester);
-        }
+        $message_init = $silent ? get_string('courseapprovedemail_silent', 'local_course') : '';
 
         $msgdata = new stdClass();
         $msgdata->requester = $requester->username;
@@ -851,6 +842,8 @@ SQL;
         // The URL for the new course would not have been available when the $commonmessage
         // was first build, so substitute it now if it appears.
         $commonmessage = str_replace('{$a->url}', $msgdata->url, $commonmessage);
+
+        $users = $this->get_users_to_email_request_status($request, $silent);
 
         foreach ($users as $user) {
             $message = $message_init;
@@ -874,6 +867,25 @@ SQL;
     }
 
     /**
+     * Get a list of users the course request(either accepted or rejected)
+     * will be emailed to.
+     */
+    public function get_users_to_email_request_status($request, $silent){
+        global $DB, $CFG;
+        // Get the users set up in admin/settings.php?section=courserequest
+        $users = get_users_from_config($CFG->courserequestnotify, 'moodle/site:approvecourse');
+
+        if($silent){
+            return $users;
+        }
+
+        $courseuserstoemail = $this->get_requested_users($request->id, true);
+        $requester = $DB->get_record('user', array('id' => $request->requesterid));
+        $users = $users + $courseuserstoemail + array($requester->id => $requester);
+        return $users;
+    }
+
+    /**
      * The body of the message consists of a user-specific first part and
      * a common second part.  The second part is the commonmessage parameter.
      * If silent, this method prefixes the message with another part.
@@ -888,23 +900,14 @@ SQL;
         $message_type_name = 'courserequestrejected';
         $subject = get_string('courserejectedemail_subject', 'local_course');
 
-        // Get the users set up in admin/settings.php?section=courserequest
-        $users = get_users_from_config($CFG->courserequestnotify, 'moodle/site:approvecourse');
-
-        $message_init = '';
-
-        if ( $silent) {
-            $message_init .= get_string('courserejectedemail_silent', 'local_course');
-        } else {
-            $courseuserstoemail = $this->get_requested_users($request->id, true);
-            $requester = $DB->get_record('user', array('id' => $request->requesterid));
-            $users = $users + $courseuserstoemail + array($requester->id => $requester);
-        }
+        $message_init = $silent ? get_string('courserejectedemail_silent', 'local_course') : '';
 
         $msgdata = new stdClass();
         $msgdata->courseshortname = $request->shortname;
         $msgdata->coursefullname = $request->fullname;
         $msgdata->reason = $commonmessage;
+
+        $users = $this->get_users_to_email_request_status($request, $silent);
 
         foreach ($users as $user) {
             $message = $message_init;
