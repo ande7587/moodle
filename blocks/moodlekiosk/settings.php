@@ -15,9 +15,9 @@ $settings->add(new admin_setting_configtext(
 ));
 
 $settings->add(new admin_setting_configtext(
-        'block_moodlekiosk/instance_name',
-        get_string('instance_name', 'block_moodlekiosk'),
-        get_string('instance_name_desc', 'block_moodlekiosk'),
+        'block_moodlekiosk/exclude_instances',
+        get_string('exclude_instances', 'block_moodlekiosk'),
+        get_string('exclude_instances_desc', 'block_moodlekiosk'),
         ''
 ));
 

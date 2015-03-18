@@ -139,7 +139,7 @@ class block_moodlekiosk extends block_base {
     protected function getCourses() {
         return $this->service->search_course(array(
                 'roles'             => 'student,teacher,editingteacher,participant,visitor,designer',
-                'exclude_instances' => get_config('block_moodlekiosk', 'instance_name')
+                'exclude_instances' => get_config('block_moodlekiosk', 'exclude_instances')
         ));
    }
 }

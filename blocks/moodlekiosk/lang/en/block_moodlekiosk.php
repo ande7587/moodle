@@ -16,8 +16,8 @@ $string['moodlekiosk:myaddinstance'] = 'Add a new Moodle Kiosk block to the My M
 // config
 $string['search_token'] = 'Search API Token';
 $string['search_token_desc'] = 'Authentication API Token to search course from MoodleKiosk system';
-$string['instance_name'] = 'This instance name';
-$string['instance_name_desc'] = 'Shortname of the current instance to identify itself against MoodleKiosk system';
+$string['exclude_instances'] = 'Names of instances to exclude';
+$string['exclude_instances_desc'] = 'Comma separated shortnames of the instances to exclude when fetching a list of courses';
 $string['course_search_url'] = 'Course search URL';
 $string['course_search_url_desc'] = 'URL of the remote MoodelKiosk server to perform search';
 

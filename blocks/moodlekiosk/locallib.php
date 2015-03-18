@@ -35,7 +35,9 @@ class moodlekiosk_service {
         $url = trim($url, ' /')."/{$USER->username}/?stamp={$stamp}&sig={$signature}";
 
         foreach ($filters as $key => $value) {
-            $url .= '&'.$key.'='.rawurlencode($value);
+            if(!empty($value)){
+                $url .= '&'.$key.'='.rawurlencode($value);
+            }
         }
 
         // query remote server
