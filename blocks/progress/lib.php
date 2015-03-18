@@ -872,10 +872,26 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     global $OUTPUT, $CFG;
     $now = time();
     $numevents = count($events);
-    $dateformat = get_string('date_format', 'block_progress');
+    $dateformat = get_string('strftimerecentfull', 'langconfig');
     $tableoptions = array('class' => 'progressBarProgressTable',
                           'cellpadding' => '0',
                           'cellspacing' => '0');
+
+    // Get colours and use defaults if they are not set in global settings.
+    $colournames = array(
+        'attempted_colour' => 'attempted_colour',
+        'notattempted_colour' => 'notAttempted_colour',
+        'futurenotattempted_colour' => 'futureNotAttempted_colour'
+    );
+    $colours = array();
+    foreach ($colournames as $name => $stringkey) {
+        if (get_config('block_progress', $name)) {
+            $colours[$name] = get_config('block_progress', $name);
+        }
+        else {
+            $colours[$name] = get_string('block_progress', $stringkey);
+        }
+    }
 
     // Place now arrow.
     if ((!isset($config->orderby) || $config->orderby == 'orderbytime') && $config->displayNow == 1 && !$simple) {
@@ -935,23 +951,22 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
             'id' => '',
             'width' => $width.'%',
             'onmouseover' => 'M.block_progress.showInfo('.$instance.','.$userid.','.$event['cm']->id.');',
-            'onmouseout' => 'M.block_progress.showDefault('.$instance.','.$userid.','.$event['cm']->id.');',
              'style' => 'background-color:');
         if ($attempted === true) {
-            $celloptions['style'] .= get_config('block_progress', 'attempted_colour').';';
+            $celloptions['style'] .= $colours['attempted_colour'].';';
             $cellcontent = $OUTPUT->pix_icon(
                                isset($config->progressBarIcons) && $config->progressBarIcons == 1 ?
                                'tick' : 'blank', '', 'block_progress');
         }
-        else if (((!isset($config->orderby) || $config->orderby == 'orderbytime' || $config->orderby == 'orderbycourse') && $event['expected'] < $now) ||
+        else if (((!isset($config->orderby) || $config->orderby == 'orderbytime') && $event['expected'] < $now) ||
                  ($attempted === 'failed')) {
-            $celloptions['style'] .= get_config('block_progress', 'notattempted_colour').';';
+            $celloptions['style'] .= $colours['notattempted_colour'].';';
             $cellcontent = $OUTPUT->pix_icon(
                                isset($config->progressBarIcons) && $config->progressBarIcons == 1 ?
                                'cross':'blank', '', 'block_progress');
         }
         else {
-            $celloptions['style'] .= get_config('block_progress', 'futurenotattempted_colour').';';
+            $celloptions['style'] .= $colours['futurenotattempted_colour'].';';
             $cellcontent = $OUTPUT->pix_icon('blank', '', 'block_progress');
         }
         if (!empty($event['cm']->available)) {
@@ -1005,7 +1020,7 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
         }
         $content .= HTML_WRITER::empty_tag('br');
         $content .= get_string($action, 'block_progress').'&nbsp;';
-        $icon = ($attempted ? 'tick' : 'cross');
+        $icon = ($attempted && $attempted !== 'failed' ? 'tick' : 'cross');
         $content .= $OUTPUT->pix_icon($icon, '', 'block_progress');
         $content .= HTML_WRITER::empty_tag('br');
         if ($displaydate) {
