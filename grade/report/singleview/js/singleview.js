@@ -52,7 +52,7 @@ M.gradereport_singleview.init = function(Y) {
     //MOOD-762 20150306 jinhofer Handle search srtings put into the input boxes
     Y.all('div.filter input').each(function() {
         this.on('valueChange', function(e) {
-            if(this.get('value') = '') {
+            if(this.get('value') == '') {
                 this.ancestor('div.singleselect').all('select option').each(function() {
                     this.removeClass('hidden');
                 });
