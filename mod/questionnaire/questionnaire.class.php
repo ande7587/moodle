@@ -316,7 +316,7 @@ class questionnaire {
                 if ($question->type_id < QUESPAGEBREAK) {
                     $i++;
                 }
-                $qid = qreg_quote('q'.$question->id, '/');
+                $qid = preg_quote('q'.$question->id, '/');
                 if ($question->type_id != QUESPAGEBREAK) {
                     $method = $qtypenames[$question->type_id].'_response_display';
                     if (method_exists($question, $method)) {
@@ -811,7 +811,7 @@ class questionnaire {
             echo ($groupname);
             echo ($timesubmitted);
         }
-        echo '<h3 class="surveyTitle">'.s($this->survey->title).'</h3>';
+        echo '<h3 class="surveyTitle">'.format_text($this->survey->title, FORMAT_HTML).'</h3>';
 
         // We don't want to display the print icon in the print popup window itself!
         if ($this->capabilities->printblank && $blankquestionnaire && $section == 1) {
@@ -1133,13 +1133,6 @@ class questionnaire {
         return($haschoices);
     }
 
-    private function array_to_insql($array) {
-        if (count($array)) {
-            return("IN (".preg_replace("/([^,]+)/", "'\\1'", join(",", $array)).")");
-        }
-        return 'IS NULL';
-    }
-
     // RESPONSE LIBRARY.
 
     private function response_check_format($section, $formdata, $checkmissing = true, $checkwrongformat = true) {
@@ -1400,29 +1393,28 @@ class questionnaire {
             $sec = min($numsections , $sec);
 
             /* get question_id's in this section */
-            $qids = '';
+            $qids = array();
             foreach ($this->questionsbysec[$sec] as $question) {
-                if (empty($qids)) {
-                    $qids .= ' AND question_id IN ('.$question->id;
-                } else {
-                    $qids .= ','.$question->id;
-                }
+                $qids[] = $question->id;
             }
-            if (!empty($qids)) {
-                $qids .= ')';
-            } else {
+            if (empty($qids)) {
                 return;
+            } else {
+                list($qsql, $params) = $DB->get_in_or_equal($qids);
+                $qsql = ' AND question_id ' . $qsql;
             }
+
         } else {
             /* delete all */
-            $qids = '';
+            $qsql = '';
+            $params = array();
         }
 
         /* delete values */
-        $select = 'response_id = \''.$rid.'\' '.$qids;
+        $select = 'response_id = \'' . $rid . '\' ' . $qsql;
         foreach (array('response_bool', 'resp_single', 'resp_multiple', 'response_rank', 'response_text',
                        'response_other', 'response_date') as $tbl) {
-            $DB->delete_records_select('questionnaire_'.$tbl, $select);
+            $DB->delete_records_select('questionnaire_'.$tbl, $select, $params);
         }
     }
 
@@ -1824,14 +1816,9 @@ class questionnaire {
                         $oldqid = $row->qid;
                     }
                 }
-                if (is_array($qids2)) {
-                    $qids2 = 'question_id ' . $this->array_to_insql($qids2);
-                } else {
-                    $qids2 = 'question_id= ' . $qids2;
-                }
-                $sql = 'SELECT * FROM {questionnaire_quest_choice} WHERE '.$qids2.
-                    'ORDER BY id';
-                if ($records2 = $DB->get_records_sql($sql)) {
+                list($qsql, $params) = $DB->get_in_or_equal($qids2);
+                $sql = 'SELECT * FROM {questionnaire_quest_choice} WHERE question_id ' . $qsql . 'ORDER BY id';
+                if ($records2 = $DB->get_records_sql($sql, $params)) {
                     foreach ($records2 as $qid => $row2) {
                         $selected = '0';
                         $qid2 = $row2->question_id;
@@ -2569,33 +2556,23 @@ class questionnaire {
         global $SESSION, $DB;
 
         $output = array();
-        $nbinfocols = 9; // Change this if you want more info columns.
         $stringother = get_string('other', 'questionnaire');
-        $columns = array(
-                get_string('response', 'questionnaire'),
-                get_string('submitted', 'questionnaire'),
-                get_string('institution'),
-                get_string('department'),
-                get_string('course'),
-                get_string('group'),
-                get_string('id', 'questionnaire'),
-                get_string('fullname'),
-                get_string('username')
-            );
-
-        $types = array(
-                0,
-                0,
-                1,
-                1,
-                1,
-                1,
-                0,
-                1,
-                1,
-            );
-
         $arr = array();
+
+        $config = get_config('questionnaire', 'downloadoptions');
+        $options = empty($config) ? array() : explode(',', $config);
+        $columns = array();
+        $types = array();
+        foreach ($options as $option) {
+            if (in_array($option, array('response', 'submitted', 'id'))) {
+                $columns[] = get_string($option, 'questionnaire');
+                $types[] = 0;
+            } else {
+                $columns[] = get_string($option);
+                $types[] = 1;
+            }
+        }
+        $nbinfocols = count($columns);
 
         $idtocsvmap = array(
             '0',    // 0: unused
@@ -2838,16 +2815,16 @@ class questionnaire {
                 $username = '';
                 $uid = '';
             }
-            $arr = array();
-            array_push($arr, $qid);
-            array_push($arr, $submitted);
-            array_push($arr, $institution);
-            array_push($arr, $department);
-            array_push($arr, $coursename);
-            array_push($arr, $groupname);
-            array_push($arr, $uid);
-            array_push($arr, $fullname);
-            array_push($arr, $username);
+            $arr = array(); // fill $arr only with fields selected in the mod settings
+            if (in_array('response', $options)) array_push($arr, $qid);
+            if (in_array('submitted', $options)) array_push($arr, $submitted);
+            if (in_array('institution', $options)) array_push($arr, $institution);
+            if (in_array('department', $options)) array_push($arr, $department);
+            if (in_array('course', $options)) array_push($arr, $coursename);
+            if (in_array('group', $options)) array_push($arr, $groupname);
+            if (in_array('id', $options)) array_push($arr, $uid);
+            if (in_array('fullname', $options)) array_push($arr, $fullname);
+            if (in_array('username', $options)) array_push($arr, $username);
 
             // Merge it.
             for ($i = $nbinfocols; $i < $numcols; $i++) {
