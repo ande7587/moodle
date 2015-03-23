@@ -376,6 +376,9 @@ class plagiarism_plugin_turnitin extends plagiarism_plugin {
         return $output;
     }
 
+    // MOOD-764 20150213 kerzn002, colin. This function produces error messages when records are not
+    // found, which is frequent.  Commented out the only call to it (in function tii_submission) since
+    // the return value was not used anyway.
     private function get_max_files_allowed($moduleid, $modname) {
         global $DB;
         $filesallowed = 1;
@@ -2154,7 +2157,10 @@ class plagiarism_plugin_turnitin extends plagiarism_plugin {
         global $CFG, $DB, $USER;
 
         $settings = $this->get_settings($cm->id);
-        $nooffilesallowed = $this->get_max_files_allowed($cm->instance, $cm->modname);
+
+        // MOOD-764 20150213 kerzn002, colin.  $nooffilesallowed is not used and the call
+        // to get_max_files_allowed produces cron error messages
+        //$nooffilesallowed = $this->get_max_files_allowed($cm->instance, $cm->modname);
 
         // Do not submit if 5 attempts have been made previously.
         $previoussubmissions = $DB->get_records_select('plagiarism_turnitin_files',
