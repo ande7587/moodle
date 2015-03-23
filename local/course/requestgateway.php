@@ -28,7 +28,7 @@ echo $OUTPUT->box(get_string('courserequestgatewayintro', 'local_course'), 'requ
 
 echo $OUTPUT->box_start('requestformlinkscontainer');
 
-echo $OUTPUT->heading($strtitle);
+echo $OUTPUT->heading($strtitle.$OUTPUT->help_icon('coursesitetypehelp', 'local_course'));
 
 $links = html_writer::tag('div',
             html_writer::link(new moodle_url('/local/course/ppsftsearch.php'),

@@ -337,3 +337,7 @@ $string['processmigrationrequests'] = 'Course migration request handling';
 $string['processmigrationresponses'] = 'Course migration response handling';
 
 $string['requestemailtolabel'] = 'To: ';
+
+// MOOD-859 add CSH
+$string['coursesitetypehelp'] = 'Course Site Type';
+$string['coursesitetypehelp_help'] = 'Select <strong>Course Site Linked to University Registration</strong> if you want to associate your course site to one or more classes in the University registration system and keep enrollments in the course site synched with enrollments in these classes. <br /> Select <strong>Course Site Using Manual Enrollment</strong> if you want to manually control who is enrolled or a different enrollment method is used.';
