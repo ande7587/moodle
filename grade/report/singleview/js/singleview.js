@@ -21,7 +21,7 @@ M.gradereport_singleview.init = function(Y) {
     //MOOD-762 20150306 jinhofer Add Click function to the button
     if(Y.one('button#toggle-search')) {
         Y.one('button#toggle-search').on('click', function() {
-            Y.all('div.singleselect select').each(function() {
+            Y.all('div.box div.singleselect select').each(function() {
                 if(this.get('size') == '15') {
                     this.setAttribute('size', '1');
                     Y.all('div.filter').each(function() {
@@ -39,7 +39,7 @@ M.gradereport_singleview.init = function(Y) {
     }
 
     //MOOD-762 20150306 jinhofer Add the filter input boxes for each select
-    Y.all('div.singleselect').each(function() {
+    Y.all('div.box div.singleselect').each(function() {
         if(this.one('input[name=item]').getAttribute('value') == 'grade') {
             id = 'grade-search';
         }
