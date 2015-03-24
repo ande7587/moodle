@@ -219,7 +219,6 @@ class format_onetopic extends format_base {
      * @return array of options
      */
     public function course_format_options($foreditform = false) {
-        global $CFG;
         static $courseformatoptions = false;
         if ($courseformatoptions === false) {
             $courseconfig = get_config('moodlecourse');
@@ -238,11 +237,6 @@ class format_onetopic extends format_base {
                 ),
                 'coursedisplay' => array(
                     'default' => $courseconfig->coursedisplay,
-                    'type' => PARAM_INT
-                ),
-                //MOOD-262 btindell adding icon display option
-                'modeditingmenu' => array(
-                    'default' => $CFG->modeditingmenu,
                     'type' => PARAM_INT
                 ),
             );
@@ -298,19 +292,6 @@ class format_onetopic extends format_base {
                     ),
                     'help' => 'coursedisplay',
                     'help_component' => 'moodle',
-                ),
-                //MOOD-262 btindell adding icon display option
-                'modeditingmenu' => array(
-                    'label' => new lang_string('modeditingmenus'),
-                    'help' => 'modeditingmenus',
-                    'help_component' => 'moodle',
-                    'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(
-                            0 => new lang_string('no'),
-                            1 => new lang_string('yes')
-                        )
-                    ),
                 )
             );
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
@@ -392,8 +373,74 @@ class format_onetopic extends format_base {
         }
         return $this->update_format_options($data);
     }
+
+    public function section_format_options($foreditform = false) {
+        static $sectionformatoptions = false;
+
+        if ($sectionformatoptions === false) {
+            $sectionformatoptions = array(
+                'level' => array(
+                    'default' => 0,
+                    'type' => PARAM_INT
+                ),
+                'fontcolor' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW
+                ),
+                'bgcolor' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW
+                ),
+                'cssstyles' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW
+                )
+            );
+        }
+
+        if ($foreditform) {
+            $sectionformatoptionsedit = array(
+                'level' => array(
+                    'default' => 0,
+                    'type' => PARAM_INT,
+                    'label' => get_string('level', 'format_onetopic'),
+                    'element_type' => 'select',
+                    'element_attributes' => array(
+                        array(
+                            0 => get_string('asprincipal', 'format_onetopic'),
+                            1 => get_string('aschild', 'format_onetopic')
+                        )
+                    ),
+                    'help' => 'level',
+                    'help_component' => 'format_onetopic',
+                ),
+                'fontcolor' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW,
+                    'label' => get_string('fontcolor', 'format_onetopic'),
+                    'help' => 'fontcolor',
+                    'help_component' => 'format_onetopic',
+                ),
+                'bgcolor' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW,
+                    'label' => get_string('bgcolor', 'format_onetopic'),
+                    'help' => 'bgcolor',
+                    'help_component' => 'format_onetopic',
+                ),
+                'cssstyles' => array(
+                    'default' => '',
+                    'type' => PARAM_RAW,
+                    'label' => get_string('cssstyles', 'format_onetopic'),
+                    'help' => 'cssstyles',
+                    'help_component' => 'format_onetopic',
+                )
+            );
+
+            $sectionformatoptions = $sectionformatoptionsedit; //array_merge_recursive($sectionformatoptions, $sectionformatoptionsedit);
+        }
+        return $sectionformatoptions;
+    }
+
 }
-
-
-
 

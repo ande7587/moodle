@@ -10,11 +10,20 @@ Download zip package, extract the onetopic folder and upload this folder into co
 ABOUT
 =============
 Developed by: David Herney Bernal García - davidherney at gmail dot com
-GIT: https://github.com/davidherney/onetopic
+GIT: https://github.com/davidherney/moodle-format_onetopic
 Information in: http://aprendeenlinea.udea.edu.co/lms/investigacion/course/view.php?id=50&topic=2
 
 IN VERSION
 =============
+2015011804:
+This release was powered by Loyola Leadership School of Universidad Loyola Andalucia
+Added functionality: Duplicate current section
+Added functionality: Change tab style properties: font color, background color and new field to change other CSS properties
+
+2015011803:
+Added functionality: Sub-tabs, in order to have tabs in two levels
+It was replaced the "<font>" tag in a tab, It was changed by "<div>" tag
+
 2015011802 (MATURITY BETA):
 Added functionality: Reduce and increment number of sections.
 
