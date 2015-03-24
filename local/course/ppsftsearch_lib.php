@@ -203,7 +203,10 @@ static public function get_myclass_search_form($userid, $defaultterm=null) {
 
     $table = html_writer::tag('table', $thead.$tbody, array('id'=>'myclassestable'));
 
-    $formcomponents = $table;
+
+    $formcomponents = html_writer::tag('div', null, array('class'=>'errormessage'));
+
+    $formcomponents .= $table;
 
     // the search button
     $searchbutton = html_writer::empty_tag('input',
@@ -227,7 +230,8 @@ static public function get_myclass_search_form($userid, $defaultterm=null) {
     return html_writer::tag('form',
                             $formcomponents,
                             array('method'=>'get',
-                                  'action'=>'ppsftsearchresult.php'));
+                                  'action'=>'ppsftsearchresult.php',
+                                  'id'    =>'myclassform'));
 }
 
 static private function get_by_subject_table() {
@@ -239,12 +243,12 @@ static private function get_by_subject_table() {
        .html_writer::tag('th', get_string('catalogtexthdr', 'local_course')));
     $thead = html_writer::tag('thead', $theadcontents);
 
-    $tfootcontents = html_writer::tag('tr',
-        html_writer::tag('td', '&nbsp;')
-       .html_writer::tag('td', '&nbsp;')
-       .html_writer::tag('td', get_string('subjecthelpnote', 'local_course'))
-       .html_writer::tag('td', get_string('catalognumberhelpnote', 'local_course')));
-    $tfoot = html_writer::tag('tfoot', $tfootcontents);
+    $tsubheadcontents = html_writer::tag('tr',
+        html_writer::tag('th', '&nbsp;')
+       .html_writer::tag('th', '&nbsp;')
+       .html_writer::tag('th', get_string('subjecthelpnote', 'local_course'), array('class'=>'searchboxsubheaders'))
+       .html_writer::tag('th', get_string('catalognumberhelpnote', 'local_course'), array('class'=>'searchboxsubheaders')));
+    $tsubhead = html_writer::tag('thead', $tsubheadcontents);
 
     $tbodycontents = html_writer::tag('tr',
          html_writer::tag('td', static::get_term_select())
@@ -254,7 +258,7 @@ static private function get_by_subject_table() {
         array('class'=>'lastrow'));
     $tbody = html_writer::tag('tbody', $tbodycontents);
 
-    $table = html_writer::tag('table', $thead.$tfoot.$tbody, array('id'=>'subjecttable'));
+    $table = html_writer::tag('table', $thead.$tsubhead.$tbody, array('id'=>'subjecttable'));
 
     return $table;
 }
@@ -304,11 +308,11 @@ static private function get_by_number_table() {
        .html_writer::tag('th', get_string('classnumbertexthdr', 'local_course')));
     $thead = html_writer::tag('thead', $theadcontents);
 
-    $tfootcontents = html_writer::tag('tr',
+    $tsubheadcontents = html_writer::tag('tr',
         html_writer::tag('td', '&nbsp;')
        .html_writer::tag('td', '&nbsp;')
-       .html_writer::tag('td', get_string('classnumberhelpnote', 'local_course')));
-    $tfoot = html_writer::tag('tfoot', $tfootcontents);
+       .html_writer::tag('td', get_string('classnumberhelpnote', 'local_course'),  array('class'=>'searchboxsubheaders')));
+    $tsubhead = html_writer::tag('thead', $tsubheadcontents);
 
     $tbodycontents = html_writer::tag('tr',
          html_writer::tag('td', static::get_term_select())
@@ -317,7 +321,7 @@ static private function get_by_number_table() {
         array('class'=>'lastrow'));
     $tbody = html_writer::tag('tbody', $tbodycontents);
 
-    $table = html_writer::tag('table', $thead.$tfoot.$tbody, array('id'=>'classnumbertable'));
+    $table = html_writer::tag('table', $thead.$tsubhead.$tbody, array('id'=>'classnumbertable'));
 
     return $table;
 }

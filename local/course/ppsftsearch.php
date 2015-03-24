@@ -38,7 +38,6 @@ $PAGE->requires->yui_module('moodle-local_course-ppsftsearch',
                             'M.ppsft_search.init_ppsftSearch',
                             array(array('subjectparams'=>$subjectparams,
                                         'classnumberparams'=>$classnumberparams)));
-$PAGE->requires->string_for_js('ppsftsearchformempty', 'local_course');
 $PAGE->requires->string_for_js('ppsftsearchformmissingparams', 'local_course');
 
 unset($SESSION->courserequest_selectedppsft);

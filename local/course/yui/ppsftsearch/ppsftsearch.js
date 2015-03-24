@@ -125,7 +125,7 @@ Y.extend(ppsftSearch, Y.Base, {
     onSubmitCheck : function (e) {
         if (this.isFormEmpty(e.target)) {
             e.preventDefault();
-            this.setErrorMessage(e.target, 'ppsftsearchformempty');
+            this.setErrorMessage(e.target, 'ppsftsearchformmissingparams');
             return;
         }
 
@@ -135,6 +135,12 @@ Y.extend(ppsftSearch, Y.Base, {
             e.preventDefault();
             this.setErrorMessage(e.target, 'ppsftsearchformmissingparams');
         }
+    },
+
+    initializeSearchForMyclassesForm: function (params) {
+
+        Y.one('#myclassform').on('submit', this.onSubmitCheck, this);
+
     },
 
     initializeSubjectForm : function (params) {
@@ -183,7 +189,7 @@ Y.extend(ppsftSearch, Y.Base, {
 
     /** Expects 'searchparams' parameter. */
     initializer : function (params) {
-
+        this.initializeSearchForMyclassesForm(params);
         this.initializeSubjectForm(params);
         this.initializeClassNumberForm(params);
     }

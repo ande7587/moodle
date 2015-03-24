@@ -19,7 +19,7 @@ body.path-local-course .previousbuttondiv button { margin-right:33px; }
 .searchbox table { margin-bottom:0; }
 .searchbox th { text-align:left; padding:1px 5px; font-weight:normal; color:#a00; }
 .searchbox tbody td { padding:1px 3px; vertical-align:middle; }
-.searchbox tfoot td { font-size:88%; color:#444; padding:0 5px; vertical-align:top; }
+.searchbox .searchboxsubheaders { font-size:88%; color:#444; padding:0 5px; vertical-align:top; }
 .searchbox div.addanotherrow { margin-top:0.5em; }
 
 .searchbox .errormessage, #classselectform .errormessage { font-size:110%; color:#a00; margin-top:0.5em;}

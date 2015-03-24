@@ -39,8 +39,7 @@ $string['subjecthelpnote'] = 'e.g. ENGL';
 $string['catalognumberhelpnote'] = 'e.g. 1001 or 1001,1001H or 10*';
 $string['classnumberhelpnote'] = 'e.g. 61538';
 
-$string['ppsftsearchformempty'] = 'At least one row must have search parameters set.';
-$string['ppsftsearchformmissingparams'] = 'Partially set rows are not allowed.';
+$string['ppsftsearchformmissingparams'] = 'Please complete all required search fields marked by an asterisk.';
 
 $string['ppsftsearchclassesnotfound'] = 'No classes matching search parameters found.';
 $string['ppsftsearchresultinstructions'] = 'Please check all the courses for which you would like to automatically enroll students to your Moodle course site.';
