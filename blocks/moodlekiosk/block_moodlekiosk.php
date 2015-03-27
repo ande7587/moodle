@@ -161,7 +161,7 @@ class block_moodlekiosk extends block_base {
     protected function getCourses() {
         return $this->service->search_course(array(
                 'roles'             => $this->get_courseroles_shortnames(),
-                'exclude_instances' => get_config('block_moodlekiosk', 'instance_name')
+                'exclude_instances' => get_config('block_moodlekiosk', 'exclude_instances')
         ));
    }
 }
