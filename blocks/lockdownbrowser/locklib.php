@@ -18,7 +18,22 @@ function lockdownbrowser_set_settings($quizid, $reqquiz, $reqreview, $exitpass, 
 function lockdownbrowser_get_quiz_options($quizid) {
 
     global $DB;
-    return $DB->get_record('block_lockdownbrowser_sett', array('quizid' => $quizid));
+
+    # MOOD-971 20150330 Colin, wolde034. Check that course matches, too. This is
+    # a work-around for incorrect quizid values in mdl_block_lockdownbrowser_sett.
+    # These incorrect quizid values typically appear when we backup and restore
+    # a course that has a deleted quiz with a lockdown browser association.
+    # In that case, the restore process creates a block_lockdownbrowser_sett
+    # row with the correct new courseid, but the incorrect quizid.  That
+    # incorrect quizid is the quizid for the deleted quiz in the original course.
+$sql =<<<SQL
+select ldb.*
+from {block_lockdownbrowser_sett} ldb
+join {quiz} q on q.id = ldb.quizid and q.course = ldb.course
+where ldb.quizid=:quizid
+SQL;
+
+    return $DB->get_records_sql($sql, array('quizid' => $quizid));
 }
 
 function lockdownbrowser_set_quiz_options($quizid, $ldbopt = null) {
