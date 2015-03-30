@@ -304,6 +304,12 @@ $CFG->admin = 'admin';
 // involved.
 // Specify the full directory path to the custom scripts
 //      $CFG->customscripts = '/home/example/customscripts';
+
+// MOOD-970 20150330 Colin. The Respondus Lockdown Browser requires this.  If we need to
+// use customscripts for something else, as well, we can copy the scripts to a
+// common location or, perhaps, symlink them to a common location.
+$CFG->customscripts = __DIR__.'/blocks/lockdownbrowser/customscripts';
+
 //
 // Performance profiling
 //
