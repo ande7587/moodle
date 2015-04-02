@@ -136,7 +136,14 @@ SQL;
     }
 
     protected function define_category_elements() {
+        global $OUTPUT;
+
         $mform =& $this->_form;
+
+        $mform->addElement('html', '<div class="elementwrapper">');
+        $mform->addElement('html', '<hr class="fieldsections" ><!-- begin moodle categories -->');
+        $mform->addElement('html', html_writer::tag('h4',get_string('moodlecategories','local_course').$OUTPUT->help_icon('moodlecategorieshelp', 'local_course')));
+        $mform->addElement('html', '</div>');
 
         $mform->addElement('html', '<div class="elementwrapper" id="depth1div">');
         $this->define_depth1_category_element();
@@ -152,11 +159,14 @@ SQL;
     }
 
     protected function define_role_element() {
-        global $DB;
+        global $DB, $OUTPUT;
 
         $mform =& $this->_form;
 
         $mform->addElement('html', '<div class="elementwrapper" id="yourrolediv">');
+        $mform->addElement('html', '<hr class="fieldsections" ><!-- begin moodle roles -->');
+        $mform->addElement('html', html_writer::tag('h4',get_string('courseroles','local_course').$OUTPUT->help_icon('courseroleshelp', 'local_course')));
+        $mform->addElement('html', '<div class="helpnote">'.get_string('addadditionalroleuserhelpnote', 'local_course').'</div>');
 
         $rolemenu = get_course_request_assignable_roles();
 
@@ -190,6 +200,9 @@ SQL;
      */
     protected function define_course_name_elements($fullnamelabel, $shortnamelabel) {
         $mform =& $this->_form;
+
+        $this->_form->addElement('html', '<hr class="fieldsections" ><!-- begin Summary of Classes-->');
+        $this->_form->addElement('html', html_writer::tag('h4',get_string('classsummary','local_course')));
 
         $mform->addElement('html', '<div class="elementwrapper" id="fullnamediv">');
         $mform->addElement('text', 'fullname', $fullnamelabel, 'maxlength="254"');
@@ -248,20 +261,26 @@ SQL;
         $repeatarray[] = &$mform->createElement('advcheckbox',
                            "additionalroleemail",
                            '',
-                           get_string('sendemail', 'local_course'));
+                           get_string('sendemail', 'local_course').$OUTPUT->help_icon('sendemailhelp', 'local_course'));
         $repeatarray[] = &$mform->createElement('html', '</div><!-- end additionalroleuserlistdiv -->');
         $repeatarray[] = &$mform->createElement('html', '</div><!-- end additionalrolediv -->');
 
-        $repeatoptions = array();
+        $repeatoptions = array('additionalroleselect' => array('rule' => array(get_string('missingadditionaluserrole', 'local_course'), 'required', null, 'client')));
 
         $mform->setType("additionalroleselect", PARAM_INTEGER);
         $mform->setType("additionalroleuserlist", PARAM_TEXT);
 
-        $this->repeat_elements($repeatarray, 1, $repeatoptions, 'rolediv_repeats', 'rolediv_add',
+        $repeats = $this->repeat_elements($repeatarray, 1, $repeatoptions, 'rolediv_repeats', 'rolediv_add',
                                 1, get_string('addadditionalrolerow', 'local_course'), true);
 
-        $mform->addElement('html', '</div><!-- end additionalrolesdiv -->');
+        // Focus on the last additional user role
+        if($repeats > 1){
+          $lastelementindex = $repeats - 1;
+          $elementtofocus = $mform->getElement('additionalroleselect['.$lastelementindex.']');
+          $elementtofocus->updateAttributes(array('autofocus' => true));
+        }
 
+        $mform->addElement('html', '</div><!-- end additionalrolesdiv -->');
 
         $plusimg = '<img src="'.$OUTPUT->pix_url('green_plus', 'local_course').'"/>';
         $mform->addElement('html', html_writer::tag('div',
@@ -270,7 +289,6 @@ SQL;
                                         array('id'=>'addadditionalrolerowdiv',
                                               'class'=>'addrowsorlookup elementwrapper')));
 
-        $mform->addElement('html', '<div class="helpnote elementwrapper">'.get_string('addadditionalroleuserhelpnote', 'local_course').'</div>');
     }
 
     /**
@@ -279,6 +297,10 @@ SQL;
     protected function define_sourcecourseurl_elements($instructions_stringid='sourcecourseurl_instructions') {
         $mform =& $this->_form;
 
+        $mform->addElement('html', '<div class="elementwrapper" id="sourcecourseurldiv">');
+        $mform->addElement('html', '<hr class="fieldsections" ><!-- begin course site copy -->');
+        $mform->addElement('html', html_writer::tag('h4',get_string('coursetocopy','local_course')));
+        $mform->addElement('html', '</div>');
         #$mform->addElement('static', 'sourcecourseurl_instructions', null, get_string($instructions_stringid, 'local_course'));
         $mform->addElement('html', '<div class="elementwrapper" id="sourcecourseurldiv">');
         $mform->addElement('text', 'sourcecourseurl', get_string('sourcecourseurl', 'local_course'), 'maxlength="200"');
@@ -622,6 +644,8 @@ class local_course_request_form_acad extends local_course_request_form_base {
 
         $triplets = $this->_customdata['triplets'];
 
+        $this->_form->addElement('html', '<hr class="fieldsections" ><!-- begin Summary of Classes-->');
+        $this->_form->addElement('html', html_writer::tag('h4',get_string('classsummary','local_course')));
         // Submit back the triplets using hidden fields.
         foreach ($triplets as $tripletstring=>$ignore) {
             $mform->addElement('hidden', "classes[$tripletstring]", $tripletstring);

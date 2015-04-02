@@ -176,7 +176,7 @@ body.path-local-course .generaltable .cell { border-color: #CCCCCC; border-style
 @media (min-width: 900px) {
     #id_requestformfieldset .elementwrapper { float:left; clear:both; margin-top:10px; }
     #shortnamediv.elementwrapper { clear:none; margin-left:10px; width:40%}
-    #id_requestformfieldset .additionalroleuserlistdiv .fitem_fcheckbox { width:100px; position:absolute; bottom: 0; right:2%; }
+    #id_requestformfieldset .additionalroleuserlistdiv .fitem_fcheckbox { width:130px; position:absolute; bottom: 0; right:2%; }
 }
 
 @media (min-width: 1200px) {
@@ -185,3 +185,5 @@ body.path-local-course .generaltable .cell { border-color: #CCCCCC; border-style
     #page-local-course-ppsftsearch #fgroup_id_buttons,
     #page-local-course-ppsftsearch #fgroup_id_buttons+div.fdescription { text-align:right;}
 }
+
+.fieldsections { border-style: outset none; width: 700px; }

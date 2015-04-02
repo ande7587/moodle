@@ -99,6 +99,19 @@ $string['primaryinstructors'] = 'Primary instructor(s):&nbsp';
 $string['yourrole'] = 'Your role in the course site';
 
 $string['sendemail'] = 'Send email';
+$string['sendemailhelp'] = 'Email notifications';
+$string['sendemailhelp_help'] = 'Checking this box will include these users in both the course request confirmation email and the course request approval/denial email. Email notification will always be sent to primary instructor(s)';
+
+$string['classsummary'] = 'Summary of class(es)';
+$string['coursetocopy'] = 'Existing course to copy';
+
+$string['moodlecategories'] = 'Moodle categories (institution, college)';
+$string['moodlecategorieshelp'] = 'Category selection';
+$string['moodlecategorieshelp_help'] = 'Moodle categories are the way Moodle groups courses together.  Select the appropriate categories based on the institution and college this course is being taught in.';
+
+$string['courseroles'] = 'Course roles';
+$string['courseroleshelp'] = 'Course roles';
+$string['courseroleshelp_help'] = 'Primary instructors of classes associated with this course will automatically be enrolled in the course site as instructors. If you are not the primary instructor of a class associated with this course site you can select what role, if any, you want to have in this course site. Also use this section to add additional users and grant them the role of Instructor, Designer, Teaching Assistant, or Non-Editing Instructor.';
 
 $string['disclaimerhead'] = 'Disclaimer';
 $string['disclaimertext'] = 'By submitting this form, I assert that I am authorized to request a Moodle course site on behalf of the instructor or program.  Instructors of record are automatically added as instructors and notified of requests made on their behalf.';
@@ -116,7 +129,7 @@ $string['shortnamehelpnote'] = 'e.g. AssignWorkStudent';
 $string['primaryinstructoremailnote'] = 'Note: Email notification will always be sent to primary instructor';
 $string['sourcecourseurlhelpnote'] = 'Copy URL from previous Moodle course';
 $string['courserequestsupporthelpnote'] = 'Additional comments or instructions for Moodle Support';
-$string['addadditionalroleuserhelpnote'] = '<a href="http://www.oit.umn.edu/moodle/instructor-guides/roles-overview/index.htm" target="_blank">Role types</a>';
+$string['addadditionalroleuserhelpnote'] = '<a href="http://www.oit.umn.edu/moodle/instructor-guides/roles-overview/index.htm" target="_blank">Role types explained</a>';
 
 $string['allowrequest'] = 'Allow requests';
 
@@ -137,6 +150,7 @@ $string['internetidinvalid'] = 'Please include comma-separated <strong>internet 
 $string['missingfullname'] = 'Missing full name';
 $string['missingshortname'] = 'Missing short name';
 $string['missingyourrole'] = 'Missing your role';
+$string['missingadditionaluserrole'] = 'Missing user role';
 $string['missingterm'] = 'Missing session/term';
 $string['notapplicable'] = 'Not Applicable';
 $string['requestcourse'] = 'Request a course';
