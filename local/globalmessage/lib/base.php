@@ -116,9 +116,10 @@ class moo_globalmessage
      */
     public function get_version()
     {
+        //MOOD-869 btindell 20150403 removed undefined property $plugin->release.
         $plugin = new \stdClass();
         include_once __DIR__ . '/../version.php';
-        return $plugin->release;
+        return '2.1.5';
     }
 
     /**

@@ -71,6 +71,9 @@ echo $OUTPUT->doctype() ?>
             <div class="row-fluid">
                 <section id="region-main" class="span8 pull-right">
                     <?php
+                    //MOOD-869 btindell 20150403 added call to global message
+                    include_once $CFG->dirroot . '/local/globalmessage/lib/base.php';
+                    moo_globalmessage::show_message();
                     echo $OUTPUT->course_content_header();
                     echo $OUTPUT->main_content();
                     echo $OUTPUT->course_content_footer();
