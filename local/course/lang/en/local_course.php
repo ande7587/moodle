@@ -128,7 +128,6 @@ $string['courserequestsuccess'] = 'Successfully saved your course request. Expec
 $string['fullnamehelpnote'] = 'e.g. OIT Assignments and Workshops - Student';
 $string['shortnamehelpnote'] = 'e.g. AssignWorkStudent';
 $string['primaryinstructoremailnote'] = 'Note: Email notifications will always be sent to primary instructor(s)';
-$string['sourcecourseurlhelpnote'] = 'Copy URL from previous Moodle course';
 $string['courserequestsupporthelpnote'] = 'Additional comments or instructions for Moodle Support';
 $string['addadditionalroleuserhelpnote'] = '<a href="http://www.oit.umn.edu/moodle/instructor-guides/roles-overview/index.htm" target="_blank">Role types explained</a>';
 
@@ -158,7 +157,7 @@ $string['requestcourse'] = 'Request a course';
 $string['sections'] = 'Course Section(s) (sec 001 and 003)';
 $string['sourcecourseidinvalid'] = 'No course with id {$a}';
 $string['sourcecourseinstanceinvalid'] = 'URL points to an invalid source Moodle instance';
-$string['sourcecourseurl'] = 'URL of Moodle course site to copy';
+$string['sourcecourseurl'] = 'To copy a previous course site, paste the URL or begin typing the name of the course below to search for the URL.';
 $string['sourcecourseurlinvalid'] = 'The URL of a Moodle course site provided is invalid. Please check for correctness. A correct URL should look something like "https://moodle.umn.edu/course/view.php?id=1234567"';
 $string['shortnametakenbycourse'] = 'This short name is already used by another course. Please add a random number at the end of this field and then click "Request a course" again, so your request will be processed.';
 $string['shortnametakenbyrequest'] = 'This short name is already used by a pending course request. Please add a random number at the end of this field and then click "Request a course" again, so your request will be processed.';

@@ -130,7 +130,50 @@ Y.extend(courseRequest, Y.Base, {
                 depth2node.remove(i);
             }
         }
+
+        // Auto complete, search course urls by course name
+        var sourceCourseUrlNode = Y.one('#id_sourcecourseurl');
+        var sourceCourserQuerySpinnerNode = Y.one('#id_sourcecoursequeryspinner');
+        var sourceCourseFullnameNode = Y.one('#id_sourcecoursefullname');
+        var spinner = M.util.add_spinner(Y, sourceCourserQuerySpinnerNode);
+        // init ac
+        sourceCourseUrlNode.plug(Y.Plugin.AutoComplete, {
+            source: 'ajax_search_existing_course_sites.php?q={query}',
+            queryDelay:  400, // query throttle
+            resultTextLocator: function (result) {
+                return result.fullname + ': ' + result.url;
+            },
+            scrollIntoView: true,
+            render:'body' // render to body to avoid css contamination due to inheritance
+        });
+
+        // show spinner when a search query is made,
+        // if there is an error, display it.
+        sourceCourseUrlNode.ac.on('query', function (e, aArgs ) {
+            spinner.show();
+            sourceCourseFullnameNode.setHTML('');
+        });
+
+        // hide spinner after query request returns
+        sourceCourseUrlNode.ac.on('results', function (e, aArgs ) {
+            if(e.data.error){
+                sourceCourseFullnameNode.setHTML(e.data.error);
+            }
+            spinner.hide();
+        });
+
+        // handle user select event
+        sourceCourseUrlNode.ac.on('select', function (e) {
+            e.preventDefault();
+            var course = e.result.raw;
+
+            sourceCourseUrlNode.set('value', course.url);
+            sourceCourseFullnameNode.setHTML(course.fullname);
+
+            sourceCourseUrlNode.ac.hide();
+        });
     }
+
 });
 
 M.local_course = M.local_course || {};
@@ -140,5 +183,5 @@ M.local_course.init_courseRequest = function(params) {
 
 },
 '@VERSION@',
-{requires:['base','array-extras','node-event-simulate']});
+{requires:['base','array-extras','node-event-simulate','autocomplete']});
 

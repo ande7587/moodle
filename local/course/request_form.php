@@ -306,9 +306,9 @@ SQL;
         $mform->addElement('html', '</div>');
         #$mform->addElement('static', 'sourcecourseurl_instructions', null, get_string($instructions_stringid, 'local_course'));
         $mform->addElement('html', '<div class="elementwrapper" id="sourcecourseurldiv">');
+        $mform->addElement('html', '<div id="id_sourcecoursequeryspinner"></div>');
         $mform->addElement('text', 'sourcecourseurl', get_string('sourcecourseurl', 'local_course'), 'maxlength="200"');
-        $mform->addElement('html', '<div class="helpnote">'.get_string('sourcecourseurlhelpnote', 'local_course').'</div>');
-        $mform->addElement('html', '</div><!-- end sourcecourseurldiv -->');
+        $mform->addElement('html', '<div id="id_sourcecoursefullname"></div></div><!-- end sourcecourseurldiv -->');
         $mform->setType('sourcecourseurl', PARAM_TEXT);
     }
 
