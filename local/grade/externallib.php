@@ -41,14 +41,16 @@ class local_grade_external extends external_api {
                     'is_hidden' => new external_value(PARAM_BOOL, 'true if item is currently hidden'),
                     'hiddenuntil' => new external_value(PARAM_TEXT, 'datetime of "hidden until" value, if set'),
                     'containeritemid' => new external_value(PARAM_INT,  'ID of the grade item that contains this grade item'),
-                    'categoryid'      => new external_value(PARAM_INT,  'ID of the grade item category')
+                    'categoryid'      => new external_value(PARAM_INT,  'ID of the grade item category'),
+                    'sortorder'       => new external_value(PARAM_INT,  'Order or position of display')
             ))),
             'categories'        => new external_multiple_structure(
                 new external_single_structure(array(
                     'name'              => new external_value(PARAM_TEXT, 'name  of the category'),
                     'id'                => new external_value(PARAM_INT,  'ID of the category'),
                     'parentcategoryid'  => new external_value(PARAM_INT,  'ID of the category\'s parent'),
-                    'itemid'            => new external_value(PARAM_INT,  'ID of the category\'s corresponding grade item')
+                    'itemid'            => new external_value(PARAM_INT,  'ID of the category\'s corresponding grade item'),
+                    'sortorder'         => new external_value(PARAM_INT,  'Order or position of display')
              )))
         ));
     }
@@ -101,7 +103,8 @@ class local_grade_external extends external_api {
                 'id'               => $category->categoryid,
                 'name'             => $category->category_fullname,
                 'itemid'           => $category->categoryitemid,
-                'parentcategoryid' => $category->categoryparentid
+                'parentcategoryid' => $category->categoryparentid,
+                'sortorder'        => $category->sortorder
             );
             $out['categories'][] = $category_out;
         }
@@ -136,7 +139,8 @@ class local_grade_external extends external_api {
                 'is_hidden' => $gi->is_hidden(),
                 'hiddenuntil' => static::iso8601_date_from_hidden($gi->get_hidden()),
                 'containeritemid' => $parentgradeitemid,
-                'categoryid'      => $gi->categoryid
+                'categoryid'      => $gi->categoryid,
+                'sortorder'       => $gi->sortorder
                 ###'timecreated'  => $gi->timecreated,
                 ###'timemodified' => $gi->timemodified
             );
@@ -158,7 +162,7 @@ class local_grade_external extends external_api {
 
         $sql =<<<SQL
  select gc.id categoryid, gi.id categoryitemid,
-        gc.parent categoryparentid,
+        gc.parent categoryparentid, gi.sortorder,
         case gc.fullname when :questionmark then ''
                          else gc.fullname end category_fullname
 from {grade_categories} gc
