@@ -508,3 +508,9 @@ span.skip-block, span.skip-block-to, span#maincontent {
 
 
 /* <<< */
+
+/* <<< MOOD-1048 */
+.jsenabled .usermenu .moodle-actionmenu.show .menu a:focus, .smaller-user-menu-dropdown .panel-content li[role="presentation"] a:focus {
+    text-decoration: underline;
+}
+/* <<< */
