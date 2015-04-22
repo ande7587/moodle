@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
     //Please refer to {@link https://docs.moodle.org/22/en/Language_packs} for more language pack information.
 
