@@ -80,8 +80,13 @@ class block_explorancebpi extends block_base {
         $this->content = new stdClass;
         $this->content->text = '';
 
+        // MOOD-415 (kerzn002@umn.edu) 20140916
+        // UMN-specific customization.  Check to see if the user has an idnumber. Even if the
+        // block would normally show something like "you must configure this" to the site
+        // administrator, this will take priority. "or empty(....)"
+
         // If the user is not logged in or if the user id is not empty, we show empty block.
-        if (! isloggedin()) {
+        if (! isloggedin() or empty($USER->idnumber)) {
 			return $this->content;
 		}
 
@@ -179,7 +184,9 @@ class block_explorancebpi extends block_base {
     function get_ModifiedUrl(){
         global $USER;
 
-        $newUrl = str_ireplace("&userid=", "&userid=".$this->randomizeQueryString($USER->username), $this->config->url);
+        // MOOD-415 (kerzn002@umn.edu) 20140916
+        // Changed idnumber from username.
+        $newUrl = str_ireplace("&userid=", "&userid=".$this->randomizeQueryString($USER->idnumber), $this->config->url);
 
         // Set the language from the URL (Feedback).
         $newUrl = str_ireplace("&lng=", "&lng=".$USER->lang, $newUrl);
