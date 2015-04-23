@@ -715,17 +715,16 @@ FUN WITH FORMS
     margin-right: 1em;
 }
 
-.format-flexpage  .block_flexpagemod_hsuforum .snap-media-object h3 {
+/*MOOD-1054 btindell 20150423 changed CSS from patch provided by MoodleRooms*/
+.format-flexpage .block_flexpagemod_hsuforum .snap-media-object h3 {
     padding: 0;
 }
 
-.modtype_hsuforum .mod-indent-outer,
-.modtype_hsuforum .activityinstance,
-.format-flexpage  .block_flexpagemod_hsuforum .mod-indent-outer,
-.format-flexpage  .block_flexpagemod_hsuforum .activityinstance {
+.format-flexpage  .block_flexpagemod_hsuforum .activityinstance,
+.modtype_hsuforum .activityinstance{
     display: block !important;
 }
-
+/* <<< MOOD-1054*/
 .modtype_hsuforum.activity:before,
 .modtype_hsuforum.activity:after,
 .format-flexpage  .block_flexpagemod_hsuforum li.activity:before,
