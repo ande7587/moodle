@@ -409,8 +409,8 @@ YUI().use('node', 'cookie', 'node-event-delegate', 'event-key', function (Y) {
 
             var is_content_max = false;
 
-            // only add the max button if there are more than one columns
-            if (left_column || right_column) {
+            // only add the max button if the page is not the maintenance page or course request
+            if (!Y.one('body.pagelayout-maintenance') && !Y.one('body.path-local-course')) {
                 var max_button = Y.Node.create('<div id="umn-clean-max-content-btn" tabindex="0"></div>');
 
                 // M.str is not available until the end of page load
