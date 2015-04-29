@@ -656,8 +656,8 @@ SQL;
     /*
      * The parameters to this function are candidate course names without
      * an index.  The function looks for any matching existing in the
-     * pending requests or the courses and returns the highest index
-     * in use.
+     * pending requests or the courses and returns the next suffix index
+     * to use.
      */
     private function get_next_course_name_index($shortname, $fullname) {
         global $DB;
@@ -671,27 +671,37 @@ SQL;
 
         // First escape any existing '|' characters.
         $shortpattern = str_replace('|', '||', $shortname);
-        $fullpattern = str_replace('|', '||', $fullname);
+        $fullpattern  = str_replace('|', '||', $fullname);
 
         // Escape SQL LIKE wildcard characters ('_', '%') with '|'.
-        $shortpattern = str_replace('_', '|_', str_replace('%', '|%', $shortpattern)) . '%';
-        $fullpattern = str_replace('_', '|_', str_replace('%', '|%', $fullpattern)) . '%';
+        $shortpattern_ = str_replace('_', '|_', str_replace('%', '|%', $shortpattern) . '_%');
+        $fullpattern_  = str_replace('_', '|_', str_replace('%', '|%', $fullpattern) . '_%');
+        $shortpattern  = str_replace('_', '|_', str_replace('%', '|%', $shortpattern));
+        $fullpattern   = str_replace('_', '|_', str_replace('%', '|%', $fullpattern));
 
         $sql =<<<SQL
   (select shortname, fullname from {course_request_u}
    where shortname like :requestshortname escape '|' or
-      fullname like :requestfullname escape '|')
+      shortname like :requestshortname_ escape '|' or
+      fullname like :requestfullname escape '|' or
+      fullname like :requestfullname_ escape '|')
 union all
   (select shortname, fullname from {course}
    where shortname like :courseshortname escape '|' or
-      fullname like :coursefullname escape '|')
+      shortname like :courseshortname_ escape '|' or
+      fullname like :coursefullname escape '|' or
+      fullname like :coursefullname_ escape '|')
 SQL;
 
         $rs = $DB->get_recordset_sql($sql,
-                                     array('requestshortname'=>$shortpattern,
-                                           'requestfullname'=>$fullpattern,
-                                           'courseshortname'=>$shortpattern,
-                                           'coursefullname'=>$fullpattern));
+                                     array('requestshortname' => $shortpattern,
+                                           'requestshortname_'=> $shortpattern_,
+                                           'requestfullname'  => $fullpattern,
+                                           'requestfullname_' => $fullpattern_,
+                                           'courseshortname'  => $shortpattern,
+                                           'courseshortname_' => $shortpattern_,
+                                           'coursefullname'   => $fullpattern,
+                                           'coursefullname_'  => $fullpattern_));
 
         $max = 0;
 
