@@ -572,3 +572,6 @@ $string['xmldberror'] = 'XMLDB error!';
 $string['alreadyloggedin'] = 'You are already logged in as {$a}, you need to log out before logging in as different user.';
 $string['youcannotdeletecategory'] = 'You cannot delete category \'{$a}\' because you can neither delete the contents, nor move them elsewhere.';
 $string['protected_cc_not_supported'] = 'Protected cartridges not supported.';
+//MOOD-1053 btindell 20150429 added language string for error being displayed
+$string['maxbytesfile'] = 'The file you have uploaded is too large. The maximum file size you can upload is {$a}.';
+//<<< MOOD-153

@@ -2038,3 +2038,7 @@ $string['textediting_help'] = 'Use this option to select the editor that you wou
 $string['modeditingmenus'] = 'Activity editing menus';
 $string['modeditingmenus_help'] = 'If enabled many of the activity editing icons shown when viewing a course with editing on will be displayed within a drop-down menu. This reduces the content on screen when editing a course by hiding the icons until they are needed.';
 // <<< MOOD-262
+
+//MOOD-1053 btindell added language string to changet the error message.
+$string['maxbytesfile'] = 'The file {$a->file} is too large. The maximum size you can upload is {$a->size}.';
+// <<< MOOD-1053

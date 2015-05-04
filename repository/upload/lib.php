@@ -191,7 +191,9 @@ class repository_upload extends repository {
         }
 
         if (($maxbytes!==-1) && (filesize($_FILES[$elname]['tmp_name']) > $maxbytes)) {
-            throw new file_exception('maxbytes');
+            //MOOD-1053 btindell 20150429 changed language string to reflect updated error message
+            $maxbytesdisplay = display_size($maxbytes);
+            throw new file_exception('maxbytesfile', $maxbytesdisplay);
         }
 
         if (file_is_draft_area_limit_reached($record->itemid, $areamaxbytes, filesize($_FILES[$elname]['tmp_name']))) {
