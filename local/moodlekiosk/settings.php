@@ -26,4 +26,16 @@ if ($hassiteconfig) {
             get_string('listener_url', 'local_moodlekiosk'),
             get_string('listener_url_descr', 'local_moodlekiosk'),
             ''));
+
+    $settings->add(new admin_setting_configtext(
+            'local_moodlekiosk/course_listener_url',
+            get_string('course_listener_url', 'local_moodlekiosk'),
+            get_string('listener_url_descr', 'local_moodlekiosk'),
+            ''));
+
+    $settings->add(new admin_setting_configtext(
+            'local_moodlekiosk/category_listener_url',
+            get_string('category_listener_url', 'local_moodlekiosk'),
+            get_string('listener_url_descr', 'local_moodlekiosk'),
+            ''));
 }

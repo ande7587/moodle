@@ -274,7 +274,22 @@ SQL;
         fclose($out);
     }
 
+    /**
+     * helper function to prepare params for posting data
+     * @param $event array event
+     * @param $listener_url
+     * @param $event_name
+     */
+    public static function prepare_and_post_data($event, $listener_url, $event_name){
 
+        $url = trim(get_config('local_moodlekiosk', $listener_url));
+        // send the event data to remote MoodleKiosk
+        $data = array($event_name     => json_encode($event),
+                      'instance'      => get_config('local_moodlekiosk', 'instance_name'),
+                      'api_key'       => get_config('local_moodlekiosk', 'api_key'));
+
+        self::post_data($url, $data);
+    }
     /**
      * helper function to post data to remote URL
      * @param string $url
@@ -327,6 +342,39 @@ function moodlekiosk_role_assigned($event) {
     return true;
 }
 
+/**
+ * handle moodlekiosk_category_created_updated event
+ * @param stdClass $event
+ */
+function moodlekiosk_category_created_updated($event){
+    global $DB;
+
+    $category = $DB->get_record('course_categories', array('id' => $event->objectid), 'id, name, parent');
+    local_moodlekiosk::prepare_and_post_data($category,'category_listener_url', 'category');
+    return true;
+}
+
+/**
+ * handle moodlekiosk_course_updated event
+ * @param stdClass $event
+ */
+function moodlekiosk_course_updated($event){
+    global $DB, $CFG;
+
+    $sql =<<<SQL
+select c.id, c.category, c.fullname, c.shortname,
+       c.visible, mu.skip_portal, concat(:courseurl, c.id) url
+from {course} c
+left join {myu_course} mu on mu.courseid=c.id
+where c.id=:courseid
+SQL;
+
+    $course = $DB->get_record_sql($sql, array('courseid' => $event->objectid,
+                                              'courseurl' => "$CFG->wwwroot/course/view.php?id="));
+    local_moodlekiosk::prepare_and_post_data($course, 'course_listener_url', 'course');
+
+    return true;
+}
 
 /**
  * handle role_unassigned event

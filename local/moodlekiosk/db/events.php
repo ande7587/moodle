@@ -15,3 +15,26 @@ $handlers = array (
         'internal'         => 1,
     ),
 );
+
+$observers = array(
+    array(
+        'eventname'   => '\core\event\course_category_created',
+        'includefile' => '/local/moodlekiosk/locallib.php',
+        'callback'    => 'moodlekiosk_category_created_updated',
+        'internal'    => true
+    ),
+
+    array(
+        'eventname'   => '\core\event\course_category_updated',
+        'includefile' => '/local/moodlekiosk/locallib.php',
+        'callback'    => 'moodlekiosk_category_created_updated',
+        'internal'    => true
+    ),
+
+    array(
+        'eventname'   => '\core\event\course_updated',
+        'includefile' => '/local/moodlekiosk/locallib.php',
+        'callback'    => 'moodlekiosk_course_updated',
+        'internal'    => true
+    )
+);
