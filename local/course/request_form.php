@@ -158,15 +158,18 @@ SQL;
         $mform->addElement('html', '</div>');
     }
 
-    protected function define_role_element() {
-        global $DB, $OUTPUT;
-
+    protected function define_role_element_headers() {
+        global $OUTPUT;
         $mform =& $this->_form;
 
         $mform->addElement('html', '<div class="elementwrapper" id="yourrolediv">');
         $mform->addElement('html', '<hr class="fieldsections" ><!-- begin moodle roles -->');
-        $mform->addElement('html', html_writer::tag('h4',get_string('courseroles','local_course').$OUTPUT->help_icon('courseroleshelp', 'local_course')));
+        $mform->addElement('html', html_writer::tag('h4', get_string('courseroles','local_course').$OUTPUT->help_icon('courseroleshelp', 'local_course')));
         $mform->addElement('html', '<div class="helpnote">'.get_string('addadditionalroleuserhelpnote', 'local_course').'</div>');
+    }
+
+    protected function define_role_element() {
+        $mform =& $this->_form;
 
         $rolemenu = get_course_request_assignable_roles();
 
@@ -469,6 +472,8 @@ class local_course_request_form_nonacad extends local_course_request_form_base {
 
         $this->define_category_elements();
 
+        $this->define_role_element_headers();
+
         $this->define_role_element();
 
         $this->define_other_role_elements();
@@ -508,6 +513,8 @@ class local_course_request_form_acad extends local_course_request_form_base {
         $this->define_form_header();
 
         $this->define_category_elements();
+
+        $this->define_role_element_headers();
 
         $this->define_role_element();
 
@@ -644,8 +651,9 @@ class local_course_request_form_acad extends local_course_request_form_base {
 
         $triplets = $this->_customdata['triplets'];
 
+        $this->_form->addelement('html', html_writer::tag('h4', get_string('stepfourcoursesitedetails','local_course'), array('class' => 'coursesitedetailsheader' )));
         $this->_form->addElement('html', '<hr class="fieldsections" ><!-- begin Summary of Classes-->');
-        $this->_form->addElement('html', html_writer::tag('h4',get_string('classsummary','local_course')));
+        $this->_form->addelement('html', html_writer::tag('h4', get_string('classsummary', 'local_course')));
         // Submit back the triplets using hidden fields.
         foreach ($triplets as $tripletstring=>$ignore) {
             $mform->addElement('hidden', "classes[$tripletstring]", $tripletstring);

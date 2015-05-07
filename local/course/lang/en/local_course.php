@@ -88,19 +88,20 @@ $string['requestgatewayheading'] = 'Request a Moodle course site';
 
 // Course requests
 $string['fullnamecourseta'] = 'Course title';
+$string['stepfourcoursesitedetails'] = 'Step 4: Enter Course Site Details';
 $string['fullnamecoursenonacad'] = 'Course site title';
-$string['fullnamecourseacad'] = 'Course site title';
+$string['fullnamecourseacad'] = '<strong>Course site title</strong>';
 $string['shortnamecourseta'] = 'Course subject and number (ACCT 2001)';
 $string['shortnamecoursenonacad'] = 'Short title';
 
-$string['autoenrolclasses'] = 'Auto-enrol class(es):&nbsp';
-$string['primaryinstructors'] = 'Primary instructor(s):&nbsp';
+$string['autoenrolclasses'] = '<strong>Auto-enrol class(es):&nbsp</strong>';
+$string['primaryinstructors'] = '<strong>Primary instructor(s):&nbsp</strong>';
 
 $string['yourrole'] = 'Your role in the course site';
 
 $string['sendemail'] = 'Send email';
-$string['sendemailhelp'] = 'Email notifications';
-$string['sendemailhelp_help'] = 'Checking this box will include these users in both the course request confirmation email and the course request approval/denial email. Email notification will always be sent to primary instructor(s)';
+$string['sendemailhelp'] = 'Email Notifications';
+$string['sendemailhelp_help'] = 'Checking this box will include these users in both the course request confirmation email and the course request approval/denial email. Email notifications will always be sent to primary instructor(s)';
 
 $string['classsummary'] = 'Summary of class(es)';
 $string['coursetocopy'] = 'Existing course to copy';
