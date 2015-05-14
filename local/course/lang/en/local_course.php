@@ -127,7 +127,7 @@ $string['courserequest'] = 'Course request';
 $string['courserequestsuccess'] = 'Successfully saved your course request. Expect an email within a few days with the outcome';
 $string['fullnamehelpnote'] = 'e.g. OIT Assignments and Workshops - Student';
 $string['shortnamehelpnote'] = 'e.g. AssignWorkStudent';
-$string['primaryinstructoremailnote'] = 'Note: Email notification will always be sent to primary instructor';
+$string['primaryinstructoremailnote'] = 'Note: Email notifications will always be sent to primary instructor(s)';
 $string['sourcecourseurlhelpnote'] = 'Copy URL from previous Moodle course';
 $string['courserequestsupporthelpnote'] = 'Additional comments or instructions for Moodle Support';
 $string['addadditionalroleuserhelpnote'] = '<a href="http://www.oit.umn.edu/moodle/instructor-guides/roles-overview/index.htm" target="_blank">Role types explained</a>';

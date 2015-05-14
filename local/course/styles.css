@@ -72,7 +72,7 @@ div.requestconfirmation, div.requestrejection { display:inline-block; text-align
 
 .coursesitedetailsheader { font-size:28px; }
 #acadrequestformheader { color:#333; margin-bottom:5px; }
-#acadrequestformheader .helpnote { font-size:88%; color:#444; font-weight:normal; }
+#acadrequestformheader .helpnote { font-size:88%; color:#444; font-weight:normal; padding-top: 5px; }
 
 #acadrequestdisclaimer { color:#333; font-size:88%; font-weight:bold; margin-bottom:10px; }
 #acadrequestdisclaimer .disclaimerhead { color:#000; font-size:110%; }
