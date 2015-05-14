@@ -48,14 +48,6 @@ if ($ADMIN->fulltree) {
     $setting = new admin_setting_configtext($name, $title, $description, $default);
     $settings->add($setting);
 
-    // Course dropdown limit
-    $name = 'theme_umn_clean/coursemenulimit';
-    $title = get_string('coursemenulimit', 'theme_umn_clean');
-    $description = get_string('coursemenulimitdesc', 'theme_umn_clean');
-    $setting = new admin_setting_configtext($name, $title, $description, 20, PARAM_INT);
-    $setting->set_updatedcallback('theme_reset_all_caches');
-    $settings->add($setting);
-
     // M dropdown
     $name = 'theme_umn_clean/mmenuitems';
     $title = get_string('mmenuitems', 'theme_umn_clean');

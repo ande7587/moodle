@@ -1,24 +1,13 @@
 <?php
 // Build Course drop-down menu items
+require_once($CFG->dirroot.'/blocks/course_overview/locallib.php');
 $coursemenuitems = array();
-if (!empty($PAGE->theme->settings->coursemenulimit)) {
-    $sortorder = 'visible DESC';
-    // Prevent undefined $CFG->navsortmycoursessort errors.
-    if (empty($CFG->navsortmycoursessort)) {
-        $CFG->navsortmycoursessort = 'sortorder';
-    }
-    // Append the chosen sortorder.
-    $sortorder = $sortorder . ',' . $CFG->navsortmycoursessort . ' ASC';
-    $courses = enrol_get_my_courses(null, $sortorder);
-    foreach ($courses as $course) {
+// block_course_overview_get_sorted_courses will return multiple arrays
+// and we only care about the first array, which is the sorted courses.
+list($sortedcourses, $sitecourses, $totalcourses) = block_course_overview_get_sorted_courses();
+foreach ($sortedcourses as $course) {
+    if (isset($course->id) && isset($course->fullname) && isset($course->shortname) && isset($course->visible)) {
         $coursecontext = context_course::instance($course->id);
-        if ($course->id != $SITE->id && !$course->visible) {
-            if (is_role_switched($course->id)) {
-                // user has to be able to access course in order to switch, let's skip the visibility test here
-            } else if (!has_capability('moodle/course:viewhiddencourses', $coursecontext)) {
-                continue;
-            }
-        }
         $url = new moodle_url('/course/view.php', array('id'=>$course->id));
         $settings = new stdClass();
         $settings->id = $course->id;
@@ -80,7 +69,7 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                             <?php foreach ($coursemenuitems as $item) {
                                 $title = $item->fullname;
                                 $href = $item->url;
-                                $id = 'dyanmic_user-course_'.$course->id;
+                                $id = 'dyanmic_user-course_'.$item->id;
                                 $hidden = $item->visible ? '' : ' '.get_string('coursehiddensubheading', 'theme_umn_clean');
                                 echo "<li><a href=\"$href\" id=\"$id\">$title$hidden</a></li>";
                             } ?>
@@ -175,7 +164,7 @@ if (!empty($PAGE->theme->settings->custom_values['logotitle'])) {
                             <?php foreach ($coursemenuitems as $item) {
                                 $title = $item->fullname;
                                 $href = $item->url;
-                                $id = 'dyanmic_user-course_'.$course->id;
+                                $id = 'dyanmic_user-course_'.$item->id;
                                 $hidden = $item->visible ? '' : ' '.get_string('coursehiddensubheading', 'theme_umn_clean');
                                 echo "<li><a href=\"$href\" id=\"$id\">$title$hidden</a></li>";
                             } ?>
