@@ -143,7 +143,6 @@ Y.extend(courseRequest, Y.Base, {
             resultTextLocator: function (result) {
                 return result.fullname + ': ' + result.url;
             },
-            scrollIntoView: true,
             render:'body' // render to body to avoid css contamination due to inheritance
         });
 
@@ -171,6 +170,11 @@ Y.extend(courseRequest, Y.Base, {
             sourceCourseFullnameNode.setHTML(course.fullname);
 
             sourceCourseUrlNode.ac.hide();
+            // YUI autocomplete has scrollIntoView attribute but does not work properly between
+            // different browsers. As an altenative solution, we use the native scrollIntoView method
+            // with its alignToTop parameter set to false. This attribute makes the node visible
+            // at the bottom of the page instead of at the top.
+            sourceCourseUrlNode.scrollIntoView(false);
         });
     }
 
