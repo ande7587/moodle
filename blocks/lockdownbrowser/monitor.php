@@ -1,7 +1,7 @@
 <?php
 // Respondus LockDown Browser Extension for Moodle
-// Copyright (c) 2011-2014 Respondus, Inc.  All Rights Reserved.
-// Date: November 25, 2014.
+// Copyright (c) 2011-2015 Respondus, Inc.  All Rights Reserved.
+// Date: May 18, 2015.
 
 // production flags
 // - should all default to false
@@ -138,14 +138,21 @@ function lockdownbrowser_monitorserviceresponse($content_type, $body, $encrypt, 
         $encrypted = lockdownbrowser_monitorbase64encrypt($body, true);
         if (is_null($encrypted)) {
             header("Content-Type: $content_type");
+            // may need this instead for Unicode support
+            //header("Content-Type: $content_type; charset=utf-8");
             echo $body;
         } else {
-            header("Content-Type: text/html"); // needed for IE client
+            // actually text/plain should be used, since the response is
+            // base64-encoded, but for some reason text/html is needed for
+            // IE-based clients
+            header("Content-Type: text/html");
             $url_encoded = urlencode($encrypted);
             echo $url_encoded;
         }
     } else {
         header("Content-Type: $content_type");
+        // may need this instead for Unicode support
+        //header("Content-Type: $content_type; charset=utf-8");
         echo $body;
     }
 
@@ -254,7 +261,8 @@ function lockdownbrowser_monitorexceptionhandler($ex) {
     $msg = "\r\n-- Exception occurred --"
         . "\r\nmessage: $info->message"
         . "\r\nerrorcode: $info->errorcode"
-        . "\r\nbacktrace: $info->backtrace"
+        . "\r\nfile: " . $ex->getFile()
+        . "\r\nline: " . $ex->getLine()
         . "\r\nlink: $info->link"
         . "\r\nmoreinfourl: $info->moreinfourl"
         . "\r\na: $info->a"
@@ -376,25 +384,60 @@ function lockdownbrowser_monitorrequestparameters() {
         $parameters[$name] = $value;
     }
 
-    // check mac
+    // check for mac (assumed to succeed other parameters)
+    $pos2 = strpos($decrypted, "&mac2=");
     $pos = strpos($decrypted, "&mac=");
-    if ($pos === false
-        || !isset($parameters["mac"])
-        || strlen($parameters["mac"]) == 0
+    if ($pos2 !== false
+        && isset($parameters["mac2"])
+        && strlen($parameters["mac2"]) > 0
     ) {
-        lockdownbrowser_monitorserviceerror(2011, "MAC not found in request");
-    }
-    $sign = substr($decrypted, 0, $pos);
-    $mac  = lockdownbrowser_monitorgeneratemac($sign);
-    if (strcmp($mac, $parameters["mac"]) != 0) {
-        lockdownbrowser_monitorserviceerror(2010, "Invalid MAC in request");
-    }
+        // new-style mac;
+        // variations needed for compatibility with various client versions
+        if ($pos !== false && $pos < $pos2) {
+            $sign1 = substr($decrypted, 0, $pos);
+            $sign2 = substr($decrypted, 0, $pos2);
+            $mac11 = lockdownbrowser_monitorgeneratemac2($sign1, 1);
+            $mac12 = lockdownbrowser_monitorgeneratemac2($sign1, 2);
+            $mac21 = lockdownbrowser_monitorgeneratemac2($sign2, 1);
+            $mac22 = lockdownbrowser_monitorgeneratemac2($sign2, 2);
+            if (strcmp($mac11, $parameters["mac2"]) != 0
+                && strcmp($mac12, $parameters["mac2"]) != 0
+                && strcmp($mac21, $parameters["mac2"]) != 0
+                && strcmp($mac22, $parameters["mac2"]) != 0
+                ) {
+                lockdownbrowser_monitorserviceerror(2010, "Invalid MAC in request");
+            }
+        } else {
+            $sign = substr($decrypted, 0, $pos2);
+            $mac21 = lockdownbrowser_monitorgeneratemac2($sign, 1);
+            $mac22 = lockdownbrowser_monitorgeneratemac2($sign, 2);
+            if (strcmp($mac21, $parameters["mac2"]) != 0
+                && strcmp($mac22, $parameters["mac2"]) != 0
+                ) {
+                lockdownbrowser_monitorserviceerror(2010, "Invalid MAC in request");
+            }
+        }
+    } else if ($pos !== false
+        && isset($parameters["mac"])
+        && strlen($parameters["mac"]) > 0
+    ) {
+        // old-style mac
+        $sign = substr($decrypted, 0, $pos);
+        $mac = lockdownbrowser_monitorgeneratemac($sign);
+        if (strcmp($mac, $parameters["mac"]) != 0) {
+            lockdownbrowser_monitorserviceerror(2010, "Invalid MAC in request");
+        }
+    } else {
+       lockdownbrowser_monitorserviceerror(2011, "MAC not found in request");
+     }
 
     return $parameters;
 }
 
 function lockdownbrowser_monitorgeneratemac($input) {
 
+    // old-style mac;
+    // broken for characters > 127 between Respondus servers and clients
     $secret = lockdownbrowser_monitorsharedsecret(false);
 
     $chararray = preg_split('//', $input, -1, PREG_SPLIT_NO_EMPTY);
@@ -405,6 +448,19 @@ function lockdownbrowser_monitorgeneratemac($input) {
     }
 
     return md5($strdatavalue . $secret);
+}
+
+function lockdownbrowser_monitorgeneratemac2($input, $style) {
+
+    // new-style mac
+    $secret = lockdownbrowser_monitorsharedsecret(false);
+    if ($style == 1) {
+        // need leading underscore so server can differentiate from old-style mac
+        $mac = "_" . md5($input . $secret);
+    } else if ($style == 2) {
+        $mac = md5($input . $secret);
+    }
+    return $mac;
 }
 
 function lockdownbrowser_monitorbase64encrypt($input, $silent) {
@@ -499,8 +555,9 @@ function lockdownbrowser_monitorredeemtoken($parameters) {
     $server_name = $CFG->block_lockdownbrowser_ldb_servername;
 
     $redeem_time = time();
-    $redeem_mac  = lockdownbrowser_monitorgeneratemac(
-        urldecode($institution_id) . urldecode($server_name) . $token . $redeem_time
+        $redeem_mac  = lockdownbrowser_monitorgeneratemac2(
+        urldecode($institution_id) . urldecode($server_name) . $token . $redeem_time,
+        1 // server request hash needs leading underscore
     );
 
     // we assume https, so no additional encryption is used
@@ -523,6 +580,30 @@ function lockdownbrowser_monitorredeemtoken($parameters) {
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    /***
+    // Moodle proxy support; needs to be tested.
+    if (!empty($CFG->proxyhost) && !is_proxybypass($url)) {
+        if (empty($CFG->proxyport)) {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+        } else {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+        }
+        if (!empty($CFG->proxyuser) && !empty($CFG->proxypassword)) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $CFG->proxyuser.':'.$CFG->proxypassword);
+            if (defined('CURLOPT_PROXYAUTH')) {
+                curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC | CURLAUTH_NTLM);
+            }
+        }
+        if (!empty($CFG->proxytype)) {
+            if ($CFG->proxytype == 'SOCKS5' && defined('CURLPROXY_SOCKS5')) {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            } else {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+                curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
+            }
+        }
+    }
+    ***/
     $result = curl_exec($ch);
     $info   = curl_getinfo($ch);
     curl_close($ch);
@@ -531,9 +612,11 @@ function lockdownbrowser_monitorredeemtoken($parameters) {
         lockdownbrowser_monitorserviceerror(2021, "Could not redeem login token");
     }
 
-    $receipt_mac = lockdownbrowser_monitorgeneratemac(
-        $token . urldecode($server_name) . urldecode($institution_id) . $redeem_time
+    $receipt_mac = lockdownbrowser_monitorgeneratemac2(
+        $token . urldecode($server_name) . urldecode($institution_id) . $redeem_time,
+        2 // server response hash doesn't include leading underscore
     );
+
     if (strcmp($result, $receipt_mac) != 0) {
         lockdownbrowser_monitorserviceerror(2022, "Received invalid token receipt");
     }
@@ -643,31 +726,6 @@ function lockdownbrowser_monitoractionlogout($parameters) {
     require_logout();
 
     lockdownbrowser_monitorservicestatus(1001, "Logout succeeded");
-}
-
-function lockdownbrowser_monitoractioncourselist($parameters) {
-
-    if (!isloggedin()) {
-        lockdownbrowser_monitorserviceerror(2004, "Must be logged in to perform the requested action");
-    }
-    if (!is_siteadmin()) {
-        lockdownbrowser_monitorserviceerror(2024, "Must be logged in as admin to perform the requested action");
-    }
-
-    $courses = get_courses();
-    if ($courses === false) {
-        $courses = array();
-    }
-
-    $c2 = array();
-    foreach ($courses as $c) {
-        if ($c->id != SITEID) {
-            $c2[] = $c;
-        }
-    }
-    $courses = $c2;
-
-    lockdownbrowser_monitorcourselistresponse($courses);
 }
 
 function lockdownbrowser_monitoractionchangesettings($parameters) {
@@ -1342,8 +1400,6 @@ function lockdownbrowser_monitorservicerequest() {
         lockdownbrowser_monitoractionuserlogin($parameters);
     } else if ($action == "logout") {
         lockdownbrowser_monitoractionlogout($parameters);
-    } else if ($action == "courselist") {
-        lockdownbrowser_monitoractioncourselist($parameters);
     } else if ($action == "changesettings") {
         lockdownbrowser_monitoractionchangesettings($parameters);
     } else if ($action == "examroster") {

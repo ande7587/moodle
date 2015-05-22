@@ -1,7 +1,7 @@
 <?php
 // Respondus LockDown Browser Extension for Moodle
-// Copyright (c) 2011-2014 Respondus, Inc.  All Rights Reserved.
-// Date: November 25, 2014.
+// Copyright (c) 2011-2015 Respondus, Inc.  All Rights Reserved.
+// Date: May 18, 2015.
 
 require_once(dirname(__FILE__) . "/locklibcfg.php");
 
@@ -18,22 +18,17 @@ function lockdownbrowser_set_settings($quizid, $reqquiz, $reqreview, $exitpass, 
 function lockdownbrowser_get_quiz_options($quizid) {
 
     global $DB;
-
-    # MOOD-971 20150330 Colin, wolde034. Check that course matches, too. This is
-    # a work-around for incorrect quizid values in mdl_block_lockdownbrowser_sett.
-    # These incorrect quizid values typically appear when we backup and restore
-    # a course that has a deleted quiz with a lockdown browser association.
-    # In that case, the restore process creates a block_lockdownbrowser_sett
-    # row with the correct new courseid, but the incorrect quizid.  That
-    # incorrect quizid is the quizid for the deleted quiz in the original course.
-$sql =<<<SQL
-select ldb.*
-from {block_lockdownbrowser_sett} ldb
-join {quiz} q on q.id = ldb.quizid and q.course = ldb.course
-where ldb.quizid=:quizid
-SQL;
-
-    return $DB->get_records_sql($sql, array('quizid' => $quizid));
+    $ldbopt = $DB->get_record('block_lockdownbrowser_sett', array('quizid' => $quizid));
+    if ($ldbopt) {
+        $quiz = $DB->get_record("quiz", array("id" => $quizid));
+        if ($quiz === false || $quiz->course != $ldbopt->course) {
+            // this will catch some orphans (deleted quizzes) and some false
+            // positives (orphans that are false matches due to backup/restore)
+            lockdownbrowser_delete_options($quizid);
+            $ldbopt = false;
+        }
+    }
+    return $ldbopt;
 }
 
 function lockdownbrowser_set_quiz_options($quizid, $ldbopt = null) {
@@ -67,7 +62,7 @@ function lockdownbrowser_set_quiz_options($quizid, $ldbopt = null) {
     if (is_null($ldbopt->monitor)) {
         $ldbopt->monitor = "";
     }
-    $existing = $DB->get_record('block_lockdownbrowser_sett', array('quizid' => $quizid));
+    $existing = lockdownbrowser_get_quiz_options($quizid);
     if ($existing) {
         $existing->attempts = $ldbopt->attempts;
         $existing->reviews  = $ldbopt->reviews;
@@ -95,10 +90,26 @@ function lockdownbrowser_delete_options($quizid) {
     $DB->delete_records('block_lockdownbrowser_sett', array('quizid' => $quizid));
 }
 
-function lockdownbrowser_get_settings($quizid) {
+function lockdownbrowser_purge_orphans() {
 
     global $DB;
-    $existing = $DB->get_record('block_lockdownbrowser_sett', array('quizid' => $quizid));
+
+    // remove any orphaned records from our settings table;
+    // orphans occur whenever a quiz is deleted without first removing the LDB
+    // requirement in our dashboard
+    $records = $DB->get_records('block_lockdownbrowser_sett');
+    if (count($records) > 0) {
+        foreach ($records as $settings) {
+            if ($DB->record_exists('quiz', array('id' => $settings->quizid)) === false) {
+                lockdownbrowser_delete_options($settings->quizid);
+            }
+        }
+    }
+}
+
+function lockdownbrowser_get_settings($quizid) {
+
+    $existing = lockdownbrowser_get_quiz_options($quizid);
     if ($existing) {
         return $existing;
     } else {
@@ -303,6 +314,31 @@ function lockdownbrowser_generate_tokens_debug() {
         echo "<p>Proxy support enabled</p>";
     }
 
+    /***
+    // Moodle proxy support; needs to be tested.
+    if (!empty($CFG->proxyhost) &&! is_proxybypass($url)) {
+        if (empty($CFG->proxyport)) {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+        } else {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+        }
+        if (!empty($CFG->proxyuser) && !empty($CFG->proxypassword)) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $CFG->proxyuser.':'.$CFG->proxypassword);
+            if (defined('CURLOPT_PROXYAUTH')) {
+                curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC | CURLAUTH_NTLM);
+            }
+        }
+        if (!empty($CFG->proxytype)) {
+            if ($CFG->proxytype == 'SOCKS5' && defined('CURLPROXY_SOCKS5')) {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            } else {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+                curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
+            }
+        }
+    }
+    ***/
+
     echo "<p>Contacting token server...</p>";
     flush();
 
@@ -406,6 +442,31 @@ function lockdownbrowser_generate_tokens() {
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_POSTREDIR, 2);
     }
+
+    /***
+    // Moodle proxy support; needs to be tested.
+    if (!empty($CFG->proxyhost) && !is_proxybypass($url)) {
+        if (empty($CFG->proxyport)) {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+        } else {
+            curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+        }
+        if (!empty($CFG->proxyuser) && !empty($CFG->proxypassword)) {
+            curl_setopt($ch, CURLOPT_PROXYUSERPWD, $CFG->proxyuser.':'.$CFG->proxypassword);
+            if (defined('CURLOPT_PROXYAUTH')) {
+                curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC | CURLAUTH_NTLM);
+            }
+        }
+        if (!empty($CFG->proxytype)) {
+            if ($CFG->proxytype == 'SOCKS5' && defined('CURLPROXY_SOCKS5')) {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            } else {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+                curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
+            }
+        }
+    }
+    ***/
 
     $resp = curl_exec($ch);
     $info = curl_getinfo($ch);

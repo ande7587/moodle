@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
 // Respondus LockDown Browser Extension for Moodle
-// Copyright (c) 2011-2014 Respondus, Inc.  All Rights Reserved.
-// Date: November 25, 2014.
+// Copyright (c) 2011-2015 Respondus, Inc.  All Rights Reserved.
+// Date: May 18, 2015.
 -->
 
 <XMLDB
@@ -44,6 +44,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="quizid" TYPE="foreign" FIELDS="quizid" REFTABLE="quiz" REFFIELDS="id"/>
       </KEYS>
       <INDEXES>
         <INDEX NAME="course_ix" UNIQUE="false" FIELDS="course" NEXT="quiz_ix"/>

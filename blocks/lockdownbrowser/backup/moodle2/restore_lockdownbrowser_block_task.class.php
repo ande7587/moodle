@@ -1,7 +1,7 @@
 <?php
 // Respondus LockDown Browser Extension for Moodle
-// Copyright (c) 2011-2014 Respondus, Inc.  All Rights Reserved.
-// Date: November 25, 2014.
+// Copyright (c) 2011-2015 Respondus, Inc.  All Rights Reserved.
+// Date: May 18, 2015.
 
 $lockdownbrowser_stepslib_file =
     "$CFG->dirroot/blocks/lockdownbrowser/backup/moodle2/restore_lockdownbrowser_stepslib.php";
@@ -52,6 +52,7 @@ class restore_lockdownbrowser_block_task extends restore_block_task {
                 $this->get_restoreid(), "quiz", $old_quizid);
             if (empty($quizmap)) {
                 $missing_ids++;
+                $DB->delete_records('block_lockdownbrowser_sett', array('quizid' => $old_quizid));
                 continue;
             }
 

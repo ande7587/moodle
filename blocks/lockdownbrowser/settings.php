@@ -1,7 +1,7 @@
 <?php
 // Respondus LockDown Browser Extension for Moodle
-// Copyright (c) 2011-2014 Respondus, Inc.  All Rights Reserved.
-// Date: November 25, 2014.
+// Copyright (c) 2011-2015 Respondus, Inc.  All Rights Reserved.
+// Date: May 18, 2015.
 
 if (!isset($CFG)) {
     require_once("../../config.php");
@@ -48,7 +48,7 @@ $settings->add(
     new admin_setting_heading(
         "lockdown_blockversionheader",
         lockdownbrowser_getsettingsstring("blockversionheader"),
-        $lockdownbrowser_version //. " (internal release)"
+        $lockdownbrowser_version //. " (internal release for Q/A)"
     )
 );
 
