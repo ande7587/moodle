@@ -63,8 +63,7 @@ class grade_import_form extends moodleform {
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepcomma', 'grades'), 'comma');
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepcolon', 'grades'), 'colon');
             $radio[] = $mform->createElement('radio', 'separator', null, get_string('sepsemicolon', 'grades'), 'semicolon');
-            //MOOD-253: btindell 20141105 Added context sensitive help
-            $mform->addGroup($radio, 'separator', get_string('separator', 'grades').$OUTPUT->help_icon('separator', 'grades'), ' ', false);
+            $mform->addGroup($radio, 'separator', get_string('separator', 'grades').$OUTPUT->help_icon('separator', 'gradeimport_verboseimport'), ' ', false);
         }
         if (empty($features['paste'])) {
             $mform->setDefault('separator', 'comma');
@@ -74,13 +73,11 @@ class grade_import_form extends moodleform {
 
         if (!empty($features['verbosescales'])) {
             $options = array(1=>get_string('yes'), 0=>get_string('no'));
-            //MOOD-253: btindell 20141105 Added context sensitive help
-            $mform->addElement('select', 'verbosescales', get_string('verbosescales', 'grades').$OUTPUT->help_icon('verbosescales', 'grades'), $options);
+            $mform->addElement('select', 'verbosescales', get_string('verbosescales', 'grades').$OUTPUT->help_icon('verbosescales', 'gradeimport_verboseimport'), $options);
         }
 
         $options = array('10'=>10, '20'=>20, '100'=>100, '1000'=>1000, '100000'=>100000);
-        //MOOD-253: btindell 20141105 Added context sensitive help
-        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'grades').$OUTPUT->help_icon('rowpreviewnum', 'grades'), $options); // TODO: localize
+        $mform->addElement('select', 'previewrows', get_string('rowpreviewnum', 'grades').$OUTPUT->help_icon('rowpreviewnum', 'gradeimport_verboseimport'), $options); // TODO: localize
         $mform->setType('previewrows', PARAM_INT);
         if(array_key_exists('paste',$features)) {
             $mform->addElement('hidden','paste',$features['paste']);
@@ -110,16 +107,12 @@ class grade_import_mapping_form extends moodleform {
                 $mapfromoptions[$i] = s($h);
             }
         }
-        //MOOD-277 btindell 20141209 added context senstive help
-        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades').$OUTPUT->help_icon('mapfrom', 'grades'), $mapfromoptions);
+        $mform->addElement('select', 'mapfrom', get_string('mapfrom', 'grades').$OUTPUT->help_icon('mapfrom', 'gradeimport_verboseimport'), $mapfromoptions);
 
-        //  deleted some etries and renamed perm
         $maptooptions = array( 'useridnumber'=>'student id number', 'useremail'=>'email address', 'username'=>'username', '0'=>'ignore');
-        //MOOD-277 btindell 20141209 added context senstive help
-        $mform->addElement('select', 'mapto', get_string('mapto', 'grades').$OUTPUT->help_icon('mapto', 'grades'), $maptooptions);
+        $mform->addElement('select', 'mapto', get_string('mapto', 'grades').$OUTPUT->help_icon('mapto', 'gradeimport_verboseimport'), $maptooptions);
 
-        //MOOD-277 btindell 20141209 added context sensitive help
-        $mform->addElement('header', 'general', get_string('mappings', 'grades').$OUTPUT->help_icon('mappings', 'grades'));
+        $mform->addElement('header', 'general', get_string('mappings', 'grades').$OUTPUT->help_icon('mappings', 'gradeimport_verboseimport'));
 
         // Add a feedback option.
         $feedbacks = array();
@@ -147,13 +140,18 @@ class grade_import_mapping_form extends moodleform {
             }
         }
         // Show null/zero prompt?
-        $nulltoupdate = empty($this->_customdata['nulltoupdate']) ? '0' : '1';
+        // If we are ignoring nulls('-',''), possibly they want zeros ignored as well?
+        // See index.php - if (!empty($CSVsettings->csvimportskipnullgrade)) {
+        $nulltoupdate = empty($this->_customdata['nulltoupdate']) ? 0 : 1;
         if ($nulltoupdate) {
             $nullignore=substr($this->_customdata['nulltoupdate'],-1);
-            $mform->addElement('header', 'general', 'Data options');
+            $mform->addElement('header', 'generaldata', 'Data options');
+            $mform->setExpanded('generaldata', false);
             $options = array(1=>get_string('yes'), 0=>get_string('no'));
-            $mform->addElement('select', 'nullignore', 'Ignore NULL grades', $options,'Otherewise these will overlay existing scores');
+            $mform->addElement('select', 'nullignore', 'Ignore NULL grades', $options,'Otherwise these will overlay existing scores');
             $mform->setDefault('nullignore', !empty($nullignore) ? 1 : 0);
+        } else {
+            $mform->addElement('hidden', 'nullignore', '0');
         }
         // course id needs to be passed for auth purposes
         $mform->addElement('hidden', 'map', 1);
